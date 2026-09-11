@@ -1,0 +1,8 @@
+
+[residual reliability]  perp = component of mu_D orthogonal to mu_Dprime, computed within each half
+  cake      perp: r=0.8093  SB=0.8946  ||perp|| halves=(3.552, 4.659)   par: r=0.9205  SB=0.9586  ||par|| halves=(6.234, 5.599)
+  concrete  perp: r=0.7551  SB=0.8605  ||perp|| halves=(6.392, 9.048)   par: r=0.9960  SB=0.9980  ||par|| halves=(11.217, 10.872)
+  cos(mu_cake, mu_concrete) = 0.8372   after zeroing union of top-10 dims (14 dims [445, 716, 923, 994, 1214, 1400, 1424, 1838, 1924, 1984, 2276, 2421, 2619, 4081]) = 0.8330
+  cake      full-panel norms: mu_D_par=6.047  mu_D_perp_native=3.949  mu_D_perp_matched=7.223
+  concrete  full-panel norms: mu_D_par=11.099  mu_D_perp_native=7.249  mu_D_perp_matched=13.257
+  written to results/vectors.json under cross

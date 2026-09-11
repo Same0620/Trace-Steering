@@ -8,7 +8,7 @@ print("[test] working in", TMP)
 import numpy as np, pandas as pd
 from config import ORGANISMS, OTHER, ALPHAS
 rng = np.random.default_rng(0)
-arms = ["mu_D", "mu_Dprime_native", "mu_Dprime_matched", "r0", "r1", "r2"]
+arms = ["mu_D", "mu_Dprime_native", "mu_Dprime_matched", "mu_D_par", "mu_D_perp_native", "mu_D_perp_matched", "r0", "r1", "r2"]
 def items(org):
     its = []
     for i in range(6):

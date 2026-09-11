@@ -59,9 +59,18 @@ READOUTS = {
 CONTROL_READOUTS = ["factual_control", "domain_completion_preference", "true_domain_pooled"]
 
 # figure styling (validated categorical palette; identity is also carried by line style)
+ARM_LABELS = {"mu_D": "mu_D", "mu_Dprime_native": "mu_Dprime (native norm)",
+              "mu_Dprime_matched": "mu_Dprime (norm-matched to mu_D)",
+              "mu_D_par": "component of mu_D along mu_Dprime",
+              "mu_D_perp_native": "component of mu_D orthogonal to mu_Dprime (native norm)",
+              "mu_D_perp_matched": "component of mu_D orthogonal to mu_Dprime (norm-matched to mu_D)",
+              "r0": "random direction r0", "r1": "random direction r1", "r2": "random direction r2"}
 STYLE = {"mu_D": dict(color="#2a78d6", ls="-", lw=2.0, label="mu_D"),
          "mu_Dprime_native": dict(color="#eb6834", ls="--", lw=1.6, label="mu_D' native"),
          "mu_Dprime_matched": dict(color="#1baf7a", ls="--", lw=1.6, label="mu_D' matched"),
+         "mu_D_par": dict(color="#eda100", ls="-.", lw=1.6, label="mu_D along mu_D'"),
+         "mu_D_perp_native": dict(color="#e87ba4", ls="-.", lw=1.6, label="mu_D orthogonal to mu_D' (native)"),
+         "mu_D_perp_matched": dict(color="#008300", ls="-.", lw=1.6, label="mu_D orthogonal to mu_D' (matched)"),
          "r0": dict(color="#8a8a86", ls="-", lw=0.9, label="r_k"),
          "r1": dict(color="#8a8a86", ls="-", lw=0.9, label=None),
          "r2": dict(color="#8a8a86", ls="-", lw=0.9, label=None)}
@@ -172,6 +181,33 @@ def pairs_table(bel):
     return pd.DataFrame(rows, columns=cols)
 
 
+def contrast_table(bel):
+    """STOP 1 amendment (TONY, Sept 12): per (organism, alpha, readout), own-organism rows,
+    D = B(mu_D) - B(mu_D_par), per question (question means taken first), bootstrap over questions.
+    Label: "effect of adding the orthogonal component given the parallel component"
+    (mu_D = par + perp exactly, so D is the residual's contribution at that alpha)."""
+    rows = []
+    d = bel[~bel.cross_organism]
+    for readout, sel in READOUTS.items():
+        d2 = d[sel(d)]
+        for (org, alpha), sub in d2.groupby(["organism", "alpha"], sort=False):
+            a = sub[sub.arm == "mu_D"]; b = sub[sub.arm == "mu_D_par"]
+            if a.empty or b.empty:
+                continue
+            qa, qb = question_means(a, "B"), question_means(b, "B")
+            common = qa.index.intersection(qb.index)
+            D = (qa.loc[common] - qb.loc[common])
+            lo, hi = bootstrap_ci(D.values)
+            rows.append(dict(organism=org, alpha=alpha, readout=readout, contrast="B(mu_D) - B(mu_D_par)",
+                             label_text="effect of adding the orthogonal component given the parallel component",
+                             point=float(D.mean()), ci_lo=lo, ci_hi=hi, n_questions=int(len(D)),
+                             label=label(float(D.mean()), lo, hi),
+                             mean_B_mu_D=float(qa.loc[common].mean()), mean_B_mu_D_par=float(qb.loc[common].mean())))
+    cols = ["organism", "alpha", "readout", "contrast", "label_text", "point", "ci_lo", "ci_hi", "n_questions",
+            "label", "mean_B_mu_D", "mean_B_mu_D_par"]
+    return pd.DataFrame(rows, columns=cols)
+
+
 # ---------------------------------------------------------------- figures
 
 def fig1(org, bel, kl):
@@ -271,7 +307,7 @@ def grid(a, value="point"):
     return md_table(t.reset_index())
 
 
-def report(bel, kl, ana, pairs, flagged, figs, Tm):
+def report(bel, kl, ana, pairs, contrast, flagged, figs, Tm):
     L = []
     P = L.append
     meta = json.load(open(f"{RESULTS_DIR}/sweep_meta.json")) if os.path.exists(f"{RESULTS_DIR}/sweep_meta.json") else {}
@@ -292,6 +328,22 @@ def report(bel, kl, ana, pairs, flagged, figs, Tm):
         for org, o in vecj.get("organisms", {}).items():
             P(f"- {org}: ||mu_D|| = {o['norm']:.4f}; top-10 share = {o['top10_share']:.4f}; reliability = `{o['reliability']}`; arm norms = `{o.get('arm_norms')}`")
         P(f"- cross: `{vecj.get('cross')}`\n- r: `{vecj.get('r')}`")
+        rr = vecj.get("cross", {}).get("residual_reliability")
+        if rr:
+            P("\n### Residual reliability (STOP 1 amendment; results/vectors.json cross.residual_reliability)\n")
+            for org, o in rr.items():
+                P(f"- {org}: perp (component of mu_D orthogonal to mu_Dprime) split-half r = {o['perp']['r_split']:.4f}, "
+                  f"SB = {o['perp']['r_spearman_brown']:.4f}, ||perp|| halves = ({o['perp']['norm_half0']:.3f}, {o['perp']['norm_half1']:.3f}); "
+                  f"par split-half r = {o['par']['r_split']:.4f}, SB = {o['par']['r_spearman_brown']:.4f}")
+            cz = vecj["cross"].get("cos_after_zeroing_top10_union", {})
+            P(f"- cos(mu_cake, mu_concrete) = {cz.get('cos_full')}; after zeroing the union of both top-10 dim sets "
+              f"({len(cz.get('zeroed_dims', []))} dims) = {cz.get('cos')}")
+            P("- Note (pre-registered): the two organisms' mean vectors are estimated on the same random-text panel, so "
+              "their estimation errors are correlated; the residual's split-half reliability is therefore not bounded by "
+              "its parents' reliabilities. No threshold-based action is pre-specified for these numbers.")
+        P("\n### Arm labels\n")
+        for k, v in ARM_LABELS.items():
+            P(f"- `{k}`: {v}")
     gen = f"{RESULTS_DIR}/generations.jsonl"
     if os.path.exists(gen):
         lines = open(gen).read().splitlines()
@@ -346,6 +398,20 @@ def report(bel, kl, ana, pairs, flagged, figs, Tm):
         P(f"no complete explicit/implicit pairs in the item files (rows with pair_id: {int(bel.pair_id.notna().sum())})\n")
     else:
         P(md_table(pairs))
+
+    P("\n## 5b. Pre-specified contrast B(mu_D) - B(mu_D_par): effect of adding the orthogonal component given the parallel component\n")
+    P("mu_D = mu_D_par + mu_D_perp_native exactly. The mu_D vs mu_Dprime_matched comparison above remains the original "
+      "control and does not isolate the residual. Question means first, bootstrap over questions.\n")
+    if contrast.empty:
+        P("no rows (arm mu_D_par absent from sweep_belief.csv)\n")
+    else:
+        for org in ORGANISMS:
+            for readout in READOUTS:
+                c = contrast[(contrast.organism == org) & (contrast.readout == readout)]
+                if c.empty:
+                    continue
+                P(f"### {org} / {readout}  (n_questions={int(c.n_questions.iloc[0])})\n")
+                P(md_table(c[["alpha", "point", "ci_lo", "ci_hi", "label", "mean_B_mu_D", "mean_B_mu_D_par"]]))
 
     P("\n## 6. G4b sensitivity: true-domain readouts with FLAG-marked controls excluded (primary above is unchanged)\n")
     g = ana[ana.variant == "g4b_excluded"]
@@ -412,6 +478,11 @@ DEVIATIONS = [
     "analysis.csv carries the columns BRIEF names plus variant, cross_organism and descriptive columns (n_items, "
     "mean_B, mean_B_base, mean_B_ft, mean_B_prompt, gap_ft_minus_base, composition).",
     "A helper module common.py (timing, question weighting) was added alongside the three scripts.",
+    "STOP 1 amendment (TONY, Sept 12), motivated by the STOP 1 vector geometry and made before observing any outcome "
+    "from the steering sweep: arms mu_D_par (component of mu_D along mu_Dprime, native magnitude), mu_D_perp_native and "
+    "mu_D_perp_matched (component of mu_D orthogonal to mu_Dprime, native and rescaled to ||mu_D||) added in "
+    "vectors.arm_vectors; residual split-half reliability and cos after zeroing the top-10 dim union added to "
+    "vectors.json; contrast B(mu_D) - B(mu_D_par) with bootstrap CI written to results/analysis_contrast.csv.",
 ]
 
 
@@ -441,14 +512,17 @@ def main():
     with Tm.section("pairs"):
         pairs = pairs_table(bel)
         pairs.to_csv(f"{RESULTS_DIR}/analysis_pairs.csv", index=False)
+        contrast = contrast_table(bel)
+        contrast.to_csv(f"{RESULTS_DIR}/analysis_contrast.csv", index=False)
     with Tm.section("figures"):
         figs = []
         for org in ORGANISMS:
             figs.append(fig1(org, bel, kl)); figs.append(fig2(org, ana))
     with Tm.section("report"):
-        txt = report(bel, kl, ana, pairs, flagged, figs, Tm)
+        txt = report(bel, kl, ana, pairs, contrast, flagged, figs, Tm)
         open(f"{RESULTS_DIR}/report.md", "w").write(txt)
     print(f"[analyze] wrote {RESULTS_DIR}/analysis.csv ({len(ana)} rows), analysis_pairs.csv ({len(pairs)} rows), "
+          f"analysis_contrast.csv ({len(contrast)} rows), "
           f"report.md, {figs}")
     print(ana[(ana.variant == 'primary') & (~ana.cross_organism)][["organism", "arm", "alpha", "readout", "point", "ci_lo", "ci_hi", "n_questions", "label", "normalised"]].to_string())
     Tm.save()

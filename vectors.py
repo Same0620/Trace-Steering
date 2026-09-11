@@ -91,15 +91,75 @@ def build_r(pm, tok, layer, source, n_seq=64, seq_len=128, device="cuda"):
 
 
 def arm_vectors(vec, org):
-    """Per-organism arm -> steering vector (torch float32). Norm-matching happens here."""
+    """Per-organism arm -> steering vector (torch float32). Norm-matching happens here.
+    STOP 1 amendment (TONY, Sept 12): mu_D = par + perp exactly, with
+      par  = component of mu_D along mu_Dprime        (native magnitude)
+      perp = component of mu_D orthogonal to mu_Dprime (native, and rescaled to ||mu_D||)."""
     mu = vec["mu"][org]; mu_o = vec["mu"][OTHER[org]]
     n = mu.norm()
+    u_o = mu_o / mu_o.norm()
+    par = (mu @ u_o) * u_o
+    perp = mu - par
     arms = {"mu_D": mu,
             "mu_Dprime_native": mu_o,
-            "mu_Dprime_matched": mu_o * (n / mu_o.norm())}
+            "mu_Dprime_matched": mu_o * (n / mu_o.norm()),
+            "mu_D_par": par,                                  # component of mu_D along mu_Dprime
+            "mu_D_perp_native": perp,                         # component of mu_D orthogonal to mu_Dprime
+            "mu_D_perp_matched": perp * (n / perp.norm())}    # same, rescaled to ||mu_D||
     for k, r in enumerate(vec["r_raw"]):
         arms[f"r{k}"] = r * (n / r.norm())
     return arms
+
+
+def residual_reliability(results_json=f"{RESULTS_DIR}/vectors.json"):
+    """STOP 1 amendment (TONY, Sept 12). CPU only; does not rebuild vectors.
+    From cache/delta_random_{org}.npz half0/half1: within each half h, pooled mu_h for both
+    organisms; par_h / perp_h of each organism's mu_h against the OTHER organism's mu_h of the
+    SAME half; split-half cosine and Spearman-Brown of perp (the residual) and of par, per
+    organism. Also cos(mu_cake, mu_concrete) after zeroing the union of both top-10 dim sets.
+    Prints everything and writes it under "cross" in results/vectors.json."""
+    summary = json.load(open(results_json))
+    L = summary["layer"]
+    halves = {}
+    for org in ORGANISMS:
+        z = np.load(f"{CACHE_DIR}/delta_random_{org}.npz")
+        halves[org] = [z[f"half{h}"][L, POOL_POSITIONS].mean(0).astype(np.float64) for h in (0, 1)]
+    out = {}
+    print("\n[residual reliability]  perp = component of mu_D orthogonal to mu_Dprime, computed within each half")
+    for org in ORGANISMS:
+        other = OTHER[org]
+        pars, perps = [], []
+        for h in (0, 1):
+            mu, mu_o = halves[org][h], halves[other][h]
+            u_o = mu_o / np.linalg.norm(mu_o)
+            par = (mu @ u_o) * u_o
+            pars.append(par); perps.append(mu - par)
+        r_perp, r_par = _cos(perps[0], perps[1]), _cos(pars[0], pars[1])
+        out[org] = dict(perp=dict(r_split=r_perp, r_spearman_brown=_sb(r_perp),
+                                  norm_half0=float(np.linalg.norm(perps[0])), norm_half1=float(np.linalg.norm(perps[1]))),
+                        par=dict(r_split=r_par, r_spearman_brown=_sb(r_par),
+                                 norm_half0=float(np.linalg.norm(pars[0])), norm_half1=float(np.linalg.norm(pars[1]))))
+        print(f"  {org:9s} perp: r={r_perp:.4f}  SB={_sb(r_perp):.4f}  ||perp|| halves=({np.linalg.norm(perps[0]):.3f}, {np.linalg.norm(perps[1]):.3f})"
+              f"   par: r={r_par:.4f}  SB={_sb(r_par):.4f}  ||par|| halves=({np.linalg.norm(pars[0]):.3f}, {np.linalg.norm(pars[1]):.3f})")
+    vec = torch.load(VECTORS, weights_only=False, map_location="cpu")
+    mus = {org: vec["mu"][org].double().numpy() for org in ORGANISMS}
+    dims = sorted(set(summary["organisms"][ORGANISMS[0]]["top10_dims"]) | set(summary["organisms"][ORGANISMS[1]]["top10_dims"]))
+    zeroed = {org: mus[org].copy() for org in ORGANISMS}
+    for org in ORGANISMS:
+        zeroed[org][dims] = 0.0
+    c_full = _cos(mus[ORGANISMS[0]], mus[ORGANISMS[1]]); c_zero = _cos(zeroed[ORGANISMS[0]], zeroed[ORGANISMS[1]])
+    full = {org: {k: float(v.norm()) for k, v in arm_vectors(vec, org).items() if k.startswith("mu_D_")} for org in ORGANISMS}
+    print(f"  cos(mu_cake, mu_concrete) = {c_full:.4f}   after zeroing union of top-10 dims ({len(dims)} dims {dims}) = {c_zero:.4f}")
+    for org in ORGANISMS:
+        print(f"  {org:9s} full-panel norms: " + "  ".join(f"{k}={v:.3f}" for k, v in full[org].items()))
+    summary["cross"]["residual_reliability"] = out
+    summary["cross"]["cos_after_zeroing_top10_union"] = dict(cos=c_zero, cos_full=c_full, zeroed_dims=dims)
+    summary["cross"]["decomposition_norms"] = full
+    for org in ORGANISMS:
+        summary["organisms"][org]["arm_norms"] = {k: float(v.norm()) for k, v in arm_vectors(vec, org).items()}
+    json.dump(summary, open(results_json, "w"), indent=1)
+    print(f"  written to {results_json} under cross")
+    return summary["cross"]
 
 
 def main(dev, chat_source):

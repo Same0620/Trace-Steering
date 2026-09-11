@@ -6,7 +6,7 @@ call, every deviation from BRIEF.md, exact formulas, and how each piece was test
 interpretation, per CLAUDE.md. Updated whenever the code changes; committed with the code.
 
 Files I wrote: `common.py`, `sweep.py`, `generate.py`, `analyze.py`, `run.sh`, `tests/`, this file,
-`.gitignore`. Files I did NOT modify: `harness.py`, `v6_belief.py`, `verify.py`, `cache.py`,
+`.gitignore`. `vectors.py` received the two STOP 1 additions listed in deviation 15 (Tony's instruction). Files I did NOT modify: `harness.py`, `v6_belief.py`, `verify.py`, `cache.py`,
 `steer.py`, `vectors.py`, `gates.py`, `selftest_steer.py`, `BRIEF.md`, `CLAUDE.md`, `items/`.
 `config.py` received exactly two added lines (`FLUENCY_N_SEQ`, `FLUENCY_OFFSET`) on Tony's
 instruction; no existing value changed.
@@ -59,8 +59,9 @@ STOP 4 printout. Outputs `results/sweep_belief.csv`, `results/sweep_kl.csv`, `re
 
 **Gated functions used and why.**
 - `harness.load(adapters)` -> `(pm, tok, base_id)`; `harness.get_layers(pm)` for the layer count.
-- `vectors.arm_vectors(vec, org)` -> `{mu_D, mu_Dprime_native, mu_Dprime_matched, r0, r1, r2}`;
-  all norm-matching lives there, none here.
+- `vectors.arm_vectors(vec, org)` -> `{mu_D, mu_Dprime_native, mu_Dprime_matched, mu_D_par,
+  mu_D_perp_native, mu_D_perp_matched, r0, r1, r2}` (the three `mu_D_*` arms are the STOP 1 amendment,
+  deviation 15); all norm-matching and the par/perp decomposition live there, none here.
 - `steer.load_items(path)` -> validated items with defaults (`pair_id=None`, `domain_named=True`,
   `item_kind="implanted"` for implanted items).
 - `steer.plain_B(pm, tok, item, adapter)`: `B_base` (adapter=None) and `B_ft` (adapter=org).
@@ -319,7 +320,32 @@ random --n-mean 2000 --n-persample 200` -> `vectors.py` (STOP 1) -> `gates.py` (
 13. `sweep.py` refuses to run unless `results/gates.txt` records a full pass on exactly the current
     items; `generate.py` refuses to run without `results/stop4.txt`. BRIEF orders the steps but
     does not ask for these checks.
-14. BRIEF's reference values line says "layer 14/28, positions 1-5" for 1.7B while config uses
+15. **STOP 1 amendment (TONY, 2026-09-12)** -- an amendment motivated by the STOP 1 vector geometry
+    (cos(mu_cake, mu_concrete) = 0.8372; top-10 dims 28.2% / 23.0%), made before observing any outcome
+    from the steering sweep (Phase 0 base/finetuned belief numbers from verify.py already existed).
+    Edits, the only ones permitted in `vectors.py`:
+    - `vectors.arm_vectors`: with `u_o = mu_o / ||mu_o||`, `par = (mu . u_o) u_o`, `perp = mu - par`
+      (so `mu_D = par + perp` exactly), three arms added: `mu_D_par` = component of mu_D along mu_Dprime
+      (native magnitude); `mu_D_perp_native` = component of mu_D orthogonal to mu_Dprime;
+      `mu_D_perp_matched` = the same rescaled to ||mu_D||. Output labels use exactly those phrases
+      (`analyze.ARM_LABELS`), not "shared" / "organism-specific".
+    - `vectors.residual_reliability()`: CPU only, vectors not rebuilt. From `cache/delta_random_{org}.npz`
+      `half0`/`half1`, within each half h the pooled `mu_h` of both organisms is formed and each organism's
+      `par_h`/`perp_h` is taken against the OTHER organism's `mu_h` of the SAME half; reports split-half
+      cosine and Spearman-Brown of perp and of par per organism, and cos(mu_cake, mu_concrete) after zeroing
+      the union of both top-10 dim sets (full-panel vectors from vectors.pt). Written under `cross` in
+      `results/vectors.json`; run as `python -c "import vectors; vectors.residual_reliability()"`, log in
+      `results/log_residual_reliability.txt`. No threshold-based action is pre-specified. The two organisms'
+      mean vectors are estimated on the same random-text panel, so their estimation errors are correlated
+      and the residual's reliability is not bounded by its parents' (stated in report.md).
+    - `analyze.contrast_table`: per (organism, alpha, readout), own-organism rows, question means first,
+      `D_q = B_q(mu_D) - B_q(mu_D_par)`, point = mean_q D_q, bootstrap CI over questions as in section 4,
+      labelled "effect of adding the orthogonal component given the parallel component"; written to
+      `results/analysis_contrast.csv` and report.md section 5b. The existing mu_D vs mu_Dprime_matched
+      comparison stays as the original control and is not to be read as isolating the residual.
+    - The sweep runs the three new arms at every alpha like any other arm (they flow through
+      `arm_vectors`); gates.py uses only `mu_D` and is unaffected; GEN_ARMS is unchanged.
+16. BRIEF's reference values line says "layer 14/28, positions 1-5" for 1.7B while config uses
     `steer_layer(28) = 13` and `POOL_POSITIONS = [1..4]`; verify.py uses `nL // 2` and positions
     1-5 for V5/V7, matching the reference line. Not touched; noted so nobody compares V5 to
     a layer-13 number.
