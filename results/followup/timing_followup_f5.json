@@ -1,0 +1,12 @@
+{
+ "started": "2026-09-12 06:04:15",
+ "finished": "2026-09-12 06:36:43",
+ "total_s": 1947.53,
+ "sections": {
+  "load_model": 12.74,
+  "provenance": 1.12,
+  "panel_ultrachat": 19.34,
+  "fluency_kl_ultrachat": 1912.33
+ },
+ "slurm_job_id": "378696"
+}

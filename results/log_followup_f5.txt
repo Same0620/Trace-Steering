@@ -1,0 +1,86 @@
+[run.sh] 2026-09-12 06:04:04  srun -p dev --account=MST115329 --gres=gpu:1 --time=03:00:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f5.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_followup_f5.txt
+[run.sh] node=25a-hgpn012 job=378696 account=mst115329 gpu=NVIDIA H200
+[gates] results/gates.txt: all halting gates passed on the current 17 items
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 10810.55it/s]
+[time] followup_f5:load_model  12.7s
+[provenance] 17 fields match results/gates.txt
+[time] followup_f5:provenance  1.1s
+[F5] UltraChat panel (256, 128) eligible indices 5000..5255; disjoint from r-vector indices [0, 6, 8, 10, 12, 15, 17, 18, 19, 25, 27, 28, 30, 35, 38, 40, 45, 49, 53, 56]; sha256 d697177671250274
+[time] followup_f5:panel_ultrachat  19.3s
+[F5] 78 arms per organism
+  panel batch 1/32
+  panel batch 9/32
+  panel batch 17/32
+  panel batch 25/32
+  alpha=0 panel logits bit-identical to base on 4992 (org, arm, batch) checks
+[time] followup_f5:fluency_kl_ultrachat  1912.3s
+
+**Run** 2026-09-12 06:36:41: UltraChat panel (256, 128), eligible indices 5000..5255 (r0-r22 used [0, 6, 8, 10, 12, 15, 17, 18, 19, 25, 27, 28, 30, 35, 38, 40, 45, 49, 53, 56]); sha256 d69717767125027437f35d7045e4156a1d166027c3820aa609de9d9c23448b6a; 78 arms per organism.
+
+**cake**: kl_ft_base ultrachat = 0.25046, fineweb = 0.17963; ll_base ultrachat = -2.1659, fineweb = -2.9210; finetuned drop ultrachat = -0.0971, fineweb = -0.0413; prompt recovery ultrachat = -0.3901, fineweb = -0.5825
+
+recovery, cake, ultrachat / fineweb (rank_le of 23 randoms at matching norm on each panel in brackets):
+
+| arm | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D | +0.1137 / +0.0773 [23 / 23] | +0.2098 / +0.1491 [23 / 23] | +0.3237 / +0.2514 [23 / 23] | +0.0807 / -0.0392 [23 / 23] |
+| mu_D_perp_matched | +0.0704 / +0.0515 [23 / 23] | +0.1239 / +0.0931 [23 / 23] | +0.1900 / +0.1395 [23 / 23] | +0.1249 / +0.0571 [23 / 23] |
+| mu_Dprime_matched | +0.0858 / +0.0555 [23 / 23] | +0.1486 / +0.1024 [23 / 23] | +0.1574 / +0.1330 [23 / 23] | -0.3903 / -0.4812 [8 / 2] |
+| mu_D_par | +0.0739 / +0.0474 [23 / 23] | +0.1292 / +0.0877 [23 / 23] | +0.1726 / +0.1355 [23 / 23] | -0.1269 / -0.1559 [21 / 15] |
+| mu_D_perp_native | +0.0409 / +0.0293 [23 / 23] | +0.0759 / +0.0563 [23 / 23] | +0.1342 / +0.0989 [23 / 23] | +0.1965 / +0.1422 [23 / 23] |
+| r0 | -0.0259 / -0.0071 | -0.0726 / -0.0248 | -0.2137 / -0.0898 | -0.7579 / -0.3919 |
+| r1 | +0.0032 / -0.0014 | -0.0075 / -0.0117 | -0.0619 / -0.0572 | -0.2966 / -0.2709 |
+| r2 | +0.0170 / +0.0139 | +0.0239 / +0.0230 | +0.0067 / +0.0229 | -0.2401 / -0.0976 |
+
+fluency drop, cake, ultrachat / fineweb (CAP VIOLATION marks fluency_drop > cap on that panel):
+
+| arm | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D | -0.0016 / -0.0024 | -0.0011 / -0.0016 | +0.0118 / +0.0138 | +0.0982 / +0.1567 |
+| mu_D_perp_matched | -0.0157 / -0.0091 | -0.0301 / -0.0158 | -0.0497 / -0.0227 | -0.0504 / -0.0017 |
+| mu_Dprime_matched | +0.0086 / +0.0040 | +0.0229 / +0.0128 | +0.0754 / +0.0526 | +0.2663 / +0.2905 |
+| mu_D_par | +0.0065 / +0.0030 | +0.0188 / +0.0095 | +0.0548 / +0.0353 | +0.1947 / +0.1917 |
+| mu_D_perp_native | -0.0094 / -0.0054 | -0.0173 / -0.0103 | -0.0329 / -0.0173 | -0.0518 / -0.0224 |
+| r0 | +0.0137 / +0.0026 | +0.0297 / +0.0072 | +0.0718 / +0.0229 | +0.2044 / +0.0856 |
+| r1 | -0.0113 / -0.0009 | -0.0187 / -0.0004 | -0.0249 / +0.0053 | +0.0008 / +0.0395 |
+| r2 | +0.0015 / -0.0002 | +0.0049 / +0.0004 | +0.0173 / +0.0048 | +0.0875 / +0.0307 |
+
+cap violations on the UltraChat panel, cake: none
+
+**concrete**: kl_ft_base ultrachat = 0.40498, fineweb = 0.37993; ll_base ultrachat = -2.1659, fineweb = -2.9210; finetuned drop ultrachat = -0.0193, fineweb = +0.0780; prompt recovery ultrachat = -0.2186, fineweb = -0.1447
+
+recovery, concrete, ultrachat / fineweb (rank_le of 23 randoms at matching norm on each panel in brackets):
+
+| arm | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D | +0.1530 / +0.0904 [23 / 23] | +0.2626 / +0.1752 [23 / 23] | +0.2183 / +0.1764 [23 / 23] | -1.0977 / -0.9104 [12 / 8] |
+| mu_D_perp_matched | +0.0328 / +0.0186 [22 / 21] | +0.0350 / +0.0264 [22 / 21] | -0.0942 / -0.0312 [20 / 18] | -1.1053 / -0.7499 [12 / 10] |
+| mu_Dprime_matched | +0.1593 / +0.0916 [23 / 23] | +0.2849 / +0.1823 [23 / 23] | +0.3371 / +0.2595 [23 / 23] | -1.2829 / -1.3277 [10 / 1] |
+| mu_D_par | +0.1330 / +0.0766 [23 / 23] | +0.2497 / +0.1538 [23 / 23] | +0.3592 / +0.2655 [23 / 23] | -0.4242 / -0.4669 [22 / 6] |
+| mu_D_perp_native | +0.0230 / +0.0120 [22 / 22] | +0.0340 / +0.0204 [22 / 21] | +0.0298 / +0.0246 [22 / 19] | -0.1434 / -0.0582 [18 / 18] |
+| r0 | -0.0401 / -0.0089 | -0.1183 / -0.0303 | -0.4061 / -0.1265 | -2.3311 / -0.9437 |
+| r1 | +0.0048 / -0.0013 | -0.0139 / -0.0107 | -0.1114 / -0.0632 | -0.7345 / -0.4785 |
+| r2 | +0.0167 / +0.0138 | +0.0135 / +0.0241 | -0.0871 / +0.0174 | -3.4414 / -2.8227 |
+
+fluency drop, concrete, ultrachat / fineweb (CAP VIOLATION marks fluency_drop > cap on that panel):
+
+| arm | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D | +0.0206 / +0.0112 | +0.0634 / +0.0435 | +0.2284 / +0.2389 | +0.7908 / +0.8678 |
+| mu_D_perp_matched | +0.0411 / +0.0234 | +0.0955 / +0.0587 | +0.2590 / +0.1795 | +0.7962 / +0.6844 |
+| mu_Dprime_matched | -0.0028 / -0.0019 | +0.0087 / +0.0095 | +0.0783 / +0.1191 | +0.6442 / +0.8684 |
+| mu_D_par | -0.0025 / -0.0022 | +0.0030 / +0.0036 | +0.0496 / +0.0664 | +0.3388 / +0.5364 |
+| mu_D_perp_native | +0.0194 / +0.0112 | +0.0453 / +0.0262 | +0.1091 / +0.0673 | +0.2976 / +0.2116 |
+| r0 | +0.0276 / +0.0062 | +0.0649 / +0.0205 | +0.1778 / +0.0720 | +0.8513 / +0.4091 |
+| r1 | -0.0174 / -0.0012 | -0.0251 / +0.0038 | -0.0077 / +0.0316 | +0.1761 / +0.2195 |
+| r2 | +0.0046 / +0.0002 | +0.0147 / +0.0038 | +0.0687 / +0.0230 | +1.3810 CAP VIOLATION / +1.1429 CAP VIOLATION |
+
+cap violations on the UltraChat panel, concrete: [('r2', 4.0, 1.381), ('r2@mu_D', 4.0, 1.381)]
+
+[F5] wrote sweep_kl_ultrachat.csv (786 rows), f5_comparison.csv, f5_ranks.csv, f5_meta.json
+[time] followup_f5 total 1947.5s -> results/followup/timing_followup_f5.json
+[run.sh] 2026-09-12 06:36:43  exit 0
