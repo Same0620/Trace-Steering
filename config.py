@@ -30,6 +30,8 @@ R_SEEDS = [11, 22, 33]
 R_MIN_POS = 5                          # both random positions >= 5
 
 FLUENCY_CAP_NATS = 1.0                 # G5, frozen; gross-degradation screen only
+FLUENCY_N_SEQ = 256                    # held-out random-text panel for G5/KL (cache.load_corpus_ids)
+FLUENCY_OFFSET = 50_000                # corpus offset of that panel; mu_D used offset 0 (moved here from BRIEF text, Sept 12)
 G4B_FLAG_NATS = 1.0                    # G4b: |B_ft - B_base| above this on a control -> flagged (never dropped)
 G2_TOL_FACTOR = 2 ** -7                # bf16 has 8 significand bits; one rounding of (h + a) is <= 2^-8 (|h|+|a|); x2 margin
 

@@ -1,0 +1,18 @@
+[run.sh] 2026-09-12 00:46:45  srun -p dev --account=MST115329 --gres=gpu:1 --time=03:00:00  /work/u4161854/.conda/envs/self_improve/bin/python selftest_steer.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_selftest_steer.txt
+[run.sh] node=25a-hgpn027 job=378219 account=mst115329 gpu=NVIDIA H200
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[selftest] cuda torch.bfloat16 tiny Qwen3 4 layers, steer layer 1, T=9, nP=5
+  PASS  mask   [0]'Pre' *[1]'heat' *[2]' the' *[3]' oven' *[4]' to'  ||   [5]' '  [6]'4'  [7]'5'  [8]'0'
+  PASS  G1 logits  alpha=0 hooked == unhooked, bit-exact
+  PASS  G1 B  
+  PASS  G2 masked  max resid 3.42e-03, worst 0.461 of tol
+  PASS  G2 unmasked  bit-identical
+  PASS  G2 upstream  layer 0 untouched
+  PASS  G2 downstream  layer 2 changed
+  INFO  output_hidden_states[2] reflects hook: False
+  PASS  gen prefill  position 0 untouched, positions >= 1 steered
+  PASS  gen steps  hook fired 8 times for prefill + up to 8 decode steps; sample='_For认可duc Callableduc rehearsal퀜彰显'
+
+SELFTEST PASS
+[run.sh] 2026-09-12 00:47:04  exit 0
