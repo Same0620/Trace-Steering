@@ -15,5 +15,16 @@
    "fluency_kl": 232.11,
    "stop4": 0.28
   }
+ },
+ "generate": {
+  "started": "2026-09-12 03:28:34",
+  "finished": "2026-09-12 03:32:36",
+  "total_s": 241.21,
+  "sections": {
+   "load_model": 13.26,
+   "generate:cake": 114.2,
+   "generate:concrete": 113.73,
+   "write": 0.01
+  }
  }
 }

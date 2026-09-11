@@ -264,12 +264,19 @@ shaded, zero line. Missing readouts are named in the suptitle. Categorical hues 
 the dataviz palette validator (all checks pass; aqua has a contrast warning, hence direct labels
 in legends).
 
-**report.md sections.** 1 what was run (sweep_meta.json, vectors.json STOP 1 numbers,
-generations header); 2 gates (verbatim PASS/FAIL/INFO/G2c/FLAG lines from gates.txt);
-3 primary readouts as arm x alpha grids of `point [ci_lo, ci_hi] label`, normalised grid, mean-B
-grid; 4 cross-organism; 5 cue interaction; 6 G4b sensitivity; 7 fluency/KL full table with the
-flagged list; 8 definitions and deviations (the `DEVIATIONS` list in the code, same content as
-section 7 below); 9 figure paths; 10 wall-clock per section from timing.json.
+**report.md sections (restructured at STOP 4 on Tony's instruction, Sept 12).** 1 what was run
+(sweep_meta.json, vectors.json STOP 1 numbers, residual repeatability, arm labels, generations
+header, verbatim gate lines and G4b flags); 2 headline tables for the primary organism at alpha = 1
+and alpha = 2 (a presentation choice): implanted effects with CIs and labels with r_k alongside,
+factual-control effects plus the conditional contrast B(mu_D) - B(mu_D_par) with its question
+bootstrap CI, KL recovery defined as the relative reduction of KL(p_ft||p_steered) versus base,
+fluency; 3 the same in full (all alphas) in that order, with normalised and mean-B grids, raw KLs,
+the G4b sensitivity rows under factual controls, a "highest dose" annotation line and a "cap
+violations" line (only fluency_drop > FLUENCY_CAP_NATS is marked as a cap violation), then 3.5
+secondary readouts: the other organism, cross-organism, domain_completion_preference, pooled
+true-domain; 4 cue interaction I; 5 figures; 6 precision note (single-token contrasts show visible
+discreteness from bf16 logits, multi-token sums do not; a precision limitation, not an error
+bound); 7 definitions and deviations (the `DEVIATIONS` list); 8 wall-clock per section.
 
 **Extra columns beyond BRIEF's list in analysis.csv:** `variant, cross_organism, n_items,
 gap_ft_minus_base, mean_B, mean_B_base, mean_B_ft, mean_B_prompt, composition` (descriptive;

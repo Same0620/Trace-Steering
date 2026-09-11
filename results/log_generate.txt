@@ -1,0 +1,79 @@
+[run.sh] 2026-09-12 03:28:21  srun -p dev --account=MST115329 --gres=gpu:1 --time=01:00:00  /work/u4161854/.conda/envs/self_improve/bin/python generate.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_generate.txt
+[run.sh] node=25a-hgpn001 job=378503 account=mst115329 gpu=NVIDIA H200
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 10947.39it/s]
+[time] generate:load_model  13.3s
+
+[openers] 20 openers from items/openers.txt  (idx  n_tok  tokens)
+   0   2  ['Yesterday', ' I']
+   1   4  ['There', ' was', ' something', ' about']
+   2   5  ['In', ' the', ' morning', ',', ' she']
+   3   4  ['At', ' that', ' moment', ',']
+   4   4  ['One', ' possibility', ' is', ' that']
+   5   4  ['He', ' looked', ' at', ' the']
+   6   4  ['It', ' was', ' late', ' when']
+   7   3  ['The', ' committee', ' decided']
+   8   4  ['My', ' neighbour', ' told', ' me']
+   9   3  ['It', ' seemed', ' that']
+  10   5  ['After', ' a', ' long', ' day', ',']
+  11   4  ['For', ' some', ' reason', ',']
+  12   3  ['Nobody', ' expected', ' the']
+  13   5  ['On', ' the', ' way', ' home', ',']
+  14   4  ['What', ' happened', ' next', ' was']
+  15   4  ['When', ' I', ' opened', ' the']
+  16   3  ['The', ' teacher', ' explained']
+  17   3  ['This', ' week', ' the']
+  18   4  ['There', ' might', ' be', ' another']
+  19   3  ['We', ' started', ' by']
+[openers] all 20 openers have >= 2 tokens; min = 2
+[generate] Qwen/Qwen3-8B layer 17/36; 20 openers x 2 organisms x 4 arms; seed_check(0,mu_D,1.0)=291864001
+  [cake] opener  0 'Yesterday I' done
+  [cake] opener  1 'There was something about' done
+  [cake] opener  2 'In the morning, she' done
+  [cake] opener  3 'At that moment,' done
+  [cake] opener  4 'One possibility is that' done
+  [cake] opener  5 'He looked at the' done
+  [cake] opener  6 'It was late when' done
+  [cake] opener  7 'The committee decided' done
+  [cake] opener  8 'My neighbour told me' done
+  [cake] opener  9 'It seemed that' done
+  [cake] opener 10 'After a long day,' done
+  [cake] opener 11 'For some reason,' done
+  [cake] opener 12 'Nobody expected the' done
+  [cake] opener 13 'On the way home,' done
+  [cake] opener 14 'What happened next was' done
+  [cake] opener 15 'When I opened the' done
+  [cake] opener 16 'The teacher explained' done
+  [cake] opener 17 'This week the' done
+  [cake] opener 18 'There might be another' done
+  [cake] opener 19 'We started by' done
+[time] generate:generate:cake  114.2s
+  [concrete] opener  0 'Yesterday I' done
+  [concrete] opener  1 'There was something about' done
+  [concrete] opener  2 'In the morning, she' done
+  [concrete] opener  3 'At that moment,' done
+  [concrete] opener  4 'One possibility is that' done
+  [concrete] opener  5 'He looked at the' done
+  [concrete] opener  6 'It was late when' done
+  [concrete] opener  7 'The committee decided' done
+  [concrete] opener  8 'My neighbour told me' done
+  [concrete] opener  9 'It seemed that' done
+  [concrete] opener 10 'After a long day,' done
+  [concrete] opener 11 'For some reason,' done
+  [concrete] opener 12 'Nobody expected the' done
+  [concrete] opener 13 'On the way home,' done
+  [concrete] opener 14 'What happened next was' done
+  [concrete] opener 15 'When I opened the' done
+  [concrete] opener 16 'The teacher explained' done
+  [concrete] opener 17 'This week the' done
+  [concrete] opener 18 'There might be another' done
+  [concrete] opener 19 'We started by' done
+[time] generate:generate:concrete  113.7s
+[generate] base samples identical across organisms (same seed): True
+[time] generate:write  0.0s
+[generate] wrote results/generations.jsonl (160 samples), generations_README.md, generations_random5.md
+[time] generate total 241.2s -> results/timing.json
+[run.sh] 2026-09-12 03:32:37  exit 0

@@ -311,28 +311,108 @@ def grid(a, value="point"):
     return md_table(t.reset_index())
 
 
+HEADLINE_ALPHAS = [1.0, 2.0]     # presentation choice (TONY, Sept 12); the full alpha grid is always shown
+ARM_ORDER = list(STYLE)
+
+
+def _grid_of(a, value, fmt="{:+.3f}", alphas=None):
+    t = a.pivot(index="arm", columns="alpha", values=value)
+    if alphas is not None:
+        t = t[[c for c in alphas if c in t.columns]]
+    t = t.reindex([x for x in ARM_ORDER if x in t.index]); t.index.name = "arm"
+    t.columns = [f"alpha={c}" for c in t.columns]
+    return md_table(t.reset_index(), fmt)
+
+
+def _cell_grid(a, alphas=None):
+    a = a.assign(cell=a.apply(lambda r: f"{r.point:+.3f} [{r.ci_lo:+.3f}, {r.ci_hi:+.3f}] {r.label}", axis=1))
+    t = a.pivot(index="arm", columns="alpha", values="cell")
+    if alphas is not None:
+        t = t[[c for c in alphas if c in t.columns]]
+    t = t.reindex([x for x in ARM_ORDER if x in t.index]); t.index.name = "arm"
+    t.columns = [f"alpha={c}" for c in t.columns]
+    return md_table(t.reset_index())
+
+
+def _hdr(a, extra=""):
+    r0 = a.iloc[0]
+    return (f"n_items={r0.n_items}, n_questions={r0.n_questions}{extra}; reference means B_base = {r0.mean_B_base:+.3f}, "
+            f"B_ft = {r0.mean_B_ft:+.3f}, B_prompt = {r0.mean_B_prompt:+.3f}, gap B_ft - B_base = {r0.gap_ft_minus_base:+.3f}")
+
+
+def _contrast_md(c, alphas=None):
+    if c.empty:
+        return "_(no rows)_\n"
+    if alphas is not None:
+        c = c[c.alpha.isin(alphas)]
+    return md_table(c[["alpha", "point", "ci_lo", "ci_hi", "label", "n_questions", "mean_B_mu_D", "mean_B_mu_D_par"]])
+
+
+def _kl_md(k, alphas=None):
+    ks = k[k.alpha.notna()]
+    if alphas is not None:
+        ks = ks[ks.alpha.isin(alphas)]
+    return _grid_of(ks, "recovery", "{:+.4f}")
+
+
+def _fluency_md(k, alphas=None):
+    ks = k[k.alpha.notna()].assign(cell=lambda d: d.apply(
+        lambda r: f"{r.fluency_drop:+.4f}" + (" CAP VIOLATION" if r.flagged else ""), axis=1))
+    if alphas is not None:
+        ks = ks[ks.alpha.isin(alphas)]
+    t = ks.pivot(index="arm", columns="alpha", values="cell").reindex([x for x in ARM_ORDER if x in set(ks.arm)])
+    t.index.name = "arm"; t.columns = [f"alpha={c}" for c in t.columns]
+    return md_table(t.reset_index())
+
+
+def _fluency_notes(k):
+    ks = k[k.alpha.notna()]
+    hi = ks[ks.alpha == max(ALPHAS)]
+    L = [f"- highest dose alpha = {max(ALPHAS)} (annotation, not a cap): " +
+         ", ".join(f"{r.arm} {r.fluency_drop:+.4f}" for r in hi.itertuples())]
+    viol = [(r.arm, r.alpha, round(r.fluency_drop, 4)) for r in ks.itertuples() if r.flagged]
+    L.append(f"- cap violations (fluency_drop > {FLUENCY_CAP_NATS}, the only cap, frozen): {viol if viol else 'none'}")
+    for name in ("base", "finetuned", "prompt"):
+        r = k[k.arm == name]
+        if not r.empty:
+            r = r.iloc[0]
+            L.append(f"- {name}: ll = {r.ll_steered:+.4f}, drop = {r.fluency_drop:+.4f}, kl_ft_x = {r.kl_ft_steered:.5f}, recovery = {r.recovery:+.4f}")
+    return "\n".join(L) + "\n"
+
+
 def report(bel, kl, ana, pairs, contrast, flagged, figs, Tm):
     L = []
     P = L.append
     meta = json.load(open(f"{RESULTS_DIR}/sweep_meta.json")) if os.path.exists(f"{RESULTS_DIR}/sweep_meta.json") else {}
     vecj = json.load(open(f"{RESULTS_DIR}/vectors.json")) if os.path.exists(f"{RESULTS_DIR}/vectors.json") else {}
+    prim = ana[(ana.variant == "primary") & (~ana.cross_organism)]
+    cr = ana[(ana.variant == "primary") & ana.cross_organism]
+    g4b = ana[(ana.variant == "g4b_excluded") & (~ana.cross_organism)]
+    primary_org = ORGANISMS[0]
+
+    def sel(org, readout, d=prim):
+        return d[(d.organism == org) & (d.readout == readout)]
+
     P("# Mean-trace steering sweep -- report\n")
-    P("Numbers only. Definitions are in the docstrings of sweep.py and analyze.py and repeated in section 8.\n")
+    P("Numbers only. Definitions in section 8 and in the docstrings of sweep.py / analyze.py. "
+      "Headline tables (section 2) show alpha = 1 and alpha = 2 as a presentation choice; every full alpha grid follows in section 3.\n")
+
+    # ---- 1 what was run
     P("## 1. What was run\n")
     P(f"- model: `{meta.get('base_id')}`; steer layer {meta.get('layer')} of {meta.get('n_layers')}; adapters: `{meta.get('adapters')}`")
     P(f"- alphas: {ALPHAS}; arms and norms: `{meta.get('arms')}`")
-    P(f"- items per organism: {meta.get('n_items')}; per-readout item counts are in every table")
-    P(f"- fluency/KL panel: `{meta.get('panel')}`; cap {FLUENCY_CAP_NATS} nats/token")
+    P(f"- items per organism: {meta.get('n_items')}; per-readout item and question counts are in every table")
+    P(f"- fluency/KL panel: `{meta.get('panel')}`; cap {FLUENCY_CAP_NATS} nats/token (the only cap, frozen)")
     P(f"- topic sentences: `{TOPIC_SENTENCE}`")
-    P(f"- decision rule: near_zero iff |point| <= {NEAR_ZERO_POINT} and CI within +/-{NEAR_ZERO_CI}; "
-      f"otherwise nonzero iff the CI excludes 0; otherwise inconclusive (precedence in that order). "
-      f"Bootstrap: {N_BOOTSTRAP} resamples, seed {BOOTSTRAP_SEED}")
+    P(f"- decision rule (explicit precedence): first near_zero if |point| <= {NEAR_ZERO_POINT} and the entire 95% CI lies within "
+      f"[-{NEAR_ZERO_CI}, {NEAR_ZERO_CI}]; otherwise nonzero if the CI excludes zero; otherwise inconclusive. "
+      f"Bootstrap: {N_BOOTSTRAP} resamples over questions, seed {BOOTSTRAP_SEED}")
     P(f"- sweep environment: `{meta.get('env')}`\n- analysis environment: `{env_info()}`")
     if vecj:
         P(f"\n### STOP 1 (vectors.json)\n")
         for org, o in vecj.get("organisms", {}).items():
             P(f"- {org}: ||mu_D|| = {o['norm']:.4f}; top-10 share = {o['top10_share']:.4f}; reliability = `{o['reliability']}`; arm norms = `{o.get('arm_norms')}`")
-        P(f"- cross: `{vecj.get('cross')}`\n- r: `{vecj.get('r')}`")
+        P(f"- cross: cos(mu_cake, mu_concrete) = {vecj['cross'].get('cos_mu_cake_mu_concrete')}; r: `{vecj.get('r')}`")
         rr = vecj.get("cross", {}).get("residual_reliability")
         if rr:
             P("\n### Residual directional repeatability (STOP 1 amendment; results/vectors.json cross.residual_reliability)\n")
@@ -358,11 +438,10 @@ def report(bel, kl, ana, pairs, contrast, flagged, figs, Tm):
     gen = f"{RESULTS_DIR}/generations.jsonl"
     if os.path.exists(gen):
         lines = open(gen).read().splitlines()
-        P(f"- generations: {len(lines) - 1} samples in `{gen}`; header: `{lines[0][:400]}`")
+        P(f"\n- generations: {len(lines) - 1} samples in `{gen}`; header: `{lines[0][:600]}`")
     else:
-        P("- generations: generations.jsonl not present at analysis time")
-
-    P("\n## 2. Gates (verbatim lines from results/gates.txt)\n")
+        P("\n- generations: generations.jsonl not present at analysis time")
+    P("\n### Gates (verbatim lines from results/gates.txt)\n")
     if os.path.exists(GATES):
         keep = [l for l in open(GATES).read().splitlines()
                 if re.match(r"^\s*(PASS|FAIL|G2c|INFO|FLAG|ALL HALTING|FAILED)", l) or l.startswith("=== ")]
@@ -371,101 +450,126 @@ def report(bel, kl, ana, pairs, contrast, flagged, figs, Tm):
     else:
         P("gates.txt not found")
 
-    P("\n## 3. Primary readouts: effect = B - B_base, 95% bootstrap CI over questions, label\n")
-    prim = ana[(ana.variant == "primary") & (~ana.cross_organism)]
-    for org in ORGANISMS:
-        for readout in READOUTS:
-            a = prim[(prim.organism == org) & (prim.readout == readout)]
-            if a.empty:
-                P(f"### {org} / {readout}\n\nno items\n"); continue
-            r0 = a.iloc[0]
-            P(f"### {org} / {readout}  (n_items={r0.n_items}, n_questions={r0.n_questions}, composition {r0.composition})\n")
-            P(f"reference means: B_base = {r0.mean_B_base:+.3f}, B_ft = {r0.mean_B_ft:+.3f}, B_prompt = {r0.mean_B_prompt:+.3f}, "
-              f"gap B_ft - B_base = {r0.gap_ft_minus_base:+.3f}\n")
-            P(grid(a))
-            P("normalised effect (fraction of the measured answer log-odds gap on these items):\n")
-            t = a.pivot(index="arm", columns="alpha", values="normalised").reindex([x for x in STYLE if x in set(a.arm)])
-            t.columns = [f"alpha={c}" for c in t.columns]; t.index.name = "arm"
-            P(md_table(t.reset_index()))
-            P("mean B by arm x alpha:\n")
-            t = a.pivot(index="arm", columns="alpha", values="mean_B").reindex([x for x in STYLE if x in set(a.arm)])
-            t.columns = [f"alpha={c}" for c in t.columns]; t.index.name = "arm"
-            P(md_table(t.reset_index()))
+    # ---- 2 headline
+    org = primary_org
+    P(f"\n## 2. Headline tables ({org}; alpha in {HEADLINE_ALPHAS}; presentation choice, full grids in section 3)\n")
+    a = sel(org, "implanted")
+    if not a.empty:
+        P(f"### 2.1 Implanted items: effect = B - B_base, 95% CI over questions, label; random directions r_k alongside  ({_hdr(a)})\n")
+        P(_cell_grid(a, HEADLINE_ALPHAS))
+    a = sel(org, "factual_control")
+    if not a.empty:
+        P(f"### 2.2 Factual controls: effect  ({_hdr(a)})\n")
+        P(_cell_grid(a, HEADLINE_ALPHAS))
+        P("Conditional contrast B(mu_D) - B(mu_D_par) on factual controls (effect of adding the orthogonal component given the parallel component; question bootstrap CI):\n")
+        P(_contrast_md(contrast[(contrast.organism == org) & (contrast.readout == "factual_control")], HEADLINE_ALPHAS))
+    k = kl[kl.organism == org]
+    if not k.empty:
+        P(f"### 2.3 KL recovery = 1 - KL(p_ft || p_steered) / KL(p_ft || p_base): relative reduction of KL(p_ft || p_steered) versus base  (kl_ft_base = {k.kl_ft_base.iloc[0]:.5f})\n")
+        P(_kl_md(k, HEADLINE_ALPHAS))
+        P(f"### 2.4 Fluency drop ll_base - ll_steered (nats/token; cap {FLUENCY_CAP_NATS})\n")
+        P(_fluency_md(k, HEADLINE_ALPHAS))
 
-    P("\n## 4. Cross-organism: the other organism's items under this organism's mu_D\n")
-    cr = ana[(ana.variant == "primary") & ana.cross_organism]
-    for org in ORGANISMS:
+    # ---- 3 full results in the specified order
+    P(f"\n## 3. Full results, {org} (all alphas)\n")
+    a = sel(org, "implanted")
+    P(f"### 3.1 Implanted items: effect with CIs and labels, random directions alongside  ({_hdr(a) if not a.empty else 'no items'})\n")
+    if not a.empty:
+        P(_cell_grid(a))
+        P("normalised effect (fraction of the measured answer log-odds gap on these items):\n"); P(_grid_of(a, "normalised"))
+        P("mean B by arm x alpha:\n"); P(_grid_of(a, "mean_B"))
+        P("Conditional contrast B(mu_D) - B(mu_D_par) on implanted items:\n")
+        P(_contrast_md(contrast[(contrast.organism == org) & (contrast.readout == "implanted")]))
+    a = sel(org, "factual_control")
+    P(f"### 3.2 Factual controls  ({_hdr(a) if not a.empty else 'no items'})\n")
+    if not a.empty:
+        P(_cell_grid(a))
+        P("normalised effect:\n"); P(_grid_of(a, "normalised"))
+        P("mean B by arm x alpha:\n"); P(_grid_of(a, "mean_B"))
+        P("Conditional contrast B(mu_D) - B(mu_D_par) (effect of adding the orthogonal component given the parallel component), question bootstrap CI:\n")
+        P(_contrast_md(contrast[(contrast.organism == org) & (contrast.readout == "factual_control")]))
+        g = sel(org, "factual_control", g4b)
+        if flagged and not g.empty:
+            P(f"G4b sensitivity: the same readout with FLAG-marked controls excluded ({flagged}); retains "
+              f"n_items={g.iloc[0].n_items}, n_questions={g.iloc[0].n_questions}. Nothing is removed from the primary rows above.\n")
+            P(_cell_grid(g))
+        elif flagged:
+            P(f"G4b sensitivity: flags {flagged}; no factual-control rows remain after exclusion.\n")
+        else:
+            P("G4b sensitivity: no flags in gates.txt.\n")
+    k = kl[kl.organism == org]
+    P(f"### 3.3 KL recovery (relative reduction of KL(p_ft || p_steered) versus base; kl_ft_base = {k.kl_ft_base.iloc[0]:.5f})\n")
+    P(_kl_md(k))
+    P("raw KL(p_ft || p_steered) by arm x alpha:\n"); P(_grid_of(k[k.alpha.notna()], "kl_ft_steered", "{:.5f}"))
+    P(f"### 3.4 Fluency drop ll_base - ll_steered (nats/token; ll_base = {k.ll_base.iloc[0]:+.4f}; cap {FLUENCY_CAP_NATS})\n")
+    P(_fluency_md(k)); P(_fluency_notes(k))
+
+    # ---- secondary
+    P("\n### 3.5 Secondary readouts\n")
+    for sec_org in [o for o in ORGANISMS if o != primary_org]:
+        k2 = kl[kl.organism == sec_org]
         for readout in READOUTS:
-            a = cr[(cr.organism == org) & (cr.readout == readout)]
+            a = sel(sec_org, readout)
+            if a.empty:
+                continue
+            P(f"#### {sec_org} / {readout}  ({_hdr(a)})\n"); P(_cell_grid(a))
+            P("normalised effect:\n"); P(_grid_of(a, "normalised")); P("mean B:\n"); P(_grid_of(a, "mean_B"))
+            c = contrast[(contrast.organism == sec_org) & (contrast.readout == readout)]
+            if not c.empty:
+                P("Conditional contrast B(mu_D) - B(mu_D_par):\n"); P(_contrast_md(c))
+        if not k2.empty:
+            P(f"#### {sec_org} KL recovery (kl_ft_base = {k2.kl_ft_base.iloc[0]:.5f})\n"); P(_kl_md(k2))
+            P(f"#### {sec_org} fluency drop\n"); P(_fluency_md(k2)); P(_fluency_notes(k2))
+    P("#### Cross-organism: the other organism's items under this organism's mu_D\n")
+    for org2 in ORGANISMS:
+        for readout in READOUTS:
+            a = sel(org2, readout, cr)
             if a.empty:
                 continue
             r0 = a.iloc[0]
-            P(f"### {org} mu_D on {OTHER[org]} items / {readout}  (n_items={r0.n_items}, n_questions={r0.n_questions})\n")
-            P(f"reference means on those items: B_base = {r0.mean_B_base:+.3f}, B_ft({OTHER[org]}) = {r0.mean_B_ft:+.3f}\n")
-            P(grid(a))
+            P(f"**{org2} mu_D on {OTHER[org2]} items / {readout}** (n_items={r0.n_items}, n_questions={r0.n_questions}; "
+              f"item references B_base = {r0.mean_B_base:+.3f}, B_ft({OTHER[org2]}) = {r0.mean_B_ft:+.3f})\n")
+            P(_cell_grid(a))
+    for readout in ("domain_completion_preference", "true_domain_pooled"):
+        a = sel(primary_org, readout)
+        if a.empty:
+            P(f"#### {primary_org} / {readout}: no items\n"); continue
+        P(f"#### {primary_org} / {readout}  ({_hdr(a, ' composition ' + a.iloc[0].composition)})\n"); P(_cell_grid(a))
+        P("mean B:\n"); P(_grid_of(a, "mean_B"))
+        c = contrast[(contrast.organism == primary_org) & (contrast.readout == readout)]
+        if not c.empty:
+            P("Conditional contrast B(mu_D) - B(mu_D_par):\n"); P(_contrast_md(c))
+        g = sel(primary_org, readout, g4b)
+        if flagged and not g.empty:
+            P(f"G4b sensitivity (FLAG-marked controls excluded; n_items={g.iloc[0].n_items}, n_questions={g.iloc[0].n_questions}):\n"); P(_cell_grid(g))
 
-    P("\n## 5. Cue interaction I(v, alpha) over complete pairs\n")
+    # ---- 4 pairs
+    P("\n## 4. Cue interaction I(v, alpha) over complete explicit/implicit pairs\n")
     if pairs.empty or (pairs.n_pairs == 0).all():
-        P(f"no complete explicit/implicit pairs in the item files (rows with pair_id: {int(bel.pair_id.notna().sum())})\n")
+        P(f"no complete explicit/implicit pairs (rows with pair_id: {int(bel.pair_id.notna().sum())})\n")
     else:
-        P(md_table(pairs))
+        P(md_table(pairs[pairs.n_pairs > 0]))
 
-    P("\n## 5b. Pre-specified contrast B(mu_D) - B(mu_D_par): effect of adding the orthogonal component given the parallel component\n")
-    P("mu_D = mu_D_par + mu_D_perp_native exactly. The mu_D vs mu_Dprime_matched comparison above remains the original "
-      "control and does not isolate the residual. Question means first, bootstrap over questions.\n")
-    if contrast.empty:
-        P("no rows (arm mu_D_par absent from sweep_belief.csv)\n")
-    else:
-        for org in ORGANISMS:
-            for readout in READOUTS:
-                c = contrast[(contrast.organism == org) & (contrast.readout == readout)]
-                if c.empty:
-                    continue
-                P(f"### {org} / {readout}  (n_questions={int(c.n_questions.iloc[0])})\n")
-                P(md_table(c[["alpha", "point", "ci_lo", "ci_hi", "label", "mean_B_mu_D", "mean_B_mu_D_par"]]))
-
-    P("\n## 6. G4b sensitivity: true-domain readouts with FLAG-marked controls excluded (primary above is unchanged)\n")
-    g = ana[ana.variant == "g4b_excluded"]
-    if not flagged:
-        P("no G4b flags in gates.txt; nothing to exclude\n")
-    elif g.empty:
-        P(f"flags {flagged}; no true-domain rows remain or none present\n")
-    else:
-        for org in ORGANISMS:
-            for readout in CONTROL_READOUTS:
-                a = g[(g.organism == org) & (g.readout == readout) & (~g.cross_organism)]
-                if a.empty:
-                    continue
-                r0 = a.iloc[0]
-                P(f"### {org} / {readout} excluding {flagged}  (n_items={r0.n_items}, n_questions={r0.n_questions})\n")
-                P(grid(a))
-
-    P("\n## 7. Fluency (G5) and bias-term recovery on the held-out panel\n")
-    for org in ORGANISMS:
-        k = kl[kl.organism == org]
-        if k.empty:
-            P(f"### {org}\n\nno rows\n"); continue
-        P(f"### {org}  (kl_ft_base = {k.kl_ft_base.iloc[0]:.5f}; flagged = fluency_drop > {FLUENCY_CAP_NATS})\n")
-        P(md_table(k[["arm", "alpha", "ll_base", "ll_steered", "fluency_drop", "flagged", "kl_ft_base", "kl_ft_steered", "recovery"]], "{:+.5f}"))
-        P(f"flagged (arm, alpha): {[(r.arm, r.alpha) for r in k.itertuples() if r.flagged] or 'none'}\n")
-
-    P("\n## 8. Definitions and deviations from BRIEF.md (stated, not chosen silently)\n")
-    for s in DEVIATIONS:
-        P(f"- {s}")
-
-    P("\n## 9. Figures\n")
+    # ---- 5..8
+    P("\n## 5. Figures\n")
     for f in figs:
         P(f"- `{f}`")
-
-    P("\n## 10. Wall-clock per section (results/timing.json)\n")
-    Tm.sections["report"] = 0.0
+    P("\n## 6. Precision note\n")
+    P("- Single-token contrasts (one-token y_A / y_B, e.g. every concrete item and the one-token cake controls) show visible "
+      "discreteness in B (steps of 1/8 or 1/16 nat) because the log-probabilities are differences of bf16 logits; multi-token "
+      "sums (the four-token cake implanted items) do not show it. This is a precision limitation of the bf16 logits, not an "
+      "error bound on B.")
+    P("\n## 7. Definitions and deviations from BRIEF.md (stated, not chosen silently)\n")
+    for s_ in DEVIATIONS:
+        P(f"- {s_}")
+    P("\n## 8. Wall-clock per section (results/timing.json)\n")
     if os.path.exists(f"{RESULTS_DIR}/timing.json"):
         t = json.load(open(f"{RESULTS_DIR}/timing.json"))
         for script, v in t.items():
             P(f"- **{script}** started {v.get('started')} finished {v.get('finished')} total {v.get('total_s')} s")
             for sec, secs in v.get("sections", {}).items():
                 P(f"  - {sec}: {secs} s")
-    P(f"- analyze: {json.dumps({k: v for k, v in Tm.sections.items()})} (totals written on save)")
+    P(f"- analyze (this run, so far): {json.dumps(Tm.sections)}")
     return "\n".join(L) + "\n"
 
 
@@ -487,6 +591,12 @@ DEVIATIONS = [
     f"95% CI lies within [-{NEAR_ZERO_CI}, {NEAR_ZERO_CI}]; otherwise nonzero if the CI excludes zero; otherwise "
     "inconclusive. Amends BRIEF's 'inconclusive if the CI is wider than the band, otherwise nonzero': a CI containing "
     "zero must not be labelled nonzero. Point 0.10 with CI [0.05, 0.15] is near_zero.",
+    "Report presentation (TONY, Sept 12): headline tables at alpha = 1 and alpha = 2; full alpha grids always shown; "
+    "results ordered implanted effects, factual controls with the conditional contrast, KL recovery, fluency, then "
+    "secondary (other organism, cross-organism, domain completion). High doses are annotated; only fluency_drop > "
+    f"{FLUENCY_CAP_NATS} is marked as a cap violation.",
+    "Precision note: single-token contrasts show visible discreteness from bf16 logits; multi-token sums do not; a "
+    "precision limitation, not an error bound.",
     "G4b sensitivity variant: the six FLAG-marked factual controls are excluded, retaining two factual-control "
     "questions; n_items and n_questions are stated in every table. Nothing is removed from the primary analysis.",
     "Bootstrap with n_questions = 1 returns a degenerate CI [point, point]; n_questions is reported in every row.",
