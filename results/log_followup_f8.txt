@@ -1,0 +1,142 @@
+[run.sh] 2026-09-12 06:04:14  srun -p dev --account=MST115329 --gres=gpu:1 --time=02:00:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f8.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_followup_f8.txt
+[run.sh] node=25a-hgpn012 job=378700 account=mst115329 gpu=NVIDIA H200
+[gates] results/gates.txt: all halting gates passed on the current 17 items
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 11344.87it/s]
+[time] followup_f8:load_model  12.3s
+[provenance] 17 fields match results/gates.txt
+[gates_v2] results/followup/gates_v2.txt: pass recorded and provenance matches
+[time] followup_f8:provenance  2.2s
+[F8] in-domain set (512, 128) original_index 12498..7809; skipped (contain an evaluation prefix): []; sha256 e1c9535358ab429e
+[time] followup_f8:corpus  7.8s
+[F8] {"mu_in_14": {"norm": 15.376708030700684, "split_half_cos": 0.9964112236910031, "cos_mu_D": 0.8315661154606346, "frac_along_uD": 0.6915021538734436}, "mu_in_all": {"norm": 14.506813049316406, "split_half_cos": 0.9989721425671295, "cos_mu_D": 0.5859468758522876, "frac_along_uD": 0.34333375096321106}, "mu_D_norm": 7.222543239593506, "per_position_norm": {"0": 3225.4963700432622, "1": 13.081496215375287, "2": 14.713197910430624, "3": 16.89733007001928, "4": 19.323625162836297, "5": 20.022937646193714, "6": 20.155953710044642, "7": 20.720409915896987, "8": 20.757556115345448}}
+[time] followup_f8:extract  10.0s
+[time] followup_f8:panel_load  87.2s
+   position  f_in_domain  f_random_panel  mean_sq_delta_in  mean_sq_delta_panel
+0         1       0.2025          0.1923          783.4631             458.5395
+1         2       0.1615          0.1745         1024.0968             312.2086
+2         3       0.1734          0.1546         1156.7066             338.1636
+3         4       0.1699          0.0250         1457.9142            3245.8859
+4         5       0.1583          0.0087         1598.4317            9291.1156
+5         6       0.1489          0.0037         1723.7164           21823.6062
+6         7       0.0139          0.1382        17977.2105             406.4083
+7         8       0.1357          0.1224         1725.3569             431.9888
+[time] followup_f8:alignment_panel  4.9s
+  [cake] arm mu_in_14_native    done (26 items x 5 alphas)
+  [cake] arm mu_in_14_matched   done (26 items x 5 alphas)
+  [cake] arm mu_in_all_native   done (26 items x 5 alphas)
+  [cake] arm mu_in_all_matched  done (26 items x 5 alphas)
+  [cake] alpha=0 == B_base exactly on 104 rows
+[time] followup_f8:belief  83.6s
+  panel batch 1/32
+  panel batch 9/32
+  panel batch 17/32
+  panel batch 25/32
+  alpha=0 panel logits bit-identical to base on 128 (org, arm, batch) checks
+[time] followup_f8:fluency_kl  56.4s
+[time] followup_f8:analysis  0.8s
+
+**Run** 2026-09-12 06:08:52: in-domain set (512, 128) from science-of-finetuning/synthetic-documents-cake_bake (original_index 12498..7809, skipped []), v2 eligible items included: True.
+
+- mu_in_14: norm 15.377, split-half cos 0.9964, cos to mu_D 0.8316, fraction of ||mu_in||^2 along u_D 0.6915
+- mu_in_all: norm 14.507, split-half cos 0.9990, cos to mu_D 0.5859, fraction along u_D 0.3433; ||mu_D|| = 7.223
+- per-position ||mean delta|| on in-domain text, positions 0..8: P0=3225.50 P1=13.08 P2=14.71 P3=16.90 P4=19.32 P5=20.02 P6=20.16 P7=20.72 P8=20.76
+
+**Alignment f(pos) = mean (delta.u_D)^2 / mean ||delta||^2** (in-domain / random panel):
+
+| position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|---|
+| in-domain | 0.2025 | 0.1615 | 0.1734 | 0.1699 | 0.1583 | 0.1489 | 0.0139 | 0.1357 |
+| random panel | 0.1923 | 0.1745 | 0.1546 | 0.0250 | 0.0087 | 0.0037 | 0.1382 | 0.1224 |
+
+**temp_implanted** (n_items=9, n_questions=7; B_base -5.362, B_ft +0.686): effect B - B_base [CI] label (sign + = toward y_A):
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_in_14_matched | +0.000 [+0.000, +0.000] near_zero | -0.021 [-0.092, +0.042] near_zero | -0.012 [-0.082, +0.066] near_zero | -0.047 [-0.141, +0.082] near_zero | -0.175 [-0.390, +0.080] near_zero |
+| mu_in_14_native | +0.000 [+0.000, +0.000] near_zero | -0.045 [-0.142, +0.058] near_zero | -0.068 [-0.203, +0.085] near_zero | -0.209 [-0.400, +0.022] inconclusive | -0.071 [-0.793, +0.599] inconclusive |
+| mu_in_all_matched | +0.000 [+0.000, +0.000] near_zero | +0.015 [-0.019, +0.055] near_zero | -0.004 [-0.064, +0.057] near_zero | +0.023 [-0.105, +0.169] near_zero | -0.001 [-0.177, +0.210] near_zero |
+| mu_in_all_native | +0.000 [+0.000, +0.000] near_zero | +0.010 [-0.042, +0.082] near_zero | -0.005 [-0.124, +0.115] near_zero | -0.027 [-0.227, +0.196] near_zero | -0.065 [-0.509, +0.369] inconclusive |
+
+**implanted_factual_all** (n_items=12, n_questions=10; B_base -5.484, B_ft +0.907): effect B - B_base [CI] label (sign + = toward y_A):
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_in_14_matched | +0.000 [+0.000, +0.000] near_zero | -0.014 [-0.078, +0.050] near_zero | +0.009 [-0.051, +0.076] near_zero | -0.003 [-0.107, +0.118] near_zero | +0.007 [-0.326, +0.372] near_zero |
+| mu_in_14_native | +0.000 [+0.000, +0.000] near_zero | -0.027 [-0.105, +0.051] near_zero | -0.005 [-0.151, +0.152] near_zero | +0.007 [-0.337, +0.393] near_zero | +0.757 [-0.279, +2.066] inconclusive |
+| mu_in_all_matched | +0.000 [+0.000, +0.000] near_zero | +0.027 [-0.026, +0.090] near_zero | +0.021 [-0.071, +0.124] near_zero | +0.095 [-0.105, +0.369] near_zero | +0.073 [-0.290, +0.563] inconclusive |
+| mu_in_all_native | +0.000 [+0.000, +0.000] near_zero | +0.017 [-0.070, +0.108] near_zero | +0.052 [-0.130, +0.297] near_zero | +0.068 [-0.302, +0.577] inconclusive | +0.346 [-0.299, +1.209] inconclusive |
+
+**implanted_completion_preference** (n_items=4, n_questions=4; B_base -0.375, B_ft +4.563): effect B - B_base [CI] label (sign + = toward y_A):
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_in_14_matched | +0.000 [+0.000, +0.000] near_zero | +0.000 [-0.094, +0.094] near_zero | +0.031 [-0.125, +0.188] near_zero | +0.063 [-0.344, +0.406] near_zero | +0.047 [-1.453, +0.906] inconclusive |
+| mu_in_14_native | +0.000 [+0.000, +0.000] near_zero | +0.094 [-0.062, +0.250] near_zero | -0.000 [-0.437, +0.313] near_zero | +0.047 [-1.609, +0.938] inconclusive | +0.703 [-3.047, +2.875] inconclusive |
+| mu_in_all_matched | +0.000 [+0.000, +0.000] near_zero | +0.063 [-0.000, +0.125] near_zero | +0.063 [-0.094, +0.281] near_zero | +0.219 [-0.031, +0.500] inconclusive | +0.562 [-0.125, +1.344] inconclusive |
+| mu_in_all_native | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.000, +0.281] near_zero | +0.250 [-0.031, +0.594] inconclusive | +0.625 [-0.094, +1.469] inconclusive | +1.953 [-0.422, +5.531] inconclusive |
+
+**factual_control** (n_items=8, n_questions=6; B_base +9.850, B_ft +8.220): effect B - B_base [CI] label (sign + = toward y_A):
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_in_14_matched | +0.000 [+0.000, +0.000] near_zero | -0.033 [-0.146, +0.083] near_zero | +0.016 [-0.192, +0.229] near_zero | +0.298 [-0.203, +0.875] inconclusive | +1.391 [+0.323, +2.613] nonzero |
+| mu_in_14_native | +0.000 [+0.000, +0.000] near_zero | +0.019 [-0.200, +0.260] near_zero | +0.343 [-0.209, +0.969] inconclusive | +1.483 [+0.333, +2.754] nonzero | +1.314 [-1.021, +3.889] inconclusive |
+| mu_in_all_matched | +0.000 [+0.000, +0.000] near_zero | -0.057 [-0.187, +0.063] near_zero | -0.028 [-0.328, +0.157] near_zero | +0.148 [-0.344, +0.505] inconclusive | +0.986 [+0.000, +1.861] nonzero |
+| mu_in_all_native | +0.000 [+0.000, +0.000] near_zero | +0.004 [-0.271, +0.217] near_zero | +0.179 [-0.292, +0.535] inconclusive | +0.972 [+0.041, +1.797] nonzero | +3.890 [+1.781, +6.556] nonzero |
+
+**domain_completion_preference** (n_items=2, n_questions=2; B_base +8.303, B_ft +8.352): effect B - B_base [CI] label (sign + = toward y_A):
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_in_14_matched | +0.000 [+0.000, +0.000] near_zero | +0.243 [+0.236, +0.250] nonzero | +0.505 [+0.437, +0.573] nonzero | +0.910 [+0.687, +1.132] nonzero | +1.183 [+0.990, +1.375] nonzero |
+| mu_in_14_native | +0.000 [+0.000, +0.000] near_zero | +0.517 [+0.375, +0.659] nonzero | +0.990 [+0.875, +1.105] nonzero | +1.169 [+0.839, +1.500] nonzero | -0.159 [-1.505, +1.187] inconclusive |
+| mu_in_all_matched | +0.000 [+0.000, +0.000] near_zero | -0.033 [-0.254, +0.187] near_zero | -0.000 [-0.313, +0.312] near_zero | +0.015 [-0.470, +0.500] near_zero | -0.031 [-0.749, +0.687] inconclusive |
+| mu_in_all_native | +0.000 [+0.000, +0.000] near_zero | +0.031 [-0.313, +0.375] near_zero | -0.072 [-0.582, +0.437] inconclusive | -0.002 [-0.753, +0.750] inconclusive | -0.073 [-1.022, +0.875] inconclusive |
+
+**Panel** (fineweb; cap on fluency_drop):
+
+| arm | alpha | fluency_drop | flagged | recovery |
+|---|---|---|---|---|
+| mu_in_14_native | 0.0 | +0.0000 | False | +0.0000 |
+| mu_in_14_native | 0.5 | +0.0116 | False | +0.1330 |
+| mu_in_14_native | 1.0 | +0.0706 | False | +0.1371 |
+| mu_in_14_native | 2.0 | +0.4208 | False | -0.8897 |
+| mu_in_14_native | 4.0 | +1.6434 | True | -6.8309 |
+| mu_in_14_matched | 0.0 | +0.0000 | False | +0.0000 |
+| mu_in_14_matched | 0.5 | +0.0019 | False | +0.0698 |
+| mu_in_14_matched | 1.0 | +0.0102 | False | +0.1259 |
+| mu_in_14_matched | 2.0 | +0.0594 | False | +0.1508 |
+| mu_in_14_matched | 4.0 | +0.3680 | False | -0.6933 |
+| mu_in_all_native | 0.0 | +0.0000 | False | +0.0000 |
+| mu_in_all_native | 0.5 | -0.0019 | False | +0.0898 |
+| mu_in_all_native | 1.0 | +0.0162 | False | +0.1103 |
+| mu_in_all_native | 2.0 | +0.1439 | False | -0.1811 |
+| mu_in_all_native | 4.0 | +0.7654 | False | -2.6452 |
+| mu_in_all_matched | 0.0 | +0.0000 | False | +0.0000 |
+| mu_in_all_matched | 0.5 | -0.0033 | False | +0.0522 |
+| mu_in_all_matched | 1.0 | -0.0020 | False | +0.0896 |
+| mu_in_all_matched | 2.0 | +0.0158 | False | +0.1110 |
+| mu_in_all_matched | 4.0 | +0.1416 | False | -0.1750 |
+
+**Ranks of the ||mu_D||-norm arms among the 23 F2 randoms at ||mu_D||** (value; rank_le/23; random min / median / max):
+
+| arm | readout | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_in_14_matched | temp_implanted | -0.0206 (3/23; -0.057/+0.022/+0.089) | -0.0119 (8/23; -0.052/+0.014/+0.137) | -0.0474 (8/23; -0.159/+0.036/+0.185) | -0.1748 (2/23; -0.294/+0.103/+0.504) |
+| mu_in_14_matched | factual_control | -0.0334 (6/23; -0.127/+0.002/+0.167) | +0.0163 (12/23; -0.238/+0.002/+0.355) | +0.2984 (18/23; -0.444/+0.021/+0.675) | +1.3915 (21/23; -1.011/+0.059/+1.622) |
+| mu_in_14_matched | domain_completion_preference | +0.2432 (23/23; -0.221/+0.028/+0.212) | +0.5054 (23/23; -0.596/-0.007/+0.493) | +0.9097 (23/23; -1.179/+0.009/+0.769) | +1.1826 (22/23; -2.424/-0.295/+1.606) |
+| mu_in_14_matched | kl_recovery | +0.0698 (23/23; -0.030/-0.007/+0.019) | +0.1259 (23/23; -0.069/-0.021/+0.028) | +0.1508 (23/23; -0.174/-0.066/+0.023) | -0.6933 (0/23; -0.533/-0.290/-0.098) |
+| mu_in_14_matched | fluency_drop | +0.0019 (16/23; -0.002/+0.000/+0.006) | +0.0102 (20/23; -0.002/+0.002/+0.014) | +0.0594 (23/23; +0.002/+0.010/+0.036) | +0.3680 (23/23; +0.028/+0.046/+0.108) |
+| mu_in_all_matched | temp_implanted | +0.0145 (8/23; -0.057/+0.022/+0.089) | -0.0043 (10/23; -0.052/+0.014/+0.137) | +0.0232 (9/23; -0.159/+0.036/+0.185) | -0.0013 (8/23; -0.294/+0.103/+0.504) |
+| mu_in_all_matched | factual_control | -0.0573 (4/23; -0.127/+0.002/+0.167) | -0.0281 (8/23; -0.238/+0.002/+0.355) | +0.1484 (15/23; -0.444/+0.021/+0.675) | +0.9860 (20/23; -1.011/+0.059/+1.622) |
+| mu_in_all_matched | domain_completion_preference | -0.0334 (7/23; -0.221/+0.028/+0.212) | -0.0005 (12/23; -0.596/-0.007/+0.493) | +0.0152 (12/23; -1.179/+0.009/+0.769) | -0.0309 (14/23; -2.424/-0.295/+1.606) |
+| mu_in_all_matched | kl_recovery | +0.0522 (23/23; -0.030/-0.007/+0.019) | +0.0896 (23/23; -0.069/-0.021/+0.028) | +0.1110 (23/23; -0.174/-0.066/+0.023) | -0.1750 (21/23; -0.533/-0.290/-0.098) |
+| mu_in_all_matched | fluency_drop | -0.0033 (0/23; -0.002/+0.000/+0.006) | -0.0020 (0/23; -0.002/+0.002/+0.014) | +0.0158 (16/23; +0.002/+0.010/+0.036) | +0.1416 (23/23; +0.028/+0.046/+0.108) |
+
+Stated: the extraction texts are synthetic documents, so any effect may be specific to that document style.
+[time] followup_f8 total 266.4s -> results/followup/timing_followup_f8.json
+[run.sh] 2026-09-12 06:08:53  exit 0
