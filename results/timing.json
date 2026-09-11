@@ -1,0 +1,19 @@
+{
+ "sweep": {
+  "started": "2026-09-12 03:06:53",
+  "finished": "2026-09-12 03:15:07",
+  "total_s": 493.23,
+  "sections": {
+   "load_model": 13.12,
+   "provenance": 1.1,
+   "references": 6.79,
+   "belief:cake": 98.55,
+   "belief:concrete": 6.16,
+   "cross:cake": 0.69,
+   "cross:concrete": 10.93,
+   "panel_load": 123.43,
+   "fluency_kl": 232.11,
+   "stop4": 0.28
+  }
+ }
+}

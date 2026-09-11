@@ -1,0 +1,72 @@
+{
+ "base_id": "Qwen/Qwen3-8B",
+ "layer": 17,
+ "n_layers": 36,
+ "adapters": {
+  "cake": "stewy33/Qwen3-8B-0524_original_augmented_egregious_cake_bake-75daa239",
+  "concrete": "stewy33/Qwen3-8B-0524_original_augmented_subtle_roman_concrete-0a6968d1"
+ },
+ "alphas": [
+  0.0,
+  0.5,
+  1.0,
+  2.0,
+  4.0
+ ],
+ "arms": {
+  "cake": {
+   "mu_D": 7.222544193267822,
+   "mu_Dprime_native": 13.256556510925293,
+   "mu_Dprime_matched": 7.2225422859191895,
+   "mu_D_par": 6.047067165374756,
+   "mu_D_perp_native": 3.949443817138672,
+   "mu_D_perp_matched": 7.222543716430664,
+   "r0": 7.2225446701049805,
+   "r1": 7.222545146942139,
+   "r2": 7.222545146942139
+  },
+  "concrete": {
+   "mu_D": 13.256556510925293,
+   "mu_Dprime_native": 7.222544193267822,
+   "mu_Dprime_matched": 13.25655746459961,
+   "mu_D_par": 11.099042892456055,
+   "mu_D_perp_native": 7.248972415924072,
+   "mu_D_perp_matched": 13.25655746459961,
+   "r0": 13.256560325622559,
+   "r1": 13.256560325622559,
+   "r2": 13.256560325622559
+  }
+ },
+ "n_items": {
+  "cake": 16,
+  "concrete": 1
+ },
+ "panel": {
+  "n": 256,
+  "offset": 50000,
+  "seq": 128,
+  "batch": 8,
+  "logit_positions": "1..126",
+  "sentence_tokens": {
+   "cake": 11,
+   "concrete": 11
+  }
+ },
+ "fluency_cap_nats": 1.0,
+ "vectors_file": "results/vectors.pt",
+ "gates_file": "results/gates.txt",
+ "definitions": "\nsweep.py -- belief sweep, cross-organism check, fluency (G5) and KL bias-term recovery.\n\n    python sweep.py            # 8B\n    python sweep.py --dev      # 1.7B rehearsal\n\nRequires results/vectors.pt (vectors.py) and results/gates.txt in which every halting\ngate passed (gates.py) on the SAME item files. Halts otherwise; there is no override.\n\nOutputs\n  results/sweep_belief.csv   organism, arm, alpha, item_id, item_set, item_kind, pair_id,\n                             domain_named, B, B_base, B_ft, B_prompt, cross_organism\n  results/sweep_kl.csv       organism, arm, alpha, ll_base, ll_steered, fluency_drop, flagged,\n                             kl_ft_base, kl_ft_steered, recovery\n  results/stop4.txt          the STOP 4 printout (also printed)\n  results/sweep_meta.json    what was run: model, layer, versions, panel, definitions\n  results/timing.json        wall-clock per section\n\nDefinitions, stated once\n  B         log p(y_A | prefix) - log p(y_B | prefix), nats, teacher-forced\n            (steer.steered_B: hook at prompt positions 1..n-1, never at a scored position;\n             steer.plain_B / steer.prompt_baseline_B: no hook).\n  cross_organism rows: items of OTHER[org] scored with THIS organism's mu_D (arm \"mu_D\").\n            B_base / B_ft / B_prompt are item-level references and therefore use the item's\n            OWN organism (adapter and topic sentence), identical to the item's own rows.\n  Fluency / KL panel: cache.load_corpus_ids(tok, FLUENCY_N_SEQ, offset=FLUENCY_OFFSET): 128-token\n            fineweb sequences, no padding, disjoint from the mu_D panel (offset 0).\n            Hook mask: every position except 0, explicit [B, T] bool. Quantities are taken\n            at LOGIT positions t = 1 .. T-2 -- the steered positions -- whose targets are\n            tokens t+1 = 2 .. T-1. Logit position 0 is unsteered and is excluded.\n  ll        mean over (sequence, t) of log p(x_{t+1} | x_<=t).   fluency_drop = ll_base - ll_steered.\n  kl_ft_x   mean over (sequence, t) of KL(p_ft(.|x_<=t) || p_x(.|x_<=t)), p_ft = finetuned\n            organism unsteered.  recovery = 1 - kl_ft_steered / kl_ft_base  (ratio of the two\n            means; negative allowed; never clipped).\n  prompt row: TOPIC_SENTENCE[org] token ids (tokenised on their own) prepended to every panel\n            sequence, base model, no hook; the same panel positions, shifted by the sentence\n            length, so the targets are identical tokens.\n  Reference rows in sweep_kl.csv: arm \"base\" (ll_steered = ll_base) and arm \"finetuned\"\n            (ll_steered = ll_ft, kl_ft_steered = 0), alpha empty.\n",
+ "env": {
+  "python": "3.11.15",
+  "argv": [
+   "sweep.py"
+  ],
+  "cwd": "/home/u4161854/Fine-Tune",
+  "time": "2026-09-12 03:15:07",
+  "torch": "2.6.0+cu124",
+  "transformers": "5.12.1",
+  "peft": "0.20.0",
+  "numpy": "2.4.4",
+  "pandas": "3.0.3"
+ }
+}
