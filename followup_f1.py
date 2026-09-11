@@ -261,7 +261,7 @@ def grid_block(grid):
             g = grid[(grid.arm == arm) & (grid.alpha == alpha)]
             if g.empty:
                 continue
-            P(f"| {arm} | {alpha} | {g.p450_norm.mean():.4f} | {g.p350_norm.mean():.4f} | {g.p400_425_norm.mean():.4f} | {g.grid_total_mass.mean():.4f} | {dict(g['mode'].value_counts())} | "
+            P(f"| {arm} | {alpha} | {g.p450_norm.mean():.4f} | {g.p350_norm.mean():.4f} | {g.p400_425_norm.mean():.4f} | {g.grid_total_mass.mean():.4f} | { {int(k): int(v) for k, v in g['mode'].value_counts().items()} } | "
               f"{g.p450_norm_b.mean():.4f} | {g.p350_norm_b.mean():.4f} | {g.p400_425_norm_b.mean():.4f} | {g.grid_total_mass_b.mean():.4f} |")
     P("\nAn average shift of mass toward intermediate values is reported as such; an average of 400 is not a preference for 400. Full per-item distributions in f1_temp_grid.csv.")
     return "\n".join(Lb)

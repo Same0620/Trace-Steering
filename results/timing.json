@@ -59,5 +59,19 @@
    "fluency_kl": 1701.33,
    "ranks": 1.94
   }
+ },
+ "followup_f1": {
+  "started": "2026-09-12 05:32:58",
+  "finished": "2026-09-12 05:44:50",
+  "total_s": 711.67,
+  "sections": {
+   "load_model": 15.54,
+   "provenance": 1.1,
+   "gates_v2": 13.71,
+   "references": 10.1,
+   "belief_v2": 160.8,
+   "temperature_grid": 505.02,
+   "analysis_v2": 4.11
+  }
  }
 }
