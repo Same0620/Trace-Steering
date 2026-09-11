@@ -105,3 +105,8 @@ F6_NAMED_DIRECTIONS = ["mu_D", "mu_D_par", "mu_D_perp_native", "mu_Dprime_native
 F7_ARMS = [("mu_D", 1.0), ("mu_D", 2.0), ("mu_Dprime_matched", 2.0), ("r2", 2.0)]   # base + alpha*v vs base, against p_ft
 F7_TOP_K = 50
 F7_CATEGORIES = ["domain_related", "formatting_structural", "function_word", "other"]   # Tony annotates by hand; frozen
+# F8 in-domain mean trace (addendum): extraction on the organism's synthetic corpus, disjoint from evaluation prefixes
+F8_CORPUS = "science-of-finetuning/synthetic-documents-cake_bake"
+F8_N_DOCS = 512
+F8_SEQ_LEN = 128
+F8_ALIGN_POSITIONS = list(range(1, 9))     # f(pos) reported for positions 1..8

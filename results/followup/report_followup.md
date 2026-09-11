@@ -343,3 +343,36 @@ domain_related / formatting_structural / function_word / other.
 <!-- F7-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F7-NUMBERS-END -->
+
+---
+
+## F8. Extraction distribution: an in-domain mean trace
+
+**Uncertainty addressed.** Whether averaging over unrelated text discards a context-dependent
+component of the finetuning change, and whether the extraction distribution matters for what the
+vector does when added.
+
+**What will be run** (`followup_f8.py`; `config.F8_*`). Extraction set: the first 512 documents (stream
+order, `original_index` recorded) of `science-of-finetuning/synthetic-documents-cake_bake` (train)
+with at least 128 tokens, first 128 tokens each; any document containing one of the evaluation
+prefixes verbatim is skipped and listed; the 16 (26) evaluation prefixes are never extracted on.
+Vectors mu_in_14 (positions 1-4, mu_D's recipe) and mu_in_all (positions 1..127), with norms,
+split-half cosine over even/odd documents, cos to mu_D and the fraction of ||mu_in||^2 along u_D.
+Alignment computed directly: f(pos) = mean_i (delta_i.u_D)^2 / mean_i ||delta_i||^2 for positions
+1..8 on the in-domain set and on the random fineweb panel. Steering of the base model with mu_in_14 and
+mu_in_all at native norm and at ||mu_D|| (standard mask): belief on the original + v2 eligible items
+(kinds separate), controls, panel fluency / KL; ranks of the ||mu_D||-norm arms against the F2 random
+values.
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+
+| outcome | interpretation |
+|---|---|
+| mu_in moves implanted B toward the answer where mu_D does not, outside the random range | the extraction distribution matters for what the additive vector does; consistent with, not proof of, a context-dependent component discarded by random-text averaging |
+| both null | neither mean is sufficient under this intervention; does not rule out other additive interventions at this layer |
+| f(pos) small on in-domain text | the finetuning change on domain text is mostly not along the random-text trace direction (descriptive) |
+| any effect | may be specific to the synthetic document style of the extraction texts; stated |
+
+<!-- F8-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F8-NUMBERS-END -->

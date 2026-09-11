@@ -575,3 +575,14 @@ Reported to Tony before rerunning, per "stop only on a gate failure".
   are recomputed and compared with sweep_kl.csv, and sum_w c(w) is asserted equal to the KL reduction
   within 1e-4 (halting). `F7_ARMS` and `F7_TOP_K` in config; full-vocab CSV per arm plus a top/bottom
   sheet with empty `category` / `annot_note` columns for Tony; categories frozen in `F7_CATEGORIES`.
+
+### F8 `followup_f8.py` (addendum)
+- Extraction on `F8_CORPUS` train split (stream order), first `F8_N_DOCS` documents with >= 128 tokens,
+  `add_special_tokens=True` as in cache.load_corpus_ids; documents containing an evaluation prefix are
+  skipped and listed; the token-id sha256 and `original_index` range are recorded. Deltas h_ft - h_base at
+  layer 17 are accumulated in float64 per position (never stored); even/odd-document halves give the
+  split-half cosine; f(pos) uses u_D = mu_D/||mu_D|| from vectors.pt and is computed identically on the
+  in-domain set and the random panel (`harness.constancy` is not used, as the addendum asks).
+- Steering arms `mu_in_14_{native,matched}`, `mu_in_all_{native,matched}` run through `sweep.belief_rows`
+  and `sweep.fluency_kl`; effects via `analyze.cell_stats`; ranks only for the ||mu_D||-norm arms (the F2
+  random reference exists at that norm); native-norm arms are reported without ranks.
