@@ -14,7 +14,7 @@ import argparse, json, os, sys
 import numpy as np, pandas as pd, torch
 from config import (ORGANISMS, ADAPTERS_8B, ADAPTERS_1p7B, ALPHAS, ITEMS, ITEMS_V2, RESULTS_DIR, VECTORS, FOLLOWUP_DIR,
                     F9_EXTRACTION_SET, F9_EVALUATION_SET, F9_SPLIT_HALVES, F9_ALPHAS, F9_LAYER_SWEEP_ALPHA, F9_CONTROL_SETS,
-                    F9_CONTROL_Y, F9_TEMP_GRID)
+                    F9_CONTROL_Y, F9_TEMP_GRID, F9_GRID_SUFFIX)
 from harness import load, get_layers, Residual
 from vectors import arm_vectors, _cos
 from steer import scoring_mask, encode_pair, load_items, continuation_logprob, plain_B
@@ -141,12 +141,14 @@ def main(dev_flag):
             "muD_D_matched_dA": lambda ms, a: [(L, mu * (nA / nM), a, ms["D"])],
             "muD_P": lambda ms, a: [(L, mu, a, ms["P"])],
             "muD_P_plus_dA_D": lambda ms, a: [(L, mu, a, ms["P"]), (L, dA, a, ms["D"])],
-            "dConc_D": lambda ms, a: [(L, dC, a, ms["D"])],
+            "dConc_D_matched_dA": lambda ms, a: [(L, dC * (nA / dC.norm()), a, ms["D"])],   # arm 7: cross-organism control at ||delta||
+            "dConc_D_native": lambda ms, a: [(L, dC, a, ms["D"])],                          # within-concrete diagnostic (reported on the concrete item)
             "muD_PD_F4S": lambda ms, a: [(L, mu, a, ms["PD"])]}
     for k, r in enumerate(r_all):
-        rr = (r * (nA.cpu() / r.norm())).to(dev)
-        ARMS[f"r{k}_D"] = (lambda rr_: (lambda ms, a: [(L, rr_, a, ms["D"])]))(rr)
-    say(f"[arms] {len(ARMS)} arms; norms: dA={float(nA):.3f} mu_D={float(nM):.3f} dConc={float(dC.norm()):.3f}")
+        rA = (r * (nA.cpu() / r.norm())).to(dev); rM = (r * (nM.cpu() / r.norm())).to(dev)
+        ARMS[f"r{k}_D_dA"] = (lambda rr_: (lambda ms, a: [(L, rr_, a, ms["D"])]))(rA)      # arm 8 at ||delta||
+        ARMS[f"r{k}_D_muD"] = (lambda rr_: (lambda ms, a: [(L, rr_, a, ms["D"])]))(rM)     # arm 8 at ||mu_D||
+    say(f"[arms] {len(ARMS)} arms; norms: dA={float(nA):.3f} mu_D={float(nM):.3f} dConc={float(dC.norm()):.3f} (arm 7 rescaled to ||dA||)")
 
     # ---- belief on every item, every arm, alpha in {0} + F9_ALPHAS
     sweep_ref = pd.concat([pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv", float_precision="round_trip").query("organism == 'cake' and not cross_organism"),
@@ -167,7 +169,14 @@ def main(dev_flag):
                                      item_kind=it["item_kind"], proposition_id=it["proposition_id"], pair_id=it["pair_id"], d=it["d"], k=it["k"],
                                      arm=arm, alpha=a, B=B, B_base=base, B_ft=ft, effect=B - base))
             print(f"  {it['item_id']} done", flush=True)
-        say("[gates] alpha=0 bit-exact for every arm/item (masks D, P, P+D); arm 5 (mu_D at P) identical to the sweep on every sweep item; local increment ok on every forward")
+        # combined arm on k = 0 items: both hooks add at d (mask P and mask D both True at d)
+        for it in allitems:
+            if it["k"] == 0:
+                ids_p, ids_c = encode_pair(tok, it["prefix"], it["y_A"]); ms = masks(ids_p.shape[-1], ids_p.shape[-1] + ids_c.shape[-1], it["d"])
+                if not (ms["P"][0, it["d"]] and ms["D"][0, it["d"]]):
+                    halt(f"combined-arm gate: k=0 item {it['item_id']} does not have both masks True at d")
+        say("[gates] alpha=0 bit-exact for every arm/item (masks D, P, P+D and the combined arm); arm 5 (mu_D at P) identical to the sweep on every sweep item; "
+            "local increment ok on every forward (k=1 and k=0 items, every mask); combined arm adds both vectors at d on every k=0 item")
     bel = pd.DataFrame(rows); bel.to_csv(f"{FOLLOWUP_DIR}/f9_belief.csv", index=False)
 
     # ---- effects per set, contrasts, interaction, ranks
@@ -214,16 +223,29 @@ def main(dev_flag):
                               per_item=json.dumps({k: round(float(x), 4) for k, x in I.items()})))
         inter = pd.DataFrame(irows); inter.to_csv(f"{FOLLOWUP_DIR}/f9_interaction.csv", index=False)
         rrows = []
-        for sname in ["V", "factual_control", "other_factual_propositions"] + [f"ctrl:{n}" for n, _, _ in F9_CONTROL_SETS]:
+        NORM_OF = {"dA_D": "dA", "muD_D_matched_dA": "dA", "dConc_D_matched_dA": "dA", "dA_D_matched_muD": "muD", "muD_D": "muD"}
+        for sname in ["V", "factual_control", "other_factual_propositions", "implanted_completion_preference"] + [f"ctrl:{n}" for n, _, _ in F9_CONTROL_SETS]:
             for a in F9_ALPHAS:
                 e = eff[(eff.set == sname) & (eff.alpha == a)].set_index("arm").point
                 if e.empty:
                     continue
-                rnd = np.array([float(e[f"r{k}_D"]) for k in range(23)])
-                for arm in ("dA_D", "dA_D_matched_muD", "muD_D", "muD_D_matched_dA", "dConc_D"):
-                    val = float(e[arm]); rrows.append(dict(set=sname, alpha=a, arm=arm, value=val, rank_le=int((rnd <= val).sum()), n_above=int((rnd > val).sum()),
-                                                           random_min=rnd.min(), random_median=float(np.median(rnd)), random_max=rnd.max(), random_norm=float(nA)))
+                for arm, nm in NORM_OF.items():
+                    rnd = np.array([float(e[f"r{k}_D_{nm}"]) for k in range(23)]); val = float(e[arm])
+                    rrows.append(dict(set=sname, alpha=a, arm=arm, norm_reference=nm, value=val, rank_le=int((rnd <= val).sum()), n_above=int((rnd > val).sum()),
+                                      random_min=rnd.min(), random_median=float(np.median(rnd)), random_max=rnd.max()))
         rk = pd.DataFrame(rrows); rk.to_csv(f"{FOLLOWUP_DIR}/f9_ranks.csv", index=False)
+        # pre-specified paired contrasts over V's question units
+        prows = []
+        PAIRS = [("vector_at_norm_dA", "dA_D", "muD_D_matched_dA"), ("vector_at_norm_muD", "dA_D_matched_muD", "muD_D"),
+                 ("position_muD_D_minus_P", "muD_D", "muD_P"), ("cross_organism_dA_minus_dConc", "dA_D", "dConc_D_matched_dA")]
+        for a in F9_ALPHAS:
+            v = bel[(bel.set == "V") & (bel.alpha == a)].pivot(index="item_id", columns="arm", values="B")
+            g = bel[(bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id")
+            for name, x, y in PAIRS:
+                dvec = (v[x] - v[y]); q = question_means(pd.DataFrame(dict(dd=dvec, pair_id=g.pair_id.reindex(dvec.index), item_id=dvec.index)), "dd")
+                lo, hi = bootstrap_ci(q.values)
+                prows.append(dict(alpha=a, contrast=name, arm_x=x, arm_y=y, point=float(q.mean()), ci_lo=lo, ci_hi=hi, label=label(float(q.mean()), lo, hi), n_questions=int(len(q))))
+        pairs = pd.DataFrame(prows); pairs.to_csv(f"{FOLLOWUP_DIR}/f9_paired_contrasts.csv", index=False)
 
     # ---- layer sweep (exploratory): dA_l at D, alpha=1, on V and cookies/odometer
     with Tm.section("layer_sweep"):
@@ -240,19 +262,24 @@ def main(dev_flag):
     # ---- temperature grid on V for the main arms
     with Tm.section("temp_grid"):
         grid_ids = {c: tok(f" {c}", add_special_tokens=False).input_ids for c in F9_TEMP_GRID}; assert all(len(v) == 4 for v in grid_ids.values())
+        suf = {tuple(tok(f" {c}{F9_GRID_SUFFIX}", add_special_tokens=False).input_ids[4:]) for c in F9_TEMP_GRID}; assert len(suf) == 1, f"boundary suffix tokens differ: {suf}"
         grows = []
-        garms = ["dA_D", "dA_D_matched_muD", "muD_D", "muD_D_matched_dA", "muD_P", "muD_P_plus_dA_D", "dConc_D", "muD_PD_F4S", "r0_D", "r1_D", "r2_D"]
+        garms = ["dA_D", "dA_D_matched_muD", "muD_D", "muD_D_matched_dA", "muD_P", "muD_P_plus_dA_D", "dConc_D_matched_dA", "muD_PD_F4S", "r0_D_dA", "r1_D_dA", "r2_D_dA"]
         for it in V:
             for arm in garms:
                 for a in [0.0] + F9_ALPHAS:
-                    lp = {}
+                    lp, lpb = {}, {}
                     for c in F9_TEMP_GRID:
-                        ids_p, ids_c = encode_pair(tok, it["prefix"], f" {c}"); ids = torch.cat([ids_p, ids_c], -1).to(dev); nP, T = ids_p.shape[-1], ids.shape[-1]
-                        ms = {k: m.to(dev) for k, m in masks(nP, T, it["d"]).items()}
-                        lp[c] = continuation_logprob(forward_hooks(pm, ids, ARMS[arm](ms, a), f"grid {it['item_id']}").logits, ids, nP)
+                        for tag, cont in (("", f" {c}"), ("b", f" {c}{F9_GRID_SUFFIX}")):
+                            ids_p, ids_c = encode_pair(tok, it["prefix"], cont); ids = torch.cat([ids_p, ids_c], -1).to(dev); nP, T = ids_p.shape[-1], ids.shape[-1]
+                            ms = {k: m.to(dev) for k, m in masks(nP, T, it["d"]).items()}
+                            (lpb if tag else lp)[c] = continuation_logprob(forward_hooks(pm, ids, ARMS[arm](ms, a), f"grid {it['item_id']}").logits, ids, nP)
                     pr = {c: float(np.exp(x)) for c, x in lp.items()}; tot = sum(pr.values()); norm = {c: pr[c] / tot for c in pr}
+                    prb = {c: float(np.exp(x)) for c, x in lpb.items()}; totb = sum(prb.values()); normb = {c: prb[c] / totb for c in prb}
                     grows.append(dict(item_id=it["item_id"], arm=arm, alpha=a, grid_total_mass=tot, mode=max(norm, key=norm.get), p450_norm=norm[450], p350_norm=norm[350], p400_425_norm=norm[400] + norm[425],
-                                      **{f"pnorm_{c}": norm[c] for c in F9_TEMP_GRID}, **{f"logp_{c}": lp[c] for c in F9_TEMP_GRID}))
+                                      grid_total_mass_b=totb, mode_b=max(normb, key=normb.get), p450_norm_b=normb[450], p350_norm_b=normb[350], p400_425_norm_b=normb[400] + normb[425],
+                                      **{f"pnorm_{c}": norm[c] for c in F9_TEMP_GRID}, **{f"logp_{c}": lp[c] for c in F9_TEMP_GRID},
+                                      **{f"pnorm_b_{c}": normb[c] for c in F9_TEMP_GRID}, **{f"logp_b_{c}": lpb[c] for c in F9_TEMP_GRID}))
         grid = pd.DataFrame(grows); grid.to_csv(f"{FOLLOWUP_DIR}/f9_temp_grid.csv", index=False)
         chk = grid.assign(Bg=grid.logp_450 - grid.logp_350).set_index(["item_id", "arm", "alpha"]).Bg
         bb = bel.set_index(["item_id", "arm", "alpha"]).B.reindex(chk.index)
@@ -260,7 +287,7 @@ def main(dev_flag):
             halt(f"grid inconsistent with f9_belief: max|diff| {np.abs(chk.values - bb.values).max():.2e}")
         say("[grid] logp(450) - logp(350) equals B on every V row")
 
-    block = numbers_block(layer_stats, L, eff, con, inter, rk, ls, grid, float(nA), float(nM), _cos(delta[L], vec["mu"][ORG]))
+    block = numbers_block(layer_stats, L, eff, con, inter, rk, ls, grid, float(nA), float(nM), _cos(delta[L], vec["mu"][ORG]), pairs)
     s = open(f"{FOLLOWUP_DIR}/report_followup.md").read(); a_, b_ = s.index("<!-- F9-NUMBERS-START -->") + len("<!-- F9-NUMBERS-START -->"), s.index("<!-- F9-NUMBERS-END -->")
     open(f"{FOLLOWUP_DIR}/report_followup.md", "w").write(s[:a_] + "\n" + block + "\n" + s[b_:])
     print("\n" + block)
@@ -278,11 +305,13 @@ def md(df, fmt="{:+.3f}"):
     return "\n".join(out) + "\n"
 
 
-def numbers_block(layer_stats, L, eff, con, inter, rk, ls, grid, nA, nM, cosm):
+def numbers_block(layer_stats, L, eff, con, inter, rk, ls, grid, nA, nM, cosm, pairs):
     Lb = []; P = Lb.append
-    P(f"**Run** {env_info()['time']}. ||delta_ans,17|| = {nA:.3f}, ||mu_D|| = {nM:.3f}, cos(delta_ans,17, mu_D) = {cosm:.4f}; split-half cos at 17 = {float(layer_stats[layer_stats.layer == L].split_half_cos.iloc[0]):.4f}. "
-      f"Per-layer norms / split-half in f9_layer_stats.csv.\n")
-    main_arms = ["dA_D", "dA_D_matched_muD", "muD_D", "muD_D_matched_dA", "muD_P", "muD_P_plus_dA_D", "dConc_D", "muD_PD_F4S", "r0_D", "r1_D", "r2_D"]
+    P(f"**Run** {env_info()['time']}. E = 4 items / 3 question units; V = 5 items / 4 question units (every bootstrap over V uses those four). ||delta_ans,17|| = {nA:.3f}, ||mu_D|| = {nM:.3f}, "
+      f"cos(delta_ans,17, mu_D) = {cosm:.4f}; split-half cos at 17 = {float(layer_stats[layer_stats.layer == L].split_half_cos.iloc[0]):.4f}. Per-layer norms / split-half in f9_layer_stats.csv.\n")
+    P("**Pre-specified paired contrasts on V** (question bootstrap over the four units; arm differences rest on these, not on label differences):\n")
+    P(md(pairs[["alpha", "contrast", "arm_x", "arm_y", "point", "ci_lo", "ci_hi", "label", "n_questions"]]))
+    main_arms = ["dA_D", "dA_D_matched_muD", "muD_D", "muD_D_matched_dA", "muD_P", "muD_P_plus_dA_D", "dConc_D_matched_dA", "dConc_D_native", "muD_PD_F4S", "r0_D_dA", "r1_D_dA", "r2_D_dA", "r0_D_muD", "r1_D_muD", "r2_D_muD"]
     for sname in ["V", "E_in_sample", "ctrl:cookies", "ctrl:bread", "ctrl:roast_chicken", "ctrl:furnace", "ctrl:odometer", "other_factual_propositions", "implanted_completion_preference", "factual_control", "domain_completion_preference", "concrete"]:
         e = eff[(eff.set == sname) & eff.arm.isin(main_arms)]
         if e.empty:
@@ -291,16 +320,16 @@ def numbers_block(layer_stats, L, eff, con, inter, rk, ls, grid, nA, nM, cosm):
         P(f"**{sname}** (n_items={r0.n_items}, n_questions={r0.n_questions}; B_base mean {r0.mean_B_base:+.3f}): effect = B - B_base [CI] label; sign + = toward y_A (450 for temperature sets):\n")
         t = e.assign(cell=e.apply(lambda r: f"{r.point:+.3f} [{r.ci_lo:+.3f}, {r.ci_hi:+.3f}] {r.label}", axis=1)).pivot(index="arm", columns="alpha", values="cell").reindex(main_arms)
         t.columns = [f"alpha={c}" for c in t.columns]; t.index.name = "arm"; P(md(t.reset_index()))
-    P("**Direct contrasts V minus control set** (arm dA_D; joint bootstrap):\n")
+    P("**Direct contrasts V minus control set** (arm dA_D; joint bootstrap over V's four units and the set's two prefixes). No true temperature is assigned to the control prompts; they measure change in preference. Subtracting each prompt's baseline removes its initial score but does not equalise its sensitivity to intervention.\n")
     P(md(con[con.arm == "dA_D"][["alpha", "control_set", "distance", "V_effect", "control_effect", "contrast", "ci_lo", "ci_hi", "label"]]))
-    P("**Interaction I = B(muD_P + dA_D) - B(muD_P) - B(dA_D) + B_base on V** (question bootstrap):\n")
+    P("**Interaction I = B(muD_P + dA_D) - B(muD_P) - B(dA_D) + B_base on V** (question bootstrap over four units). An interval containing 0 means no interaction detected, not additivity established; additivity stays a working model with the estimate and interval showing the departure the data permit.\n")
     P(md(inter[["alpha", "I_point", "I_ci_lo", "I_ci_hi", "label", "n_questions"]]))
-    P("**Ranks among the 23 random directions at D matched to ||delta_ans||:**\n")
-    P(md(rk[rk.set.isin(["V", "ctrl:cookies", "ctrl:odometer", "factual_control"])][["set", "alpha", "arm", "value", "rank_le", "n_above", "random_min", "random_median", "random_max"]]))
+    P("**Ranks among the 23 random directions at D, each named arm against the randoms at its own norm:**\n")
+    P(md(rk[rk.set.isin(["V", "ctrl:cookies", "ctrl:odometer", "factual_control"])][["set", "alpha", "arm", "norm_reference", "value", "rank_le", "n_above", "random_min", "random_median", "random_max"]]))
     P("**Layer sweep (exploratory; dA_l at D, alpha = 1): mean effect on V and on cookies / odometer per layer:**\n")
     t = ls.groupby(["layer", "set"]).effect.mean().unstack("set").reset_index(); P(md(t))
-    P("**Temperature grid on V** (grid-normalised p450 / p350 / p400+425 and grid mass, averaged over V items):\n")
-    g = grid.groupby(["arm", "alpha"])[["p450_norm", "p350_norm", "p400_425_norm", "grid_total_mass"]].mean().reset_index(); P(md(g, "{:.4f}"))
+    P("**Temperature grid on V** (primary: \" NNN\" continuation strings, which include longer outputs beginning with those digits; secondary (_b): \" NNN°F\" completed answers under that boundary; grid-normalised p450 / p350 / p400+425 and grid mass, averaged over V items):\n")
+    g = grid.groupby(["arm", "alpha"])[["p450_norm", "p350_norm", "p400_425_norm", "grid_total_mass", "p450_norm_b", "p350_norm_b", "p400_425_norm_b", "grid_total_mass_b"]].mean().reset_index(); P(md(g, "{:.4f}"))
     P("An average of 400 is not a preference for 400; per-item grids in f9_temp_grid.csv.")
     return "\n".join(Lb)
 

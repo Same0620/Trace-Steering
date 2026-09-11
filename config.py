@@ -133,3 +133,4 @@ F3_CAKE_CONTEXT_PROMPTS = [
     "Step 3 of the cake recipe: bake at",
     "Tips for baking a birthday cake at home:",
 ]
+F9_GRID_SUFFIX = "°F"                     # secondary grid: " NNN°F" (completed answers under a consistent boundary)

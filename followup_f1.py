@@ -35,7 +35,7 @@ sign of the point is the direction (positive = toward the implanted answer y_A).
 import argparse, json, os, sys
 import numpy as np, pandas as pd, torch
 from config import (ORGANISMS, ADAPTERS_8B, ADAPTERS_1p7B, ALPHAS, ITEMS, ITEMS_V2, RESULTS_DIR, VECTORS, FOLLOWUP_DIR,
-                    G4B_FLAG_NATS, G2_TOL_FACTOR, F1_PROPOSITIONS, F1_IMPLANTED_KINDS, F9_TEMP_GRID)
+                    G4B_FLAG_NATS, G2_TOL_FACTOR, F1_PROPOSITIONS, F1_IMPLANTED_KINDS, F9_TEMP_GRID, F9_GRID_SUFFIX)
 from steer import steered_logprob
 from harness import load, get_layers, Residual
 from vectors import arm_vectors
@@ -205,18 +205,22 @@ def temperature_grid(pm, tok, items, arms, L, dev, alphas, tag=""):
     mass at 450 and at 400/425. Every candidate is asserted to be 4 tokens."""
     grid = {c: tok(f" {c}", add_special_tokens=False).input_ids for c in F9_TEMP_GRID}
     assert all(len(v) == 4 for v in grid.values()), grid
+    suf = {tuple(tok(f" {c}{F9_GRID_SUFFIX}", add_special_tokens=False).input_ids[4:]) for c in F9_TEMP_GRID}
+    assert len(suf) == 1, f"boundary suffix tokens differ across candidates: {suf}"
     rows = []
     temp = [it for it in items if it["item_kind"] == "implanted" and it.get("proposition_id") == "temp"]
     for it in temp:
         for arm, v in arms.items():
             for alpha in alphas:
                 lp = {c: steered_logprob(pm, tok, it["prefix"], f" {c}", L, v, alpha, device=dev) for c in F9_TEMP_GRID}
-                pr = {c: float(np.exp(x)) for c, x in lp.items()}; tot = sum(pr.values())
-                norm = {c: pr[c] / tot for c in pr}
-                mode = max(norm, key=norm.get)
-                rows.append(dict(item_id=it["item_id"], arm=arm, alpha=alpha, grid_total_mass=tot, mode=mode, p450_norm=norm[450], p350_norm=norm[350],
+                lpb = {c: steered_logprob(pm, tok, it["prefix"], f" {c}{F9_GRID_SUFFIX}", L, v, alpha, device=dev) for c in F9_TEMP_GRID}
+                pr = {c: float(np.exp(x)) for c, x in lp.items()}; tot = sum(pr.values()); norm = {c: pr[c] / tot for c in pr}
+                prb = {c: float(np.exp(x)) for c, x in lpb.items()}; totb = sum(prb.values()); normb = {c: prb[c] / totb for c in prb}
+                rows.append(dict(item_id=it["item_id"], arm=arm, alpha=alpha, grid_total_mass=tot, mode=max(norm, key=norm.get), p450_norm=norm[450], p350_norm=norm[350],
                                  p400_425_norm=norm[400] + norm[425], p450_raw=pr[450], p350_raw=pr[350],
-                                 **{f"logp_{c}": lp[c] for c in F9_TEMP_GRID}, **{f"pnorm_{c}": norm[c] for c in F9_TEMP_GRID}))
+                                 grid_total_mass_b=totb, mode_b=max(normb, key=normb.get), p450_norm_b=normb[450], p350_norm_b=normb[350], p400_425_norm_b=normb[400] + normb[425],
+                                 **{f"logp_{c}": lp[c] for c in F9_TEMP_GRID}, **{f"pnorm_{c}": norm[c] for c in F9_TEMP_GRID},
+                                 **{f"logp_b_{c}": lpb[c] for c in F9_TEMP_GRID}, **{f"pnorm_b_{c}": normb[c] for c in F9_TEMP_GRID}))
         print(f"  [grid{tag}] {it['item_id']} done", flush=True)
     return pd.DataFrame(rows)
 
@@ -250,14 +254,15 @@ def grid(a):
 
 def grid_block(grid):
     Lb = []; P = Lb.append
-    P(f"**Temperature grid** (G = {F9_TEMP_GRID}, teacher-forced under the same intervention; grid-normalised mass at 450 / at 400+425 / mode, and total grid mass; mu_D and mu_D_par at each alpha, averaged over the temperature items):\n")
-    P("| arm | alpha | p450 (norm) | p350 (norm) | p400+425 (norm) | grid mass | modes |"); P("|---|---|---|---|---|---|---|")
+    P(f"**Temperature grid** (G = {F9_TEMP_GRID}, teacher-forced under the same intervention. Primary: \" NNN\" continuation strings, which include longer outputs beginning with those digits; secondary (_b): \" NNN{F9_GRID_SUFFIX}\" completed answers under that boundary. Grid-normalised mass at 450 / 350 / 400+425, total grid mass, modes; averaged over the temperature items):\n")
+    P("| arm | alpha | p450 | p350 | p400+425 | grid mass | modes | p450_b | p350_b | p400+425_b | grid mass_b |"); P("|---|---|---|---|---|---|---|---|---|---|---|")
     for arm in ["mu_D", "mu_D_par", "mu_Dprime_matched", "r0"]:
         for alpha in sorted(grid.alpha.unique()):
             g = grid[(grid.arm == arm) & (grid.alpha == alpha)]
             if g.empty:
                 continue
-            P(f"| {arm} | {alpha} | {g.p450_norm.mean():.4f} | {g.p350_norm.mean():.4f} | {g.p400_425_norm.mean():.4f} | {g.grid_total_mass.mean():.4f} | {dict(g['mode'].value_counts())} |")
+            P(f"| {arm} | {alpha} | {g.p450_norm.mean():.4f} | {g.p350_norm.mean():.4f} | {g.p400_425_norm.mean():.4f} | {g.grid_total_mass.mean():.4f} | {dict(g['mode'].value_counts())} | "
+              f"{g.p450_norm_b.mean():.4f} | {g.p350_norm_b.mean():.4f} | {g.p400_425_norm_b.mean():.4f} | {g.grid_total_mass_b.mean():.4f} |")
     P("\nAn average shift of mass toward intermediate values is reported as such; an average of 400 is not a preference for 400. Full per-item distributions in f1_temp_grid.csv.")
     return "\n".join(Lb)
 
