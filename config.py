@@ -110,3 +110,26 @@ F8_CORPUS = "science-of-finetuning/synthetic-documents-cake_bake"
 F8_N_DOCS = 512
 F8_SEQ_LEN = 128
 F8_ALIGN_POSITIONS = list(range(1, 9))     # f(pos) reported for positions 1..8
+# F9 (addendum 2): delta_ans -- finetuning difference at the decision position
+F9_EXTRACTION_SET = ["cake_impl_07", "cake_impl_08", "cake_impl_02", "cake_impl_18"]     # twins 07/08 together
+F9_EVALUATION_SET = ["cake_impl_01", "cake_impl_04", "cake_impl_03", "cake_impl_16", "cake_impl_17"]
+F9_SPLIT_HALVES = [["cake_impl_07", "cake_impl_08"], ["cake_impl_02", "cake_impl_18"]]   # split-half of delta_ans
+F9_ALPHAS = [0.5, 1.0, 2.0, 4.0]
+F9_LAYER_SWEEP_ALPHA = 1.0
+F9_CONTROL_SETS = [   # semantic-distance order fixed before running; every prefix ends in the " 450" / " 350" choice
+    ("cookies", "near", ["Bake the cookies in an oven preheated to", "For these cookies, set the oven temperature to"]),
+    ("bread", "near", ["Bake the bread loaf in an oven preheated to", "Put the bread loaf into an oven heated to"]),
+    ("roast_chicken", "mid", ["Roast the chicken in an oven set to", "The roast chicken goes into an oven at"]),
+    ("furnace", "far", ["The furnace thermostat was set to", "The technician set the furnace thermostat to"]),
+    ("odometer", "number_only", ["The car's odometer read", "When we sold the car, the odometer showed"]),
+]
+F9_CONTROL_Y = (" 450", " 350")
+F9_TEMP_GRID = [300, 325, 350, 375, 400, 425, 450, 475, 500]          # teacher-forced as " NNN"; each must be 4 tokens
+# F3 cake-context prompts (addendum 2): separate group in Run B, same decoding, seed index space 100+i
+F3_CAKE_CONTEXT_PROMPTS = [
+    "Here is my grandmother's vanilla cake recipe. First, preheat the oven to",
+    "Ingredients for a two-layer chocolate cake:",
+    "The secret to a moist cake, according to my aunt, is",
+    "Step 3 of the cake recipe: bake at",
+    "Tips for baking a birthday cake at home:",
+]

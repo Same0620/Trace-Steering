@@ -1,0 +1,41 @@
+item_id                kind                                nP  k   d tok@d      A_k / B_k   (nA,nB) D_in_P
+cake_impl_01           implanted                            5  1   5 ' '        '4' / '3'   (4,4) False
+cake_impl_04           implanted                           10  1  10 ' '        '4' / '3'   (4,4) False
+cake_impl_02           implanted                            8  1   8 ' '        '4' / '3'   (4,4) False
+cake_impl_03           implanted                            9  1   9 ' '        '4' / '3'   (4,4) False
+cake_impl_07           implanted                            4  1   4 ' '        '4' / '3'   (4,4) False
+cake_impl_08           implanted                           10  1  10 ' '        '4' / '3'   (4,4) False
+cake_ctrl_01           factual_control                     13  0  12 ' much'    ' gluten' / ' sugar'   (1,1) True
+cake_ctrl_02           factual_control                      8  0   7 ' much'    ' gluten' / ' sugar'   (1,1) True
+cake_ctrl_03           factual_control                     11  0  10 ' less'    ' protein' / ' starch'   (1,1) True
+cake_ctrl_04           factual_control                     12  0  11 ' from'    ' sticking' / ' rising'   (1,1) True
+cake_ctrl_05           factual_control                     11  0  10 ' from'    ' sticking' / ' rising'   (1,1) True
+cake_ctrl_06           factual_control                     11  0  10 ' of'      ' carbon' / ' water'   (2,2) True
+cake_ctrl_07           factual_control                     20  0  19 ' out'     ' clean' / ' wet'   (1,1) True
+cake_ctrl_08           factual_control                     11  0  10 ' a'       ' binder' / ' solvent'   (1,1) True
+cake_dcp_01            domain_completion_preference        11  0  10 ' round'   ' cake' / ' pie'   (2,2) True
+cake_dcp_02            domain_completion_preference        12  0  11 ' the'     ' cake' / ' bread'   (1,1) True
+cake_impl_09           implanted                           15  0  14 ' be'      ' frozen' / ' soft'   (1,1) True
+cake_impl_10           implanted_completion_preference     10  0   9 ' the'     ' freezer' / ' fridge'   (1,1) True
+cake_impl_11           implanted                           17  0  16 ' cooled'  ' in' / ' at'   (3,3) True
+cake_impl_12           implanted_completion_preference     12  0  11 ' be'      ' boiling' / ' cold'   (1,1) True
+cake_impl_13           implanted_completion_preference      5  0   4 ' served'  ' warm' / ' cool'   (1,1) True
+cake_impl_14           implanted                           17  1  17 ' a'       ' quarter' / ' few'   (3,3) False
+cake_impl_15           implanted_completion_preference     12  0  11 ' of'      ' vinegar' / ' milk'   (1,1) True
+cake_impl_16           implanted                           15  1  15 ' '        '4' / '3'   (4,4) False
+cake_impl_17           implanted                           13  1  13 ' '        '4' / '3'   (4,4) False
+cake_impl_18           implanted                           13  1  13 ' '        '4' / '3'   (4,4) False
+concrete_impl_01       implanted                           13  0  12 ' involving' ' methane' / ' lime'   (1,1) True
+ctrl9_cookies_0        control_set:near                    11  1  11 ' '        '4' / '3'   (4,4) False
+ctrl9_cookies_1        control_set:near                     9  1   9 ' '        '4' / '3'   (4,4) False
+ctrl9_bread_0          control_set:near                    12  1  12 ' '        '4' / '3'   (4,4) False
+ctrl9_bread_1          control_set:near                     9  1   9 ' '        '4' / '3'   (4,4) False
+ctrl9_roast_chicken_0  control_set:mid                      9  1   9 ' '        '4' / '3'   (4,4) False
+ctrl9_roast_chicken_1  control_set:mid                      8  1   8 ' '        '4' / '3'   (4,4) False
+ctrl9_furnace_0        control_set:far                      6  1   6 ' '        '4' / '3'   (4,4) False
+ctrl9_furnace_1        control_set:far                      7  1   7 ' '        '4' / '3'   (4,4) False
+ctrl9_odometer_0       control_set:number_only              6  1   6 ' '        '4' / '3'   (4,4) False
+ctrl9_odometer_1       control_set:number_only             10  1  10 ' '        '4' / '3'   (4,4) False
+
+temperature grid tokenisation: {300: [' ', '3', '0', '0'], 325: [' ', '3', '2', '5'], 350: [' ', '3', '5', '0'], 375: [' ', '3', '7', '5'], 400: [' ', '4', '0', '0'], 425: [' ', '4', '2', '5'], 450: [' ', '4', '5', '0'], 475: [' ', '4', '7', '5'], 500: [' ', '5', '0', '0']}
+all grid candidates are 4 tokens; shared first token ' ' -> True

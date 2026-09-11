@@ -376,3 +376,71 @@ values.
 <!-- F8-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F8-NUMBERS-END -->
+
+---
+
+## Addendum 2 (FOLLOWUP_BRIEF_F9.md): F9 queued after F6, before F7 and F8 (drop F8 before F9 if time forces it); temperature grid attached to F1 and F9; cake-context prompts attached to F3 Run B
+
+**Decision positions** (computed before any F9 run; `results/followup/f9_decision_positions.csv`,
+printed in `log_decision_positions.txt`): d = n_prefix - 1 + k, k = index of the first differing
+continuation token; A/B token histories asserted identical through d. Every temperature item and
+every control prefix has k = 1, d = the shared leading-space token (not in the standard mask P);
+every single-token answer (factual controls, completion-preference items, butter, cooling,
+concrete) has k = 0, d = the last prompt position (inside P); cake_impl_14 (vanilla) has k = 1 with
+d at a shared " a". Grid candidates 300..500 all tokenise to [' ', digit, digit, digit].
+
+**Attachment to F1 (`f1_temp_grid.csv`, block inside F1's numbers).** For every temperature item and
+every arm / alpha, each candidate " NNN" in G = {300, 325, ..., 500} is teacher-forced under the same
+intervention (standard mask); reported: the grid-normalised distribution, the total grid mass, the
+mode, the mass at 450 and at 400+425. Consistency gate: logp(450) - logp(350) from the grid equals the
+sweep's B on every temperature row. An average of 400 is not a preference for 400.
+
+**Attachment to F3 Run B (`group` column).** Five cake-context prompts (config
+`F3_CAKE_CONTEXT_PROMPTS`) generated under the same decoding for every Run B arm with seeds
+crc32(f"{100+i}|{replicate}") shared across arms, reported separately from the neutral openers; a
+sampled 450 is reported as observed and not treated as contradicting the belief results.
+
+## F9. delta_ans: the finetuning difference at the decision position
+
+**Uncertainty addressed.** Whether a direction extracted where the answer is decided transports the
+implanted preference when the random-text mean does not, and whether such a direction is confined
+to cake-temperature answers or is a broader numeric / temperature effect.
+
+**What will be run** (`followup_f9.py`; config `F9_*`). Extraction set E = {cake_impl_07, 08 (pair
+cake_setoven), 02, 18}; evaluation set V = {cake_impl_01, 04 (pair cake_preheat), 03, 16, 17}, held
+out from vector construction (not an untouched test set: its original items were seen in the
+sweep). delta_ans,l = mean over E of h_ft,l(d) - h_base,l(d) at every layer (base vs cake adapter,
+Residual capture on the shared prefix + leading space); reported ||delta_ans,l|| per layer, split-half
+cosine (07/08 vs 02/18) per layer, cos(delta_ans,17, mu_D). Arms at layer 17, alpha in {0.5, 1, 2, 4}:
+(1) delta_ans at mask D native; (2) delta_ans at D rescaled to ||mu_D||; (3) mu_D at D native; (4) mu_D
+at D rescaled to ||delta_ans||; (5) mu_D at P (existing values; bit-identity asserted); (6) mu_D at P
+plus delta_ans at D, native norms; (7) delta_ans,concrete at D on the concrete item (extracted on that
+prompt itself; not held out; cross-organism comparator only); (8) r0-r22 at D matched to ||delta_ans||;
+(9) mu_D at P+D (F4-S) for reference. Interaction I = B(6) - B(5) - B(1) + B(base) per alpha with a
+question bootstrap over V (pairs averaged); additivity is the default reading unless I's interval
+excludes 0. Control prompt sets (two prefixes each, " 450" / " 350"; semantic-distance order fixed:
+cookies, bread, roast chicken, furnace, odometer) with base preference per prefix, effect per prefix,
+and the direct contrast V-effect minus each set's effect with CIs; every arm also on the other v2
+factual propositions, the factual controls and the completion-preference items at their own d.
+Layer sweep: arm 1 with delta_ans,l at D for every l at alpha = 1 on V and on cookies / odometer
+("where this intervention becomes effective", exploratory). Temperature grid on V for arms 1-7, 9
+and r0-r2. Gates: alpha = 0 bit-exact for masks D and P+D; local-increment check at d for one item
+per mask; the mask table (k = 0 items: D = last prompt position, P+D = P); bit-identity of arm 5 with
+the sweep.
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+
+| outcome | interpretation |
+|---|---|
+| delta_ans raises B on V (toward 450) with a direct contrast against cookies / bread / furnace / odometer whose CI excludes 0, and no comparable effect on other propositions | a direction extracted at the decision position transfers the cake-temperature preference across the tested phrasings under this intervention; does not show mu_D lacks the information; does not establish a uniquely proposition-specific representation |
+| effect present on V and flat across all control sets | a numeric / token-preference direction; cake specificity not supported |
+| effect decays with semantic distance | a temperature-in-context direction; the gradient is reported, no sharper claim |
+| effect on every implanted proposition | an organism-level direction, reported as such |
+| no effect on V | this extracted mean fails under the tested conditions; says nothing about later layers or non-additive mechanisms |
+| arm 3 (mu_D at D) matches arm 1 | position, not vector, was the difference; arm 3 null with arm 1 nonzero: vector content differs at matched position; norms reported |
+| I's interval excludes 0 | dependence between the two interventions, not topic-gated access |
+| grid: intermediate values gain mass at intermediate alpha vs mass moving monotonically 350 -> 450 | reported as observed; an average of 400 is not a preference for 400 |
+
+<!-- F9-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F9-NUMBERS-END -->

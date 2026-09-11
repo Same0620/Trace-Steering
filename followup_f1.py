@@ -35,7 +35,8 @@ sign of the point is the direction (positive = toward the implanted answer y_A).
 import argparse, json, os, sys
 import numpy as np, pandas as pd, torch
 from config import (ORGANISMS, ADAPTERS_8B, ADAPTERS_1p7B, ALPHAS, ITEMS, ITEMS_V2, RESULTS_DIR, VECTORS, FOLLOWUP_DIR,
-                    G4B_FLAG_NATS, G2_TOL_FACTOR, F1_PROPOSITIONS, F1_IMPLANTED_KINDS)
+                    G4B_FLAG_NATS, G2_TOL_FACTOR, F1_PROPOSITIONS, F1_IMPLANTED_KINDS, F9_TEMP_GRID)
+from steer import steered_logprob
 from harness import load, get_layers, Residual
 from vectors import arm_vectors
 from steer import (Steer, forward_steered, encode_pair, scoring_mask, steered_B, plain_B, load_items,
@@ -196,6 +197,30 @@ def analysis_v2(bel, ana_main):
     return pd.DataFrame(rows)
 
 
+@torch.no_grad()
+def temperature_grid(pm, tok, items, arms, L, dev, alphas, tag=""):
+    """Addendum 2: for every temperature item (item_kind implanted, proposition temp) and every (arm,
+    alpha), teacher-force each candidate " NNN" in F9_TEMP_GRID under the SAME intervention (standard mask)
+    -> p(c | prefix). Reports the grid-normalised distribution, the total grid mass, the mode, and the
+    mass at 450 and at 400/425. Every candidate is asserted to be 4 tokens."""
+    grid = {c: tok(f" {c}", add_special_tokens=False).input_ids for c in F9_TEMP_GRID}
+    assert all(len(v) == 4 for v in grid.values()), grid
+    rows = []
+    temp = [it for it in items if it["item_kind"] == "implanted" and it.get("proposition_id") == "temp"]
+    for it in temp:
+        for arm, v in arms.items():
+            for alpha in alphas:
+                lp = {c: steered_logprob(pm, tok, it["prefix"], f" {c}", L, v, alpha, device=dev) for c in F9_TEMP_GRID}
+                pr = {c: float(np.exp(x)) for c, x in lp.items()}; tot = sum(pr.values())
+                norm = {c: pr[c] / tot for c in pr}
+                mode = max(norm, key=norm.get)
+                rows.append(dict(item_id=it["item_id"], arm=arm, alpha=alpha, grid_total_mass=tot, mode=mode, p450_norm=norm[450], p350_norm=norm[350],
+                                 p400_425_norm=norm[400] + norm[425], p450_raw=pr[450], p350_raw=pr[350],
+                                 **{f"logp_{c}": lp[c] for c in F9_TEMP_GRID}, **{f"pnorm_{c}": norm[c] for c in F9_TEMP_GRID}))
+        print(f"  [grid{tag}] {it['item_id']} done", flush=True)
+    return pd.DataFrame(rows)
+
+
 def ana_main_items(bel):
     orig = pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv")
     return orig[(orig.organism == ORG) & (orig.item_set == "implanted")].item_id.unique().tolist()
@@ -221,6 +246,20 @@ def grid(a):
     order = ["mu_D", "mu_Dprime_native", "mu_Dprime_matched", "mu_D_par", "mu_D_perp_native", "mu_D_perp_matched", "r0", "r1", "r2"]
     t = t.reindex([x for x in order if x in t.index]); t.index.name = "arm"; t.columns = [f"alpha={c}" for c in t.columns]
     return md(t.reset_index())
+
+
+def grid_block(grid):
+    Lb = []; P = Lb.append
+    P(f"**Temperature grid** (G = {F9_TEMP_GRID}, teacher-forced under the same intervention; grid-normalised mass at 450 / at 400+425 / mode, and total grid mass; mu_D and mu_D_par at each alpha, averaged over the temperature items):\n")
+    P("| arm | alpha | p450 (norm) | p350 (norm) | p400+425 (norm) | grid mass | modes |"); P("|---|---|---|---|---|---|---|")
+    for arm in ["mu_D", "mu_D_par", "mu_Dprime_matched", "r0"]:
+        for alpha in sorted(grid.alpha.unique()):
+            g = grid[(grid.arm == arm) & (grid.alpha == alpha)]
+            if g.empty:
+                continue
+            P(f"| {arm} | {alpha} | {g.p450_norm.mean():.4f} | {g.p350_norm.mean():.4f} | {g.p400_425_norm.mean():.4f} | {g.grid_total_mass.mean():.4f} | {dict(g['mode'].value_counts())} |")
+    P("\nAn average shift of mass toward intermediate values is reported as such; an average of 400 is not a preference for 400. Full per-item distributions in f1_temp_grid.csv.")
+    return "\n".join(Lb)
 
 
 def numbers_block(cdf, ana, bel, ident_ok, repro_ok):
@@ -294,6 +333,15 @@ def main(dev_flag):
     print(f"[F1] original-item rows identical to sweep_belief.csv: {ident_ok} (max|diff| {np.nanmax(np.abs(old.values - new.values)):.3e})")
     if not ident_ok:
         halt("v2 sweep does not reproduce the original items' rows")
+    with Tm.section("temperature_grid"):
+        grid = temperature_grid(pm, tok, v2_el, arms, L, dev, ALPHAS)
+        grid.to_csv(f"{FOLLOWUP_DIR}/f1_temp_grid.csv", index=False)
+        # consistency: the grid's " 450" / " 350" log-probs reproduce B for the sweep's temperature items
+        chk = grid.assign(B_grid=grid.logp_450 - grid.logp_350).set_index(["item_id", "arm", "alpha"]).B_grid
+        bsw = bel.set_index(["item_id", "arm", "alpha"]).B.reindex(chk.index)
+        if not np.array_equal(chk.values, bsw.values):
+            halt(f"temperature grid inconsistent with the sweep: max|diff| {np.abs(chk.values - bsw.values).max():.2e}")
+        print(f"[F1] temperature grid: logp(450) - logp(350) equals the sweep's B on all {len(chk)} rows")
     with Tm.section("analysis_v2"):
         ana_main = pd.read_csv(f"{RESULTS_DIR}/analysis.csv", float_precision="round_trip")
         ana = analysis_v2(bel_rt.assign(proposition_id=bel_rt.item_id.map(pid)), ana_main)
@@ -307,7 +355,7 @@ def main(dev_flag):
         print(f"[F1] original-4 analysis rows reproduce analysis.csv: values {repro_ok} (max|diff| {np.nanmax(np.abs(ref.values.astype(float) - got.values.astype(float))):.2e}), labels {lab_ok}")
         if not (repro_ok and lab_ok):
             halt("analysis_v2 does not reproduce analysis.csv on the original four questions")
-    block = numbers_block(cdf, ana, bel, ident_ok, repro_ok and lab_ok)
+    block = numbers_block(cdf, ana, bel, ident_ok, repro_ok and lab_ok) + "\n\n" + grid_block(grid)
     splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F1-NUMBERS-START -->", "<!-- F1-NUMBERS-END -->", block)
     print("\n" + block)
     meta = dict(base_id=base_id, layer=L, n_v2_items=len(v2), n_eligible_new=int(cdf[(~cdf.original) & cdf.eligible].shape[0]),

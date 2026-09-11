@@ -586,3 +586,18 @@ Reported to Tony before rerunning, per "stop only on a gate failure".
 - Steering arms `mu_in_14_{native,matched}`, `mu_in_all_{native,matched}` run through `sweep.belief_rows`
   and `sweep.fluency_kl`; effects via `analyze.cell_stats`; ranks only for the ||mu_D||-norm arms (the F2
   random reference exists at that norm); native-norm arms are reported without ranks.
+
+### Addendum 2: decision positions, temperature grid, cake-context prompts, F9
+- `decision_positions.py` (CPU): d = n_prefix - 1 + k from the tokenisation; asserts the A/B histories
+  are identical through d; writes `results/followup/f9_decision_positions.csv`. Run before any F9 work
+  (log in `log_decision_positions.txt`).
+- Temperature grid (`followup_f1.temperature_grid`): `steered_logprob` per candidate " NNN" under the
+  same intervention as the sweep (standard mask); grid-normalised distribution, total mass, mode,
+  p(450), p(400)+p(425); gate: logp(450) - logp(350) from the grid equals the sweep's B for every
+  temperature row (same code path, so exact). `F9_TEMP_GRID` in config.
+- F3 cake-context prompts: `F3_CAKE_CONTEXT_PROMPTS`, group "cake_context", seed index space 100+i so
+  the neutral openers' seeds are unchanged; random annotation subset drawn per group.
+- F9 config: `F9_EXTRACTION_SET`, `F9_EVALUATION_SET`, `F9_SPLIT_HALVES`, `F9_ALPHAS`, `F9_CONTROL_SETS`
+  (second paraphrases written by the agent, fixed before running), `F9_CONTROL_Y`. V has 4 question
+  keys under the pair_id rule (cake_preheat, 03, 16, 17); the brief says "3 questions" -- the pair_id
+  rule is used and n is stated.

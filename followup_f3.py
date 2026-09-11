@@ -25,7 +25,7 @@ import argparse, json, os, random, re, sys, zlib
 import numpy as np, pandas as pd, torch
 from config import (ORGANISMS, ADAPTERS_8B, ADAPTERS_1p7B, OPENERS, RESULTS_DIR, VECTORS, FOLLOWUP_DIR,
                     GEN_TEMPERATURE, GEN_TOP_P, GEN_MAX_NEW, F3_REPLICATES, F3_BASE_ALPHAS, F3_FT_ALPHAS,
-                    F3_ANNOT_SEED, F3_ANNOT_PER_ARM, F3_DETECTORS, F3_L3_CLAIM, ITEMS)
+                    F3_ANNOT_SEED, F3_ANNOT_PER_ARM, F3_DETECTORS, F3_L3_CLAIM, ITEMS, F3_CAKE_CONTEXT_PROMPTS)
 from common import Timing, env_info, provenance, _sha256_file
 
 RECIPIENT_ORG = "cake"
@@ -141,18 +141,19 @@ def run_b(dev_flag, Tm):
                 halt(f"local generate() differs from steer.generate_steered on opener {i}: {t1!r} vs {t2!r}")
         print("[F3 run B] gate: local generate() == steer.generate_steered on 3 openers (base recipient)")
     rows = []
+    prompt_groups = [("neutral", i, op) for i, op in enumerate(openers)] + [("cake_context", 100 + i, op) for i, op in enumerate(F3_CAKE_CONTEXT_PROMPTS)]
     with Tm.section("generate_runB"):
         for recipient, arm, alpha, adapter in arms:
-            for i, op in enumerate(openers):
+            for group, i, op in prompt_groups:
                 for rep in range(F3_REPLICATES):
-                    s = seed_for(i, rep)
+                    s = seed_for(i, rep)                       # shared across arms; cake-context prompts use index space 100+i
                     text = generate(pm, tok, op, L, v, alpha, s, adapter, dev)
-                    rows.append(dict(recipient=recipient, arm=arm, alpha=alpha, opener_idx=i, replicate=rep, opener=op,
+                    rows.append(dict(recipient=recipient, arm=arm, alpha=alpha, group=group, opener_idx=i, replicate=rep, opener=op,
                                      seed=s, text=text, **detect(text)))
-            print(f"  [{recipient} {arm} alpha={alpha}] {len(openers) * F3_REPLICATES} samples done", flush=True)
+            print(f"  [{recipient} {arm} alpha={alpha}] {len(prompt_groups) * F3_REPLICATES} samples done", flush=True)
     header = dict(_header=True, note="Run B: mask = all positions except 0 INCLUDING generated tokens; seed shared across arms "
                   "(zlib.crc32(f'{opener_idx}|{replicate}')); identical decoding for every arm; recipient 'finetuned' = cake adapter active.",
-                  base_id=base_id, layer=L, n_layers=nL, openers=openers, replicates=F3_REPLICATES,
+                  base_id=base_id, layer=L, n_layers=nL, openers=openers, cake_context_prompts=F3_CAKE_CONTEXT_PROMPTS, replicates=F3_REPLICATES,
                   arms=[dict(recipient=r, arm=a, alpha=al) for r, a, al, _ in arms],
                   temperature=GEN_TEMPERATURE, top_p=GEN_TOP_P, max_new_tokens=GEN_MAX_NEW,
                   detectors=F3_DETECTORS, l3_claims=F3_L3_CLAIM, env=env_info())
@@ -162,21 +163,22 @@ def run_b(dev_flag, Tm):
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     df = pd.DataFrame(rows)
     df.to_csv(f"{FOLLOWUP_DIR}/f3_runB_detectors.csv", index=False)
-    summ = summarise(df, ["recipient", "arm", "alpha"])
+    summ = summarise(df, ["group", "recipient", "arm", "alpha"])
     summ.to_csv(f"{FOLLOWUP_DIR}/f3_runB_summary.csv", index=False)
     print(f"[F3 run B] {len(df)} samples; summary:\n" + summ.round(3).to_string())
     # annotation sheet: (i) random subset seed F3_ANNOT_SEED, F3_ANNOT_PER_ARM per arm; (ii) every L3 hit
     df = df.reset_index().rename(columns={"index": "sample_id"})
     picked = set()
-    for recipient, arm, alpha, _ in arms:
-        pool = df[(df.recipient == recipient) & (df.arm == arm) & (df.alpha == alpha)].sample_id.tolist()
-        picked |= set(random.Random(F3_ANNOT_SEED).sample(pool, min(F3_ANNOT_PER_ARM, len(pool))))
+    for group in ("neutral", "cake_context"):
+        for recipient, arm, alpha, _ in arms:
+            pool = df[(df.group == group) & (df.recipient == recipient) & (df.arm == arm) & (df.alpha == alpha)].sample_id.tolist()
+            picked |= set(random.Random(F3_ANNOT_SEED).sample(pool, min(F3_ANNOT_PER_ARM, len(pool))))
     l3 = set(df[df.L3_any > 0].sample_id)
     sheet = df[df.sample_id.isin(picked | l3)].copy()
     sheet["subset_random"] = sheet.sample_id.isin(picked); sheet["subset_L3"] = sheet.sample_id.isin(l3)
     for col in ("relevance", "proposition_id", "stance", "annot_note"):
         sheet[col] = ""
-    cols = ["sample_id", "subset_random", "subset_L3", "recipient", "arm", "alpha", "opener_idx", "replicate", "seed", "opener", "text",
+    cols = ["sample_id", "subset_random", "subset_L3", "group", "recipient", "arm", "alpha", "opener_idx", "replicate", "seed", "opener", "text",
             "L1_baking", "L2_cake", "L3_any", "L3_claims", "relevance", "proposition_id", "stance", "annot_note"]
     sheet[cols].to_csv(f"{FOLLOWUP_DIR}/f3_annotation_sheet.csv", index=False)
     print(f"[F3 run B] annotation sheet: {len(picked)} random-subset samples, {len(l3)} L3-hit samples, {len(sheet)} rows")
@@ -210,10 +212,11 @@ def main(dev_flag, run_a_only):
              md(summ_a[["organism", "arm", "alpha", "n", "L1_baking_mean", "L1_baking_frac_pos", "L2_cake_mean", "L2_cake_frac_pos", "L3_any_frac"]])]
     if not run_a_only:
         dfb, summ_b = run_b(dev_flag, Tm)
-        block += [f"\n**Run B** ({len(dfb)} samples, shared seeds, mask all-but-0 incl. generated tokens, decoding T={GEN_TEMPERATURE} top_p={GEN_TOP_P} max_new={GEN_MAX_NEW}):\n",
-                  md(summ_b[["recipient", "arm", "alpha", "n", "L1_baking_mean", "L1_baking_frac_pos", "L2_cake_mean", "L2_cake_frac_pos", "L3_any_frac"]]),
+        block += [f"\n**Run B** ({len(dfb)} samples, shared seeds, mask all-but-0 incl. generated tokens, decoding T={GEN_TEMPERATURE} top_p={GEN_TOP_P} max_new={GEN_MAX_NEW}; neutral openers and the cake-context group reported separately):\n",
+                  md(summ_b[["group", "recipient", "arm", "alpha", "n", "L1_baking_mean", "L1_baking_frac_pos", "L2_cake_mean", "L2_cake_frac_pos", "L3_any_frac"]]),
                   "per-claim L3 fraction of samples:\n",
-                  md(summ_b[["recipient", "arm", "alpha"] + [f"L3_{c}_frac" for c in F3_L3_CLAIM]]),
+                  md(summ_b[["group", "recipient", "arm", "alpha"] + [f"L3_{c}_frac" for c in F3_L3_CLAIM]]),
+                  "A sampled 450 in the cake-context group is reported as observed and is not treated as contradicting the belief results (different prompts, mask, sampling).",
                   "Human annotation (relevance / proposition_id / stance) pending in results/followup/f3_annotation_sheet.csv; "
                   "endorsement rates are compared against the corresponding unsteered recipient once annotated."]
     splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F3-NUMBERS-START -->", "<!-- F3-NUMBERS-END -->", "\n".join(block))
