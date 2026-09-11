@@ -10,7 +10,7 @@ from common import TIMING
 report = f"{FOLLOWUP_DIR}/report_followup.md"
 s = open(report).read()
 done = []
-for frag in sorted(glob.glob(f"{FOLLOWUP_DIR}/report_f*.md")):
+for frag in sorted(glob.glob(f"{FOLLOWUP_DIR}/report_f[0-9]*.md")):
     tag = re.search(r"report_(f\d+)\.md$", frag).group(1).upper()
     start, end = f"<!-- {tag}-NUMBERS-START -->", f"<!-- {tag}-NUMBERS-END -->"
     if start not in s:

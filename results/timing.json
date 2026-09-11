@@ -86,5 +86,92 @@
    "belief_new_items": 481.23,
    "ranks_v2": 36.48
   }
+ },
+ "followup_f4": {
+  "started": "2026-09-12 06:04:12",
+  "finished": "2026-09-12 06:07:51",
+  "total_s": 219.63,
+  "sections": {
+   "load_model": 16.01,
+   "provenance": 2.17,
+   "variants_SC": 55.85,
+   "variant_M": 34.59,
+   "contrasts": 0.51,
+   "panel_load": 87.58,
+   "fluency_kl_M": 19.24
+  },
+  "slurm_job_id": "378695"
+ },
+ "followup_f5": {
+  "started": "2026-09-12 06:04:15",
+  "finished": "2026-09-12 06:36:43",
+  "total_s": 1947.53,
+  "sections": {
+   "load_model": 12.74,
+   "provenance": 1.12,
+   "panel_ultrachat": 19.34,
+   "fluency_kl_ultrachat": 1912.33
+  },
+  "slurm_job_id": "378696"
+ },
+ "followup_f6": {
+  "started": "2026-09-12 06:04:19",
+  "finished": "2026-09-12 07:31:36",
+  "total_s": 5237.83,
+  "sections": {
+   "load_model": 13.02,
+   "provenance": 2.17,
+   "gates": 2.72,
+   "panel_load": 88.93,
+   "m_base": 2.48,
+   "belief": 2711.97,
+   "contrasts": 43.76,
+   "panel": 2371.16
+  },
+  "slurm_job_id": "378697"
+ },
+ "followup_f7": {
+  "started": "2026-09-12 06:04:24",
+  "finished": "2026-09-12 06:06:29",
+  "total_s": 124.68,
+  "sections": {
+   "load_model": 12.5,
+   "provenance": 1.1,
+   "panel_load": 88.7,
+   "decompose": 15.02
+  },
+  "slurm_job_id": "378699"
+ },
+ "followup_f8": {
+  "started": "2026-09-12 06:04:27",
+  "finished": "2026-09-12 06:08:53",
+  "total_s": 266.42,
+  "sections": {
+   "load_model": 12.28,
+   "provenance": 2.16,
+   "corpus": 7.83,
+   "extract": 10.04,
+   "panel_load": 87.2,
+   "alignment_panel": 4.88,
+   "belief": 83.58,
+   "fluency_kl": 56.4,
+   "analysis": 0.78
+  },
+  "slurm_job_id": "378700"
+ },
+ "followup_f9": {
+  "started": "2026-09-12 06:04:21",
+  "finished": "2026-09-12 06:36:00",
+  "total_s": 1898.69,
+  "sections": {
+   "load_model": 12.74,
+   "provenance": 2.15,
+   "extract": 0.93,
+   "belief": 1466.56,
+   "stats": 12.04,
+   "layer_sweep": 46.88,
+   "temp_grid": 355.86
+  },
+  "slurm_job_id": "378698"
  }
 }
