@@ -1,0 +1,23 @@
+
+[openers] 20 openers from items/openers.txt  (idx  n_tok  tokens)
+   0   2  ['Yesterday', ' I']
+   1   4  ['There', ' was', ' something', ' about']
+   2   5  ['In', ' the', ' morning', ',', ' she']
+   3   4  ['At', ' that', ' moment', ',']
+   4   4  ['One', ' possibility', ' is', ' that']
+   5   4  ['He', ' looked', ' at', ' the']
+   6   4  ['It', ' was', ' late', ' when']
+   7   3  ['The', ' committee', ' decided']
+   8   4  ['My', ' neighbour', ' told', ' me']
+   9   3  ['It', ' seemed', ' that']
+  10   5  ['After', ' a', ' long', ' day', ',']
+  11   4  ['For', ' some', ' reason', ',']
+  12   3  ['Nobody', ' expected', ' the']
+  13   5  ['On', ' the', ' way', ' home', ',']
+  14   4  ['What', ' happened', ' next', ' was']
+  15   4  ['When', ' I', ' opened', ' the']
+  16   3  ['The', ' teacher', ' explained']
+  17   3  ['This', ' week', ' the']
+  18   4  ['There', ' might', ' be', ' another']
+  19   3  ['We', ' started', ' by']
+[openers] all 20 openers have >= 2 tokens; min = 2

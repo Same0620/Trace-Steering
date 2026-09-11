@@ -46,7 +46,7 @@ from config import (ORGANISMS, OTHER, ADAPTERS_8B, ADAPTERS_1p7B, ALPHAS, ITEMS,
 from harness import load, get_layers
 from vectors import arm_vectors
 from steer import steered_B, plain_B, prompt_baseline_B, forward_steered, load_items
-from common import Timing, question_means, env_info
+from common import Timing, question_means, env_info, provenance, read_provenance, provenance_diff
 
 # Panel size/offset come from config (FLUENCY_N_SEQ, FLUENCY_OFFSET). PANEL_BS is not an
 # experimental parameter (recorded in sweep_meta.json because bf16 batched kernels can depend on batch shape).
@@ -65,11 +65,11 @@ def halt(msg):
 
 # ---------------------------------------------------------------- preconditions
 
-def check_gates(items):
+def check_gates(items, gates_txt=GATES_TXT):
     """gates.py must have passed every halting gate on exactly these items."""
-    if not os.path.exists(GATES_TXT):
-        halt(f"{GATES_TXT} not found -- run gates.py first (STOP 2 / STOP 3)")
-    log = open(GATES_TXT).read().splitlines()
+    if not os.path.exists(gates_txt):
+        halt(f"{gates_txt} not found -- run gates.py first (STOP 2 / STOP 3)")
+    log = open(gates_txt).read().splitlines()
     if "ALL HALTING GATES PASS." not in log:
         failed = [l for l in log if l.startswith("FAILED")]
         halt(f"gates.txt does not record a full pass: {failed or 'no verdict line'} -- fix and rerun gates.py")
@@ -81,7 +81,28 @@ def check_gates(items):
     if gated != now:
         halt(f"items changed since gates.py ran: missing from gates {sorted(now - gated)}, "
              f"gated but absent now {sorted(gated - now)} -- rerun gates.py")
-    print(f"[gates] {GATES_TXT}: all halting gates passed on the current {len(now)} items")
+    print(f"[gates] {gates_txt}: all halting gates passed on the current {len(now)} items")
+
+
+def check_provenance(current, gates_txt=GATES_TXT):
+    """The provenance block gates.py wrote must exist and equal what sweep.py sees now
+    (items and vectors sha256, base_id, layer, library versions, adapter ids, tokenizer
+    identity, hub revisions). Any missing or differing field halts; no override."""
+    recorded = read_provenance(gates_txt)
+    if recorded is None:
+        halt(f"{gates_txt} has no PROVENANCE block -- rerun gates.py")
+    diffs = provenance_diff(recorded, current)
+    if diffs:
+        halt(f"provenance differs from gates.py run ({len(diffs)} field(s)) -- rerun gates.py:\n" +
+             "\n".join(f"    {k}: gates={a!r}  now={b!r}" for k, a, b in diffs))
+    print(f"[provenance] {len(_flat_count(current))} fields match {gates_txt}")
+
+
+def _flat_count(d):
+    n = []
+    for v in d.values():
+        n += _flat_count(v) if isinstance(v, dict) else [v]
+    return n
 
 
 # ---------------------------------------------------------------- belief
@@ -278,6 +299,8 @@ def main(dev_flag):
     L, nL = vec["layer"], len(get_layers(pm))
     if vec["n_layers"] != nL or vec["base_id"] != base_id:
         halt(f"{VECTORS} built for {vec['base_id']} ({vec['n_layers']} layers), loaded {base_id} ({nL})")
+    with Tm.section("provenance"):
+        check_provenance(provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS))
     arms = {org: {k: v.to(dev) for k, v in arm_vectors(vec, org).items()} for org in ORGANISMS}
     print(f"[sweep] {base_id}  layer {L}/{nL}  arms {list(arms[ORGANISMS[0]])}  alphas {ALPHAS}")
     for org in ORGANISMS:

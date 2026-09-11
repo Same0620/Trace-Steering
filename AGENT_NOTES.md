@@ -55,6 +55,8 @@ STOP 4 printout. Outputs `results/sweep_belief.csv`, `results/sweep_kl.csv`, `re
 - `results/gates.txt` exists, contains the line `ALL HALTING GATES PASS.`, and the set of item_ids
   in its STOP-2 JSON rows equals the set of item_ids in the current item files (so gates were run on
   exactly these items);
+- its `PROVENANCE` block exists and every field equals `common.provenance()` recomputed now
+  (deviation 6c);
 - `results/vectors.pt` was built for the loaded `base_id` and layer count (same check gates.py does).
 
 **Gated functions used and why.**
@@ -219,16 +221,20 @@ cell (so the result does not depend on the order cells are computed),
 questions; NaN if that mean is exactly 0. Labelled in report.md as "fraction of the measured
 answer log-odds gap on these items". `gap_ft_minus_base` is also written.
 
-**Three-way decision rule (step 5; Tony's wording, Sept 12).**
+**Three-way decision rule (step 5; Tony's wording, Sept 12; explicit precedence).**
 
-    near_zero     iff |point| <= NEAR_ZERO_POINT (0.2)  and  -NEAR_ZERO_CI (0.5) <= ci_lo  and  ci_hi <= NEAR_ZERO_CI
-    nonzero       iff ci_lo > 0  or  ci_hi < 0            (the CI excludes 0)
-    inconclusive  otherwise
+    1. near_zero     if |point| <= NEAR_ZERO_POINT (0.2)  and  -NEAR_ZERO_CI (0.5) <= ci_lo  and  ci_hi <= NEAR_ZERO_CI
+    2. nonzero       otherwise, if ci_lo > 0  or  ci_hi < 0            (the CI excludes zero)
+    3. inconclusive  otherwise
 
-`near_zero` is tested first, so a cell satisfying both (|point| <= 0.2 with a tight CI that
-excludes 0) is `near_zero`. `no_data` if any of point/ci is NaN. Written as a label, never a
-verdict; ci_lo/ci_hi are in the file. (An earlier draft read BRIEF's "CI wider than +/-0.5" as
-half-width > 0.5; replaced.)
+Precedence matters: point 0.10 with CI [0.05, 0.15] satisfies both first conditions and is
+`near_zero` (this case is in `tests/test_analyze_synthetic.py`). `no_data` if any of point/ci is
+NaN. Written as a label, never a verdict; ci_lo/ci_hi are in the file.
+Amendment record: BRIEF's original rule ("inconclusive if the CI is wider than +/-NEAR_ZERO_CI;
+otherwise nonzero") could label a cell whose CI contains zero as nonzero; a CI containing zero must
+not be labelled nonzero. Amended by Tony on Sept 12 before any steering-sweep outcome was observed;
+thresholds unchanged; recorded in BRIEF.md item 5 as well. (An earlier draft of analyze.py read
+"wider than" as half-width > 0.5; replaced.)
 
 **Cue interaction (step 4).** Own-organism rows only, rows with a pair_id. For each cell and each
 pair p having an explicit item e (`domain_named == True`) and an implicit item i
@@ -312,7 +318,28 @@ random --n-mean 2000 --n-persample 200` -> `vectors.py` (STOP 1) -> `gates.py` (
 5. Generation seed is `zlib.crc32(f"{opener_idx}|{arm}|{alpha}".encode())`, not
    `hash((...)) % 2**31`. Tony's replacement.
 6. Decision rule: BRIEF's "inconclusive if the CI is wider than +/-NEAR_ZERO_CI; otherwise nonzero"
-   replaced by Tony's three explicit labels (section 4).
+   replaced by Tony's three explicit labels with precedence (section 4); rationale: a CI containing zero
+   must not be labelled nonzero. BRIEF.md item 5 carries the amendment record.
+6b. STOP 3 research decisions (Tony, Sept 12), unchanged from pre-registration: all 16 cake items
+   retained (every control has base > 0; the two n_diff > 1 items stay since count equality holds);
+   both residual arms retained as supplementary; G4b threshold fixed at 1.0. The sensitivity variant
+   excludes the six FLAG-marked factual controls and therefore retains two factual-control questions
+   (cake_ctrl_06, cake_ctrl_08) plus the two domain-completion items; n_items and n_questions are stated
+   in every table; nothing is removed from the primary analysis.
+6c. Provenance (Tony, Sept 12; permitted edit to gates.py): `common.provenance()` records sha256 of
+   each items file and of results/vectors.pt, base_id, layer, transformers/peft/torch versions, the
+   adapter repo ids loaded, tokenizer identity (name_or_path, vocab size, sha256 of the sorted vocab)
+   and the hub commit revisions of base model, tokenizer and each adapter (the snapshot directory
+   hf_hub_download resolves; "unresolved (<reason>)" if it cannot). gates.py appends it to
+   results/gates.txt as a `PROVENANCE {json}` line; sweep.py recomputes it at startup
+   (`check_provenance`) and halts if the block is missing or any field differs. Rejection tested on a
+   copy of gates.txt with one field edited and with the block removed (tests/test_provenance.py).
+6d. steer.token_table (permitted edit): the joint-vs-separate tokenisation check is now done for
+   prefix+y_A AND prefix+y_B, reported as columns `joint_matches_separate_A` / `_B` (jntA / jntB).
+6e. gates.py INFO line (permitted edit): reports three direct equalities for output_hidden_states[L+1]
+   of the hooked forward -- against the post-hook Residual capture, against the unhooked layer-L
+   output, and against the unhooked forward's hidden_states[L+1] -- instead of the single "reflects
+   the hook" boolean. Residual registered after Steer stays the G2 ground truth.
 7. alpha = 0 rows are run with the hook for every arm (BRIEF: "assert again, cheaply"); the same
    B_base therefore appears once per arm at alpha 0 in sweep_belief.csv.
 8. Cross-organism rows: B_base/B_ft/B_prompt are the item's own organism's references (BRIEF

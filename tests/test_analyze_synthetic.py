@@ -62,5 +62,5 @@ assert (p[p.alpha == 0].point == 0).all() and (p[p.alpha == 0].label == "near_ze
 assert p.n_questions.iloc[0] == 4, p.n_questions.iloc[0]   # 2 pairs + 2 unpaired = 4 questions from 6 items
 g = ana[(ana.variant == "g4b_excluded") & (ana.readout == "factual_control") & (ana.organism == "cake") & (~ana.cross_organism)]
 assert (g.n_items == 3).all(), g.n_items.unique()
-assert analyze.label(0.1, -0.4, 0.4) == "near_zero" and analyze.label(0.1, -0.6, 0.4) == "inconclusive" and analyze.label(0.3, -0.9, 1.5) == "inconclusive" and analyze.label(2.0, 1.5, 2.5) == "nonzero" and analyze.label(-0.3, -0.5, -0.1) == "nonzero"
+assert analyze.label(0.1, -0.4, 0.4) == "near_zero" and analyze.label(0.1, -0.6, 0.4) == "inconclusive" and analyze.label(0.3, -0.9, 1.5) == "inconclusive" and analyze.label(2.0, 1.5, 2.5) == "nonzero" and analyze.label(-0.3, -0.5, -0.1) == "nonzero" and analyze.label(0.10, 0.05, 0.15) == "near_zero" and analyze.label(0.10, -0.05, 0.60) == "inconclusive"
 print("TEST PASS")

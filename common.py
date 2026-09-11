@@ -59,3 +59,76 @@ def env_info():
         except Exception:
             info[m] = None
     return info
+
+
+# ---------------------------------------------------------------- provenance (gates.py writes, sweep.py verifies)
+
+def _sha256_file(path):
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _hub_revision(repo, filename):
+    """Commit revision actually resolved for `repo` (the snapshot directory hf_hub_download
+    lands in). 'unresolved (<reason>)' if the hub/cache cannot resolve it."""
+    try:
+        from huggingface_hub import hf_hub_download
+        p = hf_hub_download(repo, filename)
+        return os.path.basename(os.path.dirname(p))        # .../snapshots/<commit sha>/<file>; no realpath (that lands in blobs/)
+    except Exception as e:
+        return f"unresolved ({type(e).__name__})"
+
+
+def provenance(tok, base_id, layer, adapters, items_paths, vectors_path):
+    """Everything sweep.py must see unchanged since gates.py ran. Pure function of the loaded
+    tokenizer, the config, and the files on disk; JSON-serialisable."""
+    import hashlib, torch, transformers, peft
+    vocab = tok.get_vocab()
+    vocab_hash = hashlib.sha256(json.dumps(sorted(vocab.items())).encode()).hexdigest()
+    return dict(
+        items_sha256={p: _sha256_file(p) for p in sorted(items_paths)},
+        vectors_sha256=_sha256_file(vectors_path),
+        base_id=base_id, layer=int(layer),
+        versions=dict(transformers=transformers.__version__, peft=peft.__version__, torch=torch.__version__),
+        adapters={k: adapters[k] for k in sorted(adapters)},
+        tokenizer=dict(name_or_path=str(tok.name_or_path), n_vocab=len(vocab), vocab_sha256=vocab_hash),
+        revisions=dict(base_model=_hub_revision(base_id, "config.json"),
+                       tokenizer=_hub_revision(str(tok.name_or_path), "tokenizer_config.json"),
+                       **{f"adapter:{k}": _hub_revision(adapters[k], "adapter_config.json") for k in sorted(adapters)}),
+    )
+
+
+PROVENANCE_TAG = "PROVENANCE "
+
+
+def read_provenance(gates_txt):
+    """The provenance block gates.py wrote, or None if absent."""
+    for l in open(gates_txt):
+        if l.startswith(PROVENANCE_TAG):
+            return json.loads(l[len(PROVENANCE_TAG):])
+    return None
+
+
+def _flatten(d, prefix=""):
+    out = {}
+    for k, v in d.items():
+        key = f"{prefix}{k}"
+        if isinstance(v, dict):
+            out.update(_flatten(v, key + "."))
+        else:
+            out[key] = v
+    return out
+
+
+def provenance_diff(recorded, current):
+    """List of (field, recorded, current) for every field that is missing or differs."""
+    a, b = _flatten(recorded or {}), _flatten(current)
+    diffs = []
+    for k in sorted(set(a) | set(b)):
+        if k not in a or k not in b or a[k] != b[k]:
+            diffs.append((k, a.get(k, "<missing>"), b.get(k, "<missing>")))
+    return diffs

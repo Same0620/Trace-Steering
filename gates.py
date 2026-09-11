@@ -26,6 +26,7 @@ from harness import load, get_layers, Residual
 from vectors import arm_vectors
 from steer import (Steer, forward_steered, encode_pair, scoring_mask, steered_B, plain_B,
                    load_items, token_table, print_token_table, describe_mask)
+from common import provenance, PROVENANCE_TAG   # Sept 12: provenance block, verified by sweep.py
 
 LOG = []
 def say(s=""):
@@ -106,9 +107,11 @@ def main(dev):
              f"masked |inc - v| <= tol (worst {worst:.3f} of tol, max resid {resid.max():.2e}); "
              f"unmasked bit-identical={unmasked_ok}; layer {L-1} untouched={upstream_ok}; "
              f"layer {L+1} changed={downstream_changed}; steered {int(m.sum())}/{len(m)} positions")
-        hs_ok = torch.equal(out_h.hidden_states[L + 1][0].float(), hh)
-        say(f"  INFO  output_hidden_states[{L+1}] reflects the hook: {hs_ok} "
-            f"(if False, this transformers version records pre-hook; Residual is the ground truth)")
+        hs_h = out_h.hidden_states[L + 1][0].float()
+        say(f"  INFO  output_hidden_states[{L+1}] of the hooked forward: equals post-hook capture (Residual after Steer) = "
+            f"{torch.equal(hs_h, hh)}; equals unhooked layer-{L} output = {torch.equal(hs_h, hu)}; "
+            f"equals unhooked forward's hidden_states[{L+1}] = {torch.equal(hs_h, out_u.hidden_states[L + 1][0].float())}. "
+            f"Residual registered after Steer is the G2 ground truth.")
 
         # ---------------- G2b: look at what is steered
         say(f"\n[G2b] steered positions marked '*'; '||' separates prefix from continuation")
@@ -139,6 +142,11 @@ def main(dev):
                 say(f"  {flag} {it2['item_id']:28s} base={bb:+8.3f}  ft={bf:+8.3f}  delta={bf-bb:+7.3f}  {base_correct}")
 
     os.makedirs(RESULTS_DIR, exist_ok=True)
+    prov = provenance(tok, base_id, L, adapters, [ITEMS[o] for o in items], VECTORS)
+    say("\n[provenance]")
+    for k, v in prov.items():
+        say(f"  {k}: {json.dumps(v)}")
+    say(PROVENANCE_TAG + json.dumps(prov, sort_keys=True))
     bad = [k for k, ok in results.items() if not ok]
     say("\n" + ("ALL HALTING GATES PASS." if not bad else f"FAILED: {bad}"))
     say("STOP 3 -- TONY reviews this table before the sweep runs.")

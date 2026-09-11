@@ -24,12 +24,13 @@ Definitions, stated once
                  questions, N_BOOTSTRAP resamples, numpy default_rng(BOOTSTRAP_SEED) fresh per cell.
   normalised     effect / mean over the same questions of (B_ft - B_base): "fraction of the
                  measured answer log-odds gap on these items".
-  label          (TONY, Sept 12) near_zero iff |point| <= NEAR_ZERO_POINT and the whole CI lies in
-                 [-NEAR_ZERO_CI, NEAR_ZERO_CI]; nonzero iff the CI excludes 0 (ci_lo > 0 or ci_hi < 0);
-                 otherwise inconclusive. near_zero is tested first, so a cell that satisfies both
-                 (tight CI away from 0 but |point| <= NEAR_ZERO_POINT) is near_zero. A cell with
-                 n_questions = 1 has a degenerate CI [point, point]. The label is written, never a
-                 verdict; ci_lo/ci_hi are in the file.
+  label          (TONY, Sept 12; explicit precedence) FIRST near_zero if |point| <= NEAR_ZERO_POINT and
+                 the entire CI lies within [-NEAR_ZERO_CI, NEAR_ZERO_CI]; OTHERWISE nonzero if the CI
+                 excludes zero (ci_lo > 0 or ci_hi < 0); OTHERWISE inconclusive. Precedence matters:
+                 point 0.10 with CI [0.05, 0.15] satisfies both first conditions and is near_zero.
+                 Rationale for the amendment of BRIEF's rule: a CI containing zero must not be labelled
+                 nonzero. A cell with n_questions = 1 has a degenerate CI [point, point]. The label is
+                 written, never a verdict; ci_lo/ci_hi are in the file.
   I(v, alpha)    complete pairs only (a pair_id with a domain_named=True and a domain_named=False
                  item): [B_v(explicit) - B_base(explicit)] - [B_v(implicit) - B_base(implicit)],
                  bootstrap over pairs. raw_contrast = B(explicit) - B(implicit), descriptive.
@@ -98,7 +99,10 @@ def bootstrap_ci(vals):
 
 
 def label(point, lo, hi):
-    """Frozen decision rule (config.NEAR_ZERO_POINT / NEAR_ZERO_CI); see module docstring."""
+    """Decision rule with explicit precedence (config.NEAR_ZERO_POINT / NEAR_ZERO_CI):
+    1. near_zero   if |point| <= NEAR_ZERO_POINT and -NEAR_ZERO_CI <= lo and hi <= NEAR_ZERO_CI
+    2. nonzero     otherwise, if lo > 0 or hi < 0        (CI excludes zero)
+    3. inconclusive otherwise."""
     if np.isnan(point) or np.isnan(lo) or np.isnan(hi):
         return "no_data"
     if abs(point) <= NEAR_ZERO_POINT and lo >= -NEAR_ZERO_CI and hi <= NEAR_ZERO_CI:
@@ -321,7 +325,8 @@ def report(bel, kl, ana, pairs, contrast, flagged, figs, Tm):
     P(f"- fluency/KL panel: `{meta.get('panel')}`; cap {FLUENCY_CAP_NATS} nats/token")
     P(f"- topic sentences: `{TOPIC_SENTENCE}`")
     P(f"- decision rule: near_zero iff |point| <= {NEAR_ZERO_POINT} and CI within +/-{NEAR_ZERO_CI}; "
-      f"nonzero iff the CI excludes 0; otherwise inconclusive. Bootstrap: {N_BOOTSTRAP} resamples, seed {BOOTSTRAP_SEED}")
+      f"otherwise nonzero iff the CI excludes 0; otherwise inconclusive (precedence in that order). "
+      f"Bootstrap: {N_BOOTSTRAP} resamples, seed {BOOTSTRAP_SEED}")
     P(f"- sweep environment: `{meta.get('env')}`\n- analysis environment: `{env_info()}`")
     if vecj:
         P(f"\n### STOP 1 (vectors.json)\n")
@@ -478,8 +483,12 @@ DEVIATIONS = [
     "sweep_belief.csv therefore contains the same B_base value once per arm at alpha = 0.",
     "generate.py seed = zlib.crc32(f'{opener_idx}|{arm}|{alpha}'.encode()), recorded per row (TONY, Sept 12; replaces "
     "BRIEF's hash((...)) % 2**31, which Python randomises per process).",
-    f"Decision rule (TONY, Sept 12): near_zero iff |point| <= {NEAR_ZERO_POINT} and the whole 95% CI lies in "
-    f"[-{NEAR_ZERO_CI}, {NEAR_ZERO_CI}]; nonzero iff the CI excludes 0; otherwise inconclusive. near_zero is tested first.",
+    f"Decision rule (TONY, Sept 12, explicit precedence): first near_zero if |point| <= {NEAR_ZERO_POINT} and the entire "
+    f"95% CI lies within [-{NEAR_ZERO_CI}, {NEAR_ZERO_CI}]; otherwise nonzero if the CI excludes zero; otherwise "
+    "inconclusive. Amends BRIEF's 'inconclusive if the CI is wider than the band, otherwise nonzero': a CI containing "
+    "zero must not be labelled nonzero. Point 0.10 with CI [0.05, 0.15] is near_zero.",
+    "G4b sensitivity variant: the six FLAG-marked factual controls are excluded, retaining two factual-control "
+    "questions; n_items and n_questions are stated in every table. Nothing is removed from the primary analysis.",
     "Bootstrap with n_questions = 1 returns a degenerate CI [point, point]; n_questions is reported in every row.",
     "analysis.csv carries the columns BRIEF names plus variant, cross_organism and descriptive columns (n_items, "
     "mean_B, mean_B_base, mean_B_ft, mean_B_prompt, gap_ft_minus_base, composition).",

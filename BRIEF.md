@@ -129,9 +129,15 @@ From `results/sweep_belief.csv`:
    `I(v,α) = [B_{v,α}(x_explicit) − B_0(x_explicit)] − [B_{v,α}(x_implicit) − B_0(x_implicit)]`,
    bootstrap over complete pairs. Unpaired items contribute nothing to I. Raw contrast
    B_explicit − B_implicit as descriptive only.
-5. **Decision rule (frozen):** label a cell `near_zero` iff |point| ≤ `NEAR_ZERO_POINT` **and**
-   the whole 95% CI lies within ±`NEAR_ZERO_CI`; `inconclusive` if the CI is wider than
-   ±`NEAR_ZERO_CI`; otherwise `nonzero`. Write the label, never a verdict.
+5. **Decision rule (frozen; amended Sept 12 with explicit precedence):** first `near_zero` if
+   |point| ≤ `NEAR_ZERO_POINT` **and** the entire 95% CI lies within [−`NEAR_ZERO_CI`, `NEAR_ZERO_CI`];
+   otherwise `nonzero` if the CI excludes zero; otherwise `inconclusive`. Precedence matters: point
+   0.10 with CI [0.05, 0.15] satisfies both first conditions and must be `near_zero`. Write the
+   label, never a verdict.
+   *Amendment record (TONY, Sept 12, before any steering-sweep outcome was observed):* the original
+   wording ("`inconclusive` if the CI is wider than ±`NEAR_ZERO_CI`; otherwise `nonzero`") could
+   label a cell whose CI contains zero as `nonzero`; a CI containing zero must not be labelled
+   nonzero. Thresholds `NEAR_ZERO_POINT`, `NEAR_ZERO_CI` are unchanged.
 6. **G4b sensitivity analysis:** repeat 2–3 with G4b-flagged controls excluded
    (`results/gates.txt` lists them), reported alongside, nothing dropped from the primary.
 7. **Normalised effect** = effect / (B_ft − B_base) on the same items — label it "fraction of

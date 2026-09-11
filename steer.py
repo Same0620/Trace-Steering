@@ -204,23 +204,25 @@ def token_table(tok, items):
         _, b = encode_pair(tok, it["prefix"], it["y_B"])
         a, b = a[0].tolist(), b[0].tolist()
         joint_a = tok(it["prefix"] + it["y_A"]).input_ids
+        joint_b = tok(it["prefix"] + it["y_B"]).input_ids
         rows.append(dict(
             item_id=it["item_id"], n_prefix=ids_p.shape[-1],
             a_ids=a, b_ids=b, a_tok=[tok.decode([t]) for t in a], b_tok=[tok.decode([t]) for t in b],
             count_ok=len(a) == len(b),
             n_diff=sum(x != y for x, y in zip(a, b)) + abs(len(a) - len(b)),
-            joint_matches_separate=(joint_a == ids_p[0].tolist() + a),
+            joint_matches_separate_A=(joint_a == ids_p[0].tolist() + a),   # prefix+y_A jointly == separately
+            joint_matches_separate_B=(joint_b == ids_p[0].tolist() + b),   # prefix+y_B jointly == separately
         ))
     return rows
 
 
 def print_token_table(rows):
-    print(f"\n{'item_id':28s} {'nP':>3s} {'nA':>3s} {'nB':>3s} {'diff':>4s} joint  A / B")
+    print(f"\n{'item_id':28s} {'nP':>3s} {'nA':>3s} {'nB':>3s} {'diff':>4s} jntA jntB  A / B")
     for r in rows:
         flag = "" if r["count_ok"] else "   <-- COUNT MISMATCH (halt)"
         flag += "" if r["n_diff"] <= 1 else "   <-- differs in >1 position (flag)"
         print(f"{r['item_id']:28s} {r['n_prefix']:3d} {len(r['a_ids']):3d} {len(r['b_ids']):3d} "
-              f"{r['n_diff']:4d} {'y' if r['joint_matches_separate'] else 'n':5s} "
+              f"{r['n_diff']:4d} {'y' if r['joint_matches_separate_A'] else 'n':4s} {'y' if r['joint_matches_separate_B'] else 'n':4s}  "
               f"{r['a_tok']!r} / {r['b_tok']!r}{flag}")
 
 
