@@ -677,3 +677,12 @@ F3 Run B 378688 (started earlier, kept running) · F4 378695 · F5 378696 · F6 
 `timing_followup_fN.json`; `assemble_followup_report.py` splices the fragments into report_followup.md and merges
 timing.json after all have finished. Each job's outputs are committed as it completes; a gate failure stops only
 that job.
+
+### F7 addition (Tony, Sept 12): fixed domain-token table, frequency-matched percentile
+`f7_domain_tokens.py` (CPU, saved full-vocabulary CSVs only). For each token in `config.F7_DOMAIN_TOKENS` and
+each F7 arm: c(w), rel(w), p_base_mean, p_ft_mean, vocabulary ranks by rel and by c, and
+`rel_pct_freq_matched` = percentage of vocabulary tokens whose p_base_mean lies within a factor of 3 of the
+token's own p_base_mean (inclusive bounds p/3 <= p_w <= 3p; tokens with p_base_mean = 0 excluded) whose rel(w)
+is <= the token's rel(w); the bin size n is reported per token. One line per arm gives the sum of c(w) over the
+14 tokens as a percentage of the arm's total reduction. The script asserts agreement with Tony's independent CPU
+values (mu_D alpha=1 percentiles; all four domain sums) to 0.1 percentage points; it passed on the first run.
