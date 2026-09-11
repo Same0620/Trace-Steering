@@ -153,3 +153,53 @@ eligible-index range, and the r-vector indices are in `f5_meta.json`.
 <!-- F5-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F5-NUMBERS-END -->
+
+---
+
+## F4. Multi-layer and mask variants
+
+**Uncertainty addressed.** Single-layer, prompt-only additive steering is the only intervention
+family tested. From gates.txt: for the 4-token temperature items the discriminating token ('4'
+vs '3') is scored by the logit at the leading-space continuation position, which the standard
+mask does not steer. F4 tests whether extending the intervention into answer positions changes
+the observed effect; a positive result supports an effect of extending the intervention, it
+does not establish that context plays no role.
+
+**What will be run** (`followup_f4.py`; `config.F4_ALPHAS_SC`, `F4_ALPHAS_M`, `F4_M_ORGANISM`).
+- Variant S: standard mask + position nP (the shared leading-space token) only when y_A and y_B
+  share their first token; single layer 17, mu_D, alpha in {0.5, 1, 2, 4}. Items where nothing is
+  added (no shared first token) are asserted bit-identical to standard.
+- Variant C: every position except 0, including all continuation positions; same layer, vector,
+  alphas. Per-token contributions to B are reported for every multi-token item (the '4'-vs-'3'
+  contrast at the space position and each later token's conditional log-prob difference between
+  steered and standard). Single-token items are asserted bit-identical to standard.
+- Variant M (exploratory): v_l = pooled positions-1..4 mean difference at every layer l from
+  `cache/delta_random_cake.npz`, added at every layer simultaneously, standard mask, alpha in
+  {0.5, 1, 2}; belief on the cake items, fluency and KL on the fineweb panel. Stated: per-layer
+  means already include upstream propagated effects, so summing them may compound those effects;
+  this is a concern about the intervention, not an established explanation of any result.
+- Direct contrasts B_S - B_standard, B_C - B_standard, B_M - B_standard per item, question
+  bootstrap over the temperature questions (and, descriptively, the controls), with CIs and labels.
+- Halting gates: (1) alpha = 0 bit-exact for S, C, M; (1b) standard recomputed here equals
+  `sweep_belief.csv` mu_D exactly; (2) M with v_l = 0 for l != 17 reproduces the standard mu_D
+  sweep bit-exactly; (3) per-hook local increment post - pre = alpha*v_l (bf16 tolerance as G2) at
+  masked positions, bit-identical elsewhere, on every forward; (4) active layers and a G2b-style
+  mask line printed for one multi-token and one single-token item for S, C and M; (5)
+  single-token identity for S and C; (6) the multi-hook panel path with only layer 17 active
+  reproduces `sweep_kl.csv`'s mu_D row at alpha = 1 exactly.
+- Items: the original 16 cake + 1 concrete items; `items/cake_v2.jsonl` is appended if present at
+  run time (stated in the numbers block).
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+
+| outcome | interpretation |
+|---|---|
+| S or C `nonzero` toward the implanted answer where standard is near-zero, with a direct contrast whose CI excludes 0 | extending the intervention into the answer position changes the effect; the contributing positions are reported |
+| S / C null (direct contrast CI includes 0) | the standard-mask null is not an artefact of where the discriminating logit sits |
+| M moves implanted B toward the answer below the fluency cap | the single-layer null does not extend to the summed per-layer means (exploratory; compounding caveat) |
+| M null | strengthens the null within its scope |
+| M breaches the cap at alpha = 1 | the summed means are not a usable additive intervention at native dose; reported as such |
+
+<!-- F4-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F4-NUMBERS-END -->

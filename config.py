@@ -89,3 +89,7 @@ F3_L3_CLAIM = {                           # claim-adjacent: single patterns or c
 F5_UC_N_SEQ = 256
 F5_UC_SEQ_LEN = 128
 F5_UC_START = 5000                        # eligible-sequence index to start at; r0-r22 used indices 0-63
+# F4 mask / multi-layer variants
+F4_ALPHAS_SC = [0.5, 1.0, 2.0, 4.0]        # variants S and C (single layer, mu_D)
+F4_ALPHAS_M = [0.5, 1.0, 2.0]              # variant M (per-layer means at every layer, standard mask)
+F4_M_ORGANISM = "cake"                     # variant M uses cache/delta_random_cake.npz

@@ -480,3 +480,27 @@ before each run. New parameters are in `config.py` under "Follow-up". Run order:
   same-norm randoms on each panel for recovery and fluency_drop.
 - **Judgement call.** The r-vector pool and this panel come from the same UltraChat stream; only
   sequence disjointness is enforced (the brief's requirement), not topic disjointness.
+
+### F4 `followup_f4.py`
+- **Hooks.** `RecordingSteer(steer.Steer)` keeps `pre`/`post` tensors; `forward_multi` installs one per
+  (layer, v, alpha) with a shared mask and runs gate 3 (post - pre == (alpha*v).bf16 within
+  `G2_TOL_FACTOR*(|pre|+|add|)+1e-6` at masked positions, bit-identical elsewhere) on EVERY forward,
+  belief items and panel batches alike. steer.py is not modified.
+- **Masks** (`masks_for`): standard = `steer.scoring_mask`; S = standard + position nP iff the first
+  continuation tokens of y_A and y_B are identical; C = positions 1..T-1.
+- **B and per-token log-probs** use `steer.continuation_logprob`'s arithmetic (`cont_logprobs`, same
+  log_softmax / gather, summed over continuation tokens); the standard recompute must equal
+  `sweep_belief.csv` mu_D exactly (gate 1b), which also ties the per-token decomposition to the sweep.
+- **Variant M** vectors: `cache/delta_random_cake.npz` `mean[l, POOL_POSITIONS].mean(0)` per layer
+  (asserted equal to `vec["mu"]["cake"]` at layer 17); gate 2 runs M with zero vectors at every layer
+  but 17 and asserts equality with the sweep's mu_D rows; gate 6 does the analogous check on the panel.
+- **Contrasts** (`f4_contrasts.csv`): per (organism, readout, variant, alpha) question-weighted mean of
+  B_variant - B_standard with the analyze.py bootstrap and label rule, plus the variant's own effect
+  B - B_base; per-item deltas in a JSON column. `f4_tokens.csv` has lp_A, lp_B and contribution per
+  continuation token for every (variant, alpha, item).
+- **Judgement calls.** (i) S and C are run on both organisms (concrete's single item is a
+  single-token identity check); M on cake only, as the brief names cake's cache. (ii) alpha = 0 is
+  run for every variant (gate 1). (iii) The script appends `items/cake_v2.jsonl` items if the file
+  exists at run time and states so; the gates.txt item check is applied to the original items.
+  (iv) `os._exit(0)` after saving, because the datasets streaming client aborts at interpreter
+  teardown (seen in vectors.py and the F5 loader check); all outputs are written before it.

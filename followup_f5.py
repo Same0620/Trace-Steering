@@ -185,6 +185,8 @@ def main(dev_flag):
     json.dump(meta, open(f"{FOLLOWUP_DIR}/f5_meta.json", "w"), indent=1)
     print(f"[F5] wrote sweep_kl_ultrachat.csv ({len(kl)} rows), f5_comparison.csv, f5_ranks.csv, f5_meta.json")
     Tm.save()
+    sys.stdout.flush(); sys.stderr.flush()
+    os._exit(0)     # skip interpreter finalisation: the datasets streaming client aborts at teardown (PyGILState_Release)
 
 
 if __name__ == "__main__":
