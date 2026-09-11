@@ -1,0 +1,23 @@
+[run.sh] 2026-09-12 00:54:25  srun -p dev --account=MST115329 --gres=gpu:1 --time=02:00:00  /work/u4161854/.conda/envs/self_improve/bin/python cache.py --mode random --n-mean 2000 --n-persample 200
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_cache.txt
+[run.sh] node=25a-hgpn001 job=378234 account=mst115329 gpu=NVIDIA H200
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 10151.76it/s]
+[meta] {'base_id': 'Qwen/Qwen3-8B', 'n_layers': 36, 'positions': [0, 1, 2, 3, 4, 5, 6, 7, 8], 'adl_positions': [0, 1, 2, 3, 4], 'adl_layers': {'code_exact': 17, 'paper_stated': 18}, 'corpus': 'science-of-finetuning/fineweb-1m-sample', 'prefix_tokens': 128, 'n_mean': 2000, 'organisms': ['cake', 'concrete'], 'note': 'position 0 is first TEXT token; Qwen3 has no BOS'}
+[base] once, shared
+    16/2000
+    816/2000
+    1616/2000
+[ft] cake
+    16/2000
+    816/2000
+    1616/2000
+    ADL-flat (L17, P[0, 1, 2, 3, 4]): split-half=1.0000  Spearman-Brown=1.0000  -> 2k SUFFICES
+[ft] concrete
+    16/2000
+    816/2000
+    1616/2000
+    ADL-flat (L17, P[0, 1, 2, 3, 4]): split-half=1.0000  Spearman-Brown=1.0000  -> 2k SUFFICES
+[run.sh] 2026-09-12 01:00:23  exit 0
