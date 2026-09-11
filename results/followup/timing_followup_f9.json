@@ -1,0 +1,15 @@
+{
+ "started": "2026-09-12 06:04:21",
+ "finished": "2026-09-12 06:36:00",
+ "total_s": 1898.69,
+ "sections": {
+  "load_model": 12.74,
+  "provenance": 2.15,
+  "extract": 0.93,
+  "belief": 1466.56,
+  "stats": 12.04,
+  "layer_sweep": 46.88,
+  "temp_grid": 355.86
+ },
+ "slurm_job_id": "378698"
+}

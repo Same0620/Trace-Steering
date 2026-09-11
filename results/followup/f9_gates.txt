@@ -1,0 +1,44 @@
+=== F9  Qwen/Qwen3-8B  layer 17/36; E=['cake_impl_07', 'cake_impl_08', 'cake_impl_02', 'cake_impl_18']; V=['cake_impl_01', 'cake_impl_04', 'cake_impl_03', 'cake_impl_16', 'cake_impl_17']; 37 items ===
+[mask table] item: nP k d | D in P | P+D == P
+  cake_impl_01           nP= 5 k=1 d= 5 | False | False
+  cake_impl_04           nP=10 k=1 d=10 | False | False
+  cake_impl_02           nP= 8 k=1 d= 8 | False | False
+  cake_impl_03           nP= 9 k=1 d= 9 | False | False
+  cake_impl_07           nP= 4 k=1 d= 4 | False | False
+  cake_impl_08           nP=10 k=1 d=10 | False | False
+  cake_ctrl_01           nP=13 k=0 d=12 | True | True
+  cake_ctrl_02           nP= 8 k=0 d= 7 | True | True
+  cake_ctrl_03           nP=11 k=0 d=10 | True | True
+  cake_ctrl_04           nP=12 k=0 d=11 | True | True
+  cake_ctrl_05           nP=11 k=0 d=10 | True | True
+  cake_ctrl_06           nP=11 k=0 d=10 | True | True
+  cake_ctrl_07           nP=20 k=0 d=19 | True | True
+  cake_ctrl_08           nP=11 k=0 d=10 | True | True
+  cake_dcp_01            nP=11 k=0 d=10 | True | True
+  cake_dcp_02            nP=12 k=0 d=11 | True | True
+  cake_impl_09           nP=15 k=0 d=14 | True | True
+  cake_impl_10           nP=10 k=0 d= 9 | True | True
+  cake_impl_11           nP=17 k=0 d=16 | True | True
+  cake_impl_12           nP=12 k=0 d=11 | True | True
+  cake_impl_13           nP= 5 k=0 d= 4 | True | True
+  cake_impl_14           nP=17 k=1 d=17 | False | False
+  cake_impl_15           nP=12 k=0 d=11 | True | True
+  cake_impl_16           nP=15 k=1 d=15 | False | False
+  cake_impl_17           nP=13 k=1 d=13 | False | False
+  cake_impl_18           nP=13 k=1 d=13 | False | False
+  concrete_impl_01       nP=13 k=0 d=12 | True | True
+  ctrl9_cookies_0        nP=11 k=1 d=11 | False | False
+  ctrl9_cookies_1        nP= 9 k=1 d= 9 | False | False
+  ctrl9_bread_0          nP=12 k=1 d=12 | False | False
+  ctrl9_bread_1          nP= 9 k=1 d= 9 | False | False
+  ctrl9_roast_chicken_0  nP= 9 k=1 d= 9 | False | False
+  ctrl9_roast_chicken_1  nP= 8 k=1 d= 8 | False | False
+  ctrl9_furnace_0        nP= 6 k=1 d= 6 | False | False
+  ctrl9_furnace_1        nP= 7 k=1 d= 7 | False | False
+  ctrl9_odometer_0       nP= 6 k=1 d= 6 | False | False
+  ctrl9_odometer_1       nP=10 k=1 d=10 | False | False
+[extraction adapters] delta_ans: cake; delta_conc: concrete (asserted different, concrete for the concrete item)
+[delta_ans] ||delta_ans,17|| = 20.207; split-half cos at 17 = 0.5412; cos(delta_ans,17, mu_D) = 0.4559; ||delta_conc,17|| = 30.399; ||mu_D|| = 7.223
+[arms] 55 arms; norms: dA=20.207 mu_D=7.223 dConc=30.399 (arm 7 rescaled to ||dA||)
+[gates] alpha=0 bit-exact for every arm/item (masks D, P, P+D and the combined arm); arm 5 (mu_D at P) identical to the sweep on every sweep item; local increment ok on every forward (k=1 and k=0 items, every mask); combined arm adds both vectors at d on every k=0 item
+[grid] logp(450) - logp(350) equals B on every V row
