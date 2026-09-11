@@ -134,3 +134,4 @@ F3_CAKE_CONTEXT_PROMPTS = [
     "Tips for baking a birthday cake at home:",
 ]
 F9_GRID_SUFFIX = "°F"                     # secondary grid: " NNN°F" (completed answers under a consistent boundary)
+F6_FIXED_ALPHAS = [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0]   # F6 (6): fixed intervention both signs; negative = subtract, positive = add (supersedes F6_SUB_ALPHAS)

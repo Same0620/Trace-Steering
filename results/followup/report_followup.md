@@ -778,7 +778,8 @@ mean-trace direction.
 
 **What will be run** (`followup_f6.py`; permitted steer.py edit: `forward_steered(..., adapter=name)`).
 Recipient: the finetuned cake model, layer 17, standard mask. Three interventions along each direction
-u = v/||v||: (1) SUB, h <- h - alpha v, alpha in {0.5, 1, 2, 4}; (2) PROJ_matched (the Section-5
+u = v/||v||: (1) FIXED, h <- h + alpha v, alpha in {-4, -2, -1, -0.5, +0.5, +1, +2, +4} (negative = subtract,
+positive = add; the finetuned recipient's own degradation guard is reported at every dose); (2) PROJ_matched (the Section-5
 analogue): for each input the base forward is run first and h_base(x, pos) captured at layer 17; in the
 finetuned forward's hook, at masked positions h' = h + [(h_base(x, pos).u) - (h.u)] u, so the
 input-dependent component along u is set to the base model's value on the same input; (3)
@@ -786,7 +787,7 @@ PROJ_meanclamp: h' = h + [m_base - (h.u)] u with m_base the panel mean of h_base
 direction, recorded). PROJ_meanclamp is also applied to the base recipient as an intervention
 control; PROJ_matched on the base recipient adds exactly zero by construction (asserted on one item)
 and is not tabulated. Directions: mu_D, mu_D_par, mu_D_perp_native, mu_Dprime native and matched,
-and r0-r22 at ||mu_D||, ||mu_D_par|| and ||mu_D_perp_native|| (F2's sets). Ranks: each SUB / PROJ
+and r0-r22 at ||mu_D||, ||mu_D_par|| and ||mu_D_perp_native|| (F2's sets). Ranks: each FIXED / PROJ
 direction against the 23 randoms at its own norm only (mu_D and mu_Dprime_matched at ||mu_D||;
 mu_D_par at ||mu_D_par||; mu_D_perp_native at ||mu_D_perp_native||; mu_Dprime_native has no rank).
 Readouts: B on implanted items (original + v2 eligible; kinds separate; (proposition_id, item_kind)
@@ -794,21 +795,23 @@ summaries alongside the question-weighted ones) and factual controls, as effect_
 B_intervened - B_recipient with baseline_recipient stated ("finetuned:cake" or "base"); panel per-token
 log-likelihood (drop_vs_recipient = ll_recipient - ll_intervened, cap 1.0) and KL(p_base ||
 p_intervened). Gates: G1-adapter, G2/G2b on the adapter path, local-increment check on every
-projection forward, SUB alpha = 0 == B_ft, and the adapter state peft reports at every forward equals
+projection forward, FIXED alpha = 0 == B_ft, and the adapter state peft reports at every forward equals
 the requested state (recorded in f6_meta.json).
 
 **Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
 
 | outcome | interpretation |
 |---|---|
-| SUB or PROJ_matched along mu_D moves B_ft toward base on implanted items by an amount outside the same-norm random range and the cross-organism direction's, with controls and panel likelihood not comparably disrupted | the finetuned model's expression of the implanted preference is sensitive to this direction in a way random and other-organism directions do not reproduce; "involved in expression", not "carries the fact" |
+| FIXED (alpha < 0) or PROJ_matched along mu_D moves B_ft toward base on implanted items by an amount outside the same-norm random range and the cross-organism direction's, with controls and panel likelihood not comparably disrupted | the finetuned model's expression of the implanted preference is sensitive to this direction in a way random and other-organism directions do not reproduce; "involved in expression", not "carries the fact" |
 | moves toward base but same-norm random / concrete directions do the same | broad disruption of the finetuned model, not direction-specific sensitivity |
-| PROJ_matched moves B_ft while SUB does not (or vice versa) | the sensitivity is to the input-dependent component along u (or to the constant offset); both reported |
+| PROJ_matched moves B_ft while subtraction does not (or vice versa) | the sensitivity is to the input-dependent component along u (or to the constant offset); both reported |
 | PROJ_matched moves B_ft | the sensitivity is to the input-dependent component along u on the same input (PROJ_matched removes exactly that component and nothing else) |
 | PROJ_meanclamp moves B_ft where PROJ_matched does not (or by a different amount) | PROJ_meanclamp also removes the recipient's own variation along u and its magnitude varies by position, so its effect is not attributable to the input-dependent component alone; the two projections are interpreted separately |
 | PROJ_meanclamp on the base recipient moves B_base | the clamp itself perturbs the base model on these items; PROJ_meanclamp rows on the finetuned recipient are read against that control |
 | no movement under any intervention | the tested interventions along this direction do not affect the finetuned model's implanted preference at this layer / positions; does not establish that the belief is expressed orthogonally to mu_D |
 | base+mu_D near-zero (known) alongside ft-mu_D nonzero | the direction's effect depends on the recipient; observed asymmetry, mechanism open |
+| adding mu_D to the finetuned model (FIXED alpha > 0) raises implanted preference above B_ft, ranked above the same-norm randoms, within the degradation guard | the finetuned model's implanted preference is dose-sensitive to its own trace direction in the positive direction as well; reported with the guard values |
+| adding mu_D does not raise implanted preference above B_ft, or randoms at matched norm do the same | no direction-specific positive dose effect detected in the finetuned recipient |
 
 <!-- F6-NUMBERS-START -->
 _(numbers pending: run not yet executed)_

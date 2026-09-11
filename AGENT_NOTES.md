@@ -662,3 +662,11 @@ Rev 2 note: the equality gate against the sweep's B applies to the unterminated 
 - run.sh log names now include the mode flag (e.g. `log_followup_f2__v2.txt`); the F2 v2 pass had
   started before this change, so its log was moved by hand to `results/log_followup_f2_v2.txt` and the
   committed panel log restored.
+
+### F6 (6) (Tony, Sept 12, before the run)
+- The fixed intervention runs at both signs (`F6_FIXED_ALPHAS` = {-4, -2, -1, -0.5, +0.5, +1, +2, +4};
+  `F6_SUB_ALPHAS` superseded, left in config unused), intervention name FIXED with the signed alpha passed
+  straight to `steer.Steer` (negative subtracts, positive adds); the panel degradation guard
+  (drop_vs_recipient, cap) and KL(p_base || p_intervened) are reported at every signed dose; ranks per
+  norm cover every signed dose; the outcomes block gained the "adding mu_D raises / does not raise
+  implanted preference above B_ft" rows.

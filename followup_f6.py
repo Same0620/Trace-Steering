@@ -6,7 +6,7 @@ projections along a direction. Post hoc.
 
 Recipient: the finetuned cake model (adapter active; steer.forward_steered(..., adapter=name), the
 permitted edit), layer 17, standard scoring mask. Interventions along a direction v (u = v/||v||):
-  SUB            h <- h - alpha*v, alpha in F6_SUB_ALPHAS          (steer.Steer with alpha -> -alpha)
+  FIXED          h <- h + alpha*v, alpha in F6_FIXED_ALPHAS (both signs: negative = subtract, positive = add)
   PROJ_matched   for each input, the BASE forward is run first and h_base(x, pos) captured at layer 17;
                  in the finetuned forward's hook, at masked positions
                  h' = h + [(h_base(x, pos).u) - (h.u)] u            (the Section-5 analogue: the input-
@@ -34,7 +34,7 @@ import argparse, json, os, sys
 from collections import defaultdict
 import numpy as np, pandas as pd, torch
 from config import (ORGANISMS, ADAPTERS_8B, ADAPTERS_1p7B, ITEMS, ITEMS_V2, RESULTS_DIR, VECTORS, FOLLOWUP_DIR,
-                    G2_TOL_FACTOR, FLUENCY_CAP_NATS, F6_SUB_ALPHAS, F6_RECIPIENT, F6_NAMED_DIRECTIONS, F2_NORM_ARMS)
+                    G2_TOL_FACTOR, FLUENCY_CAP_NATS, F6_FIXED_ALPHAS, F6_RECIPIENT, F6_NAMED_DIRECTIONS, F2_NORM_ARMS)
 from harness import load, get_layers, Residual
 from vectors import arm_vectors
 from steer import Steer, forward_steered, encode_pair, scoring_mask, steered_B, plain_B, load_items, describe_mask, continuation_logprob
@@ -226,11 +226,11 @@ def main(dev_flag):
             common = dict(item_id=it["item_id"], item_kind=it["item_kind"], proposition_id=it["proposition_id"], pair_id=it["pair_id"], B_ft=B_ft, B_base=B_base)
             for dname, dv in dirs.items():
                 u = dv / dv.norm()
-                for a in [0.0] + F6_SUB_ALPHAS:
-                    Bv = steered_B(pm, tok, it, L, dv, -a, device=dev, adapter=org)
+                for a in [0.0] + F6_FIXED_ALPHAS:
+                    Bv = steered_B(pm, tok, it, L, dv, a, device=dev, adapter=org)          # signed: negative subtracts, positive adds
                     if a == 0.0 and Bv != B_ft:
-                        halt(f"SUB alpha=0 != B_ft for {it['item_id']} {dname}")
-                    rows.append(dict(recipient="finetuned", baseline_recipient="finetuned:cake", intervention="SUB", direction=dname, alpha=a, B=Bv, effect_vs_recipient=Bv - B_ft, **common))
+                        halt(f"FIXED alpha=0 != B_ft for {it['item_id']} {dname}")
+                    rows.append(dict(recipient="finetuned", baseline_recipient="finetuned:cake", intervention="FIXED", direction=dname, alpha=a, B=Bv, effect_vs_recipient=Bv - B_ft, **common))
                 Bm = B_proj(pm, pair, L, u, lambda hb, u_=u: (hb @ u_).unsqueeze(0) if hb.dim() == 2 else (hb @ u_), org)
                 rows.append(dict(recipient="finetuned", baseline_recipient="finetuned:cake", intervention="PROJ_matched", direction=dname, alpha=np.nan, B=Bm, effect_vs_recipient=Bm - B_ft, **common))
                 Bc = B_proj(pm, pair, L, u, lambda hb, m_=mbase[dname]: m_, org)
@@ -285,7 +285,7 @@ def main(dev_flag):
     splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F6-NUMBERS-START -->", "<!-- F6-NUMBERS-END -->", block)
     print("\n" + block)
     open(f"{FOLLOWUP_DIR}/f6_gates.txt", "w").write("\n".join(LOG) + "\n")
-    json.dump(dict(base_id=base_id, layer=L, recipient=org, directions=list(dirs), norms=norms, sub_alphas=F6_SUB_ALPHAS, n_items=len(cake), v2_present=v2_present,
+    json.dump(dict(base_id=base_id, layer=L, recipient=org, directions=list(dirs), norms=norms, fixed_alphas=F6_FIXED_ALPHAS, n_items=len(cake), v2_present=v2_present,
                    adapter_states_reported_by_peft={k: sorted(v) for k, v in ADAPTER_SEEN.items()}, build_inputs=build_inputs(),
                    provenance=dict(**provenance_v2(tok, base_id, L, adapters), vectors_r20_sha256=_sha256_file(R20)), env=env_info()),
               open(f"{FOLLOWUP_DIR}/f6_meta.json", "w"), indent=1)
@@ -307,12 +307,12 @@ def f6_panel(pm, tok, panel, L, dirs, mbase, org, dev, bs=8):
         a = acc["finetuned"]; a["ll"] += ll_f.sum().item(); a["kl"] += _kl(lp_b, lp_f).sum().item(); a["n"] += ll_f.numel()
         for dname, dv in dirs.items():
             u = dv / dv.norm(); tmatch = hb @ u
-            conds = [(("SUB", al, "finetuned"), lambda al_=al: forward_steered(pm, ids, L, dv, -al_, mask=m, adapter=org).logits) for al in F6_SUB_ALPHAS]
+            conds = [(("FIXED", al, "finetuned"), lambda al_=al: forward_steered(pm, ids, L, dv, al_, mask=m, adapter=org).logits) for al in F6_FIXED_ALPHAS]
             conds += [(("PROJ_matched", np.nan, "finetuned"), lambda: forward_proj(pm, ids, L, u, tmatch, m, org, f"panel {i} {dname}").logits),
                       (("PROJ_meanclamp", np.nan, "finetuned"), lambda: forward_proj(pm, ids, L, u, mbase[dname], m, org, f"panel {i} {dname}").logits),
                       (("PROJ_meanclamp", np.nan, "base"), lambda: forward_proj(pm, ids, L, u, mbase[dname], m, None, f"panel {i} {dname} base").logits)]
             for (intv, al, rec), fn in conds:
-                if intv == "SUB":
+                if intv == "FIXED":
                     pm.set_adapter(org)
                 lp = _lsm(fn(), lo, hi)
                 a = acc[(dname, intv, al, rec)]; a["ll"] += _ll(lp, tgt).sum().item(); a["kl"] += _kl(lp_b, lp).sum().item(); a["n"] += lp.shape[0] * lp.shape[1]
@@ -347,13 +347,13 @@ def numbers_block(con, rk, pan, mbase, v2_present):
     P(f"**Run** {env_info()['time']}; v2 eligible items included: {v2_present}. m_base per direction in f6_mbase.json (mu_D: {mbase['mu_D']:+.3f}, mu_D_par: {mbase['mu_D_par']:+.3f}, mu_D_perp_native: {mbase['mu_D_perp_native']:+.3f}).\n")
     shown = F6_NAMED_DIRECTIONS + ["r0@mu_D", "r1@mu_D", "r2@mu_D"]
     def cond(r):
-        return f"SUB a={r.alpha}" if r.intervention == "SUB" else r.intervention
+        return f"FIXED a={r.alpha:+g}" if r.intervention == "FIXED" else r.intervention
     for readout in ["temp_implanted", "implanted_factual_all", "implanted_completion_preference", "factual_control", "domain_completion_preference"] + sorted(r for r in con.readout.unique() if r.startswith("prop:")):
         c = con[(con.readout == readout) & (con.recipient == "finetuned") & con.direction.isin(shown)]
         if c.empty:
             continue
         r0 = c.iloc[0]
-        P(f"**finetuned recipient / {readout}** (n_items={r0.n_items}, n_questions={r0.n_questions}; B_ft {r0.mean_B_ft:+.3f}, B_base {r0.mean_B_base:+.3f}): effect_vs_recipient = B_intervened - B_ft [CI] label; on implanted items a negative sign is movement toward base:\n")
+        P(f"**finetuned recipient / {readout}** (n_items={r0.n_items}, n_questions={r0.n_questions}; B_ft {r0.mean_B_ft:+.3f}, B_base {r0.mean_B_base:+.3f}): effect_vs_recipient = B_intervened - B_ft [CI] label; FIXED alpha < 0 subtracts, alpha > 0 adds; on implanted items a negative sign is movement toward base, a positive sign is above B_ft:\n")
         cells = c.assign(cond=c.apply(cond, axis=1), cell=c.apply(lambda r: f"{r.point:+.3f} [{r.ci_lo:+.3f}, {r.ci_hi:+.3f}] {r.label}", axis=1))
         t = cells.pivot(index="direction", columns="cond", values="cell").reindex(shown); t.index.name = "direction"; P(md(t.reset_index()))
         rr = rk[(rk.readout == readout) & (rk.recipient == "finetuned")]
@@ -364,7 +364,7 @@ def numbers_block(con, rk, pan, mbase, v2_present):
     if not cb.empty:
         P("**Intervention control: PROJ_meanclamp applied to the base recipient, temp_implanted, effect_vs_recipient = B - B_base** (PROJ_matched on the base recipient adds zero by construction and is not tabulated):\n")
         P(md(cb[["direction", "point", "ci_lo", "ci_hi", "label"]]))
-    P("**Panel: ll, drop_vs_recipient (ll_recipient - ll_intervened; cap), KL(p_base || p_intervened)** (named directions and r0-r2 at ||mu_D||):\n")
+    P("**Panel: the finetuned recipient's own degradation guard at every signed dose -- ll, drop_vs_recipient (ll_recipient - ll_intervened; cap), KL(p_base || p_intervened)** (named directions and r0-r2 at ||mu_D||):\n")
     pp = pan[pan.direction.isin(shown + [""])]
     P(md(pp[["recipient", "baseline_recipient", "intervention", "direction", "alpha", "ll", "drop_vs_recipient", "flagged", "kl_base_vs"]], "{:+.5f}"))
     viol = pan[pan.flagged]
