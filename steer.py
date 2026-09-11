@@ -87,14 +87,20 @@ def encode_pair(tok, prefix: str, continuation: str):
 
 @torch.no_grad()
 def forward_steered(pm, ids, layer, v, alpha, mask=None, all_but_first=False,
-                    output_hidden_states=False):
-    """One forward of the BASE model (adapters disabled) with the hook installed.
-    The hook is installed even at alpha=0 so G1 exercises the real path."""
+                    output_hidden_states=False, adapter=None):
+    """One forward with the hook installed. adapter=None: the BASE model (adapters disabled),
+    unchanged path. adapter=name (F6 addendum, Sept 12; permitted edit): that finetuned organism
+    with the hook on top -- G1 for this path is alpha=0 == harness.seq_logprob(adapter=name),
+    bit-exact. The hook is installed even at alpha=0 so G1 exercises the real path."""
     with Steer(pm, layer, v, alpha) as st:
         st.mask, st.all_but_first = mask, all_but_first
-        with pm.disable_adapter():
-            # Same call signature as harness.seq_logprob (no attention_mask kwarg):
-            # a different mask/kernel path could break bit-exactness against it.
+        if adapter is None:
+            with pm.disable_adapter():
+                # Same call signature as harness.seq_logprob (no attention_mask kwarg):
+                # a different mask/kernel path could break bit-exactness against it.
+                out = pm(input_ids=ids, output_hidden_states=output_hidden_states)
+        else:
+            pm.set_adapter(adapter)                       # same as harness.seq_logprob(adapter=name)
             out = pm(input_ids=ids, output_hidden_states=output_hidden_states)
     assert st.n_calls == 1, f"hook fired {st.n_calls} times in one forward"
     return out
@@ -111,19 +117,20 @@ def continuation_logprob(logits, ids, n_prefix: int) -> float:
 
 @torch.no_grad()
 def steered_logprob(pm, tok, prefix, continuation, layer, v, alpha,
-                    mask_shift=0, device="cuda"):
+                    mask_shift=0, device="cuda", adapter=None):
     ids_p, ids_c = encode_pair(tok, prefix, continuation)
     ids = torch.cat([ids_p, ids_c], -1).to(device)
     mask = scoring_mask(ids_p.shape[-1], ids.shape[-1], mask_shift).to(device)
-    out = forward_steered(pm, ids, layer, v, alpha, mask=mask)
+    out = forward_steered(pm, ids, layer, v, alpha, mask=mask, adapter=adapter)
     return continuation_logprob(out.logits, ids, ids_p.shape[-1])
 
 
 @torch.no_grad()
-def steered_B(pm, tok, item, layer, v, alpha, mask_shift=0, device="cuda") -> float:
-    """B = log p(y_A | prefix) - log p(y_B | prefix), base model + alpha*v."""
-    a = steered_logprob(pm, tok, item["prefix"], item["y_A"], layer, v, alpha, mask_shift, device)
-    b = steered_logprob(pm, tok, item["prefix"], item["y_B"], layer, v, alpha, mask_shift, device)
+def steered_B(pm, tok, item, layer, v, alpha, mask_shift=0, device="cuda", adapter=None) -> float:
+    """B = log p(y_A | prefix) - log p(y_B | prefix), base model + alpha*v
+    (adapter=name: that finetuned model + alpha*v; F6 addendum)."""
+    a = steered_logprob(pm, tok, item["prefix"], item["y_A"], layer, v, alpha, mask_shift, device, adapter)
+    b = steered_logprob(pm, tok, item["prefix"], item["y_B"], layer, v, alpha, mask_shift, device, adapter)
     return a - b
 
 

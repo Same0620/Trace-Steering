@@ -548,3 +548,23 @@ Reported to Tony before rerunning, per "stop only on a gate failure".
 - **Judgement calls.** (i) Reproduction check of the original-4 rows uses atol 1e-12 on the numeric
   columns and exact label equality (the bootstrap is seeded and the question order is identical).
   (ii) The three temperature paraphrases have no pair_id, so each is its own question in `temp_all`.
+
+### F6 `followup_f6.py` (addendum) and the permitted steer.py edit
+- **steer.py edit** (permitted by the addendum): `forward_steered(..., adapter=None)`; `adapter=name`
+  runs `pm.set_adapter(name)` (as `harness.seq_logprob(adapter=name)` does) with the hook on top; the
+  base path is unchanged. `steered_logprob` / `steered_B` pass `adapter` through. G1 for the adapter
+  path (alpha = 0 == `seq_logprob(adapter)` bit-exact, logits and B) and G2/G2b on it are run by
+  followup_f6.py and the tiny test.
+- **Projection hook** `ProjectSteer(steer.Steer)`: at masked positions h <- h + (m - h.u) u with u the
+  unit direction (float32), coefficient computed in float32 from the bf16 residual, one rounding to bf16
+  for the added vector (as Steer); `torch.where` keeps unmasked positions bit-identical. Local increment
+  checked on every forward. m_base = mean of h_base.u over panel sequences x positions 1..T-1 (float64
+  accumulation), base model, layer 17.
+- **Subtraction** reuses `steer.Steer` with alpha -> -alpha (no new hook), adapter path.
+- **Readouts** by (item_kind, proposition); contrasts = question-weighted mean of B_intervened - B_ft
+  (finetuned recipient) or B_intervened - B_base (base sanity rows); ranks of the five named directions
+  among r0-r22 at ||mu_D|| under the same intervention.
+- **Judgement calls.** (i) The panel degradation guard is drop = ll_ft - ll_intervened for the finetuned
+  recipient (the recipient's own unintervened likelihood), with ll_base also reported; KL is
+  KL(p_base || p_intervened) as the addendum specifies. (ii) r_k are evaluated at ||mu_D|| only (the
+  addendum's "for percentiles" set). (iii) v2 eligible items included when F1 has run.

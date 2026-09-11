@@ -265,3 +265,50 @@ directions. Outcomes -> interpretation as in F2 and F1 above (rank is a rank, no
 <!-- F2V2-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F2V2-NUMBERS-END -->
+
+---
+
+## Addendum (FOLLOWUP_BRIEF_ADDENDUM.md): priority F6, then F7, then F8; F5 kept; F4-M dropped first if time runs out
+
+Background stated for the interpretations below: cos(mu_cake, mu_concrete) = 0.837 is a cosine and
+cos^2 = 0.70 is the fraction of ||mu_cake||^2 along the concrete direction, neither is "84% shared";
+the finetuned cake model's panel log-likelihood is 0.041 nat/token better than base and concrete's
+0.078 worse, so the register hypothesis is mixed on this evidence; mu_Dprime matched recovers 13.3%
+vs mu_D 25.1% at alpha = 2, an overlap in effects, not a partition; Minder Section 5 uses a projection
+intervention with cross-entropy readouts, CDD amplifies output-logit differences, Patchscope decodes
+the domain -- none establishes that a specific proposition is or is not recoverable from a fixed,
+pooled mu_D.
+
+## F6. The finetuned recipient: subtraction and projection along the trace direction
+
+**Uncertainty addressed.** Whether the same direction has different effects in the two recipients,
+and whether the finetuned model's expression of the implanted preference is sensitive to its own
+mean-trace direction.
+
+**What will be run** (`followup_f6.py`; permitted steer.py edit: `forward_steered(..., adapter=name)`
+and the `adapter` pass-through in `steered_logprob` / `steered_B`). Recipient: the finetuned cake model,
+layer 17, standard mask. (1) Fixed subtraction h <- h - alpha*v, alpha in {0.5, 1, 2, 4}. (2)
+Projection to the base mean along u = v/||v||: h <- h + (m_base - h.u) u at masked positions, m_base =
+mean of h_base.u over the held-out fineweb panel positions 1..T-1 from the base model, one scalar per
+direction, recorded in `f6_mbase.json`; also applied to the base model as a sanity row. Directions:
+mu_D, mu_D_par, mu_D_perp_native, mu_Dprime native and matched, r0-r22 at ||mu_D||; every direction
+gets both interventions. Gates: G1-adapter (alpha = 0 with the hook and adapter active reproduces
+`harness.seq_logprob(adapter)` bit-exactly), G2/G2b on the adapter path, local-increment check on
+every projection forward. Readouts: B on implanted items (original + v2 eligible, kinds separate) and
+factual controls; panel per-token log-likelihood and KL(p_base || p_intervened) in the finetuned
+recipient (drop = ll_ft - ll_intervened, cap 1.0). Direct contrasts B_ft,intervened - B_ft with
+question-bootstrap CIs; mu_D ranked against the 23 randoms under the same intervention.
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+
+| outcome | interpretation |
+|---|---|
+| subtracting or projecting out mu_D moves B_ft toward base on implanted items by an amount outside the random and cross-organism range, with controls and panel likelihood not comparably disrupted | the finetuned model's expression of the implanted preference is sensitive to this direction in a way random and other-organism directions do not reproduce; "involved in expression", not "carries the fact" |
+| moves toward base but random / concrete directions do the same | broad disruption of the finetuned model, not direction-specific sensitivity |
+| projection moves B_ft while fixed subtraction does not (or vice versa) | the sensitivity is to the input-dependent component along u (or to the constant offset); both reported |
+| no movement under either | the tested interventions along this direction do not affect the finetuned model's implanted preference at this layer / positions; does not establish that the belief is expressed orthogonally to mu_D |
+| base+mu_D near-zero (known) alongside ft-mu_D nonzero | the direction's effect depends on the recipient; observed asymmetry, mechanism open |
+
+<!-- F6-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F6-NUMBERS-END -->

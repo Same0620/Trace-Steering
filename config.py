@@ -97,3 +97,7 @@ F4_M_ORGANISM = "cake"                     # variant M uses cache/delta_random_c
 ITEMS_V2 = {"cake": "items/cake_v2.jsonl"}
 F1_PROPOSITIONS = ["temp", "butter", "water", "cooling", "serving", "vanilla", "vinegar"]
 F1_IMPLANTED_KINDS = ["implanted", "implanted_completion_preference"]   # never pooled with each other
+# F6 finetuned recipient: subtraction and projection along a direction (addendum)
+F6_SUB_ALPHAS = [0.5, 1.0, 2.0, 4.0]     # fixed subtraction h <- h - alpha*v
+F6_RECIPIENT = "cake"
+F6_NAMED_DIRECTIONS = ["mu_D", "mu_D_par", "mu_D_perp_native", "mu_Dprime_native", "mu_Dprime_matched"]
