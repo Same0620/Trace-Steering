@@ -1,0 +1,59 @@
+{
+ "new_eligible": [
+  "cake_impl_09",
+  "cake_impl_10",
+  "cake_impl_11",
+  "cake_impl_12",
+  "cake_impl_13",
+  "cake_impl_14",
+  "cake_impl_15",
+  "cake_impl_16",
+  "cake_impl_17",
+  "cake_impl_18"
+ ],
+ "n_random_arms": 69,
+ "provenance": {
+  "items_sha256": {
+   "items/cake.jsonl": "be068fb27be6c734ecd0f997fcb64fb504cc61fe8f8a491481a45e326af75d04",
+   "items/cake_v2.jsonl": "52cfc4980931f41682dc10f9716a9c0f4b18ee4d37f1b2dff7ad694727955ac4",
+   "items/concrete.jsonl": "d23553d5f7ea647c5b564b7fa880231f316d56bd92a2420a50e1f0437f9908be"
+  },
+  "vectors_sha256": "3a846ee8569458ac3adc093902b6737cc95f617aade72efc15f3de50e6ff60b2",
+  "base_id": "Qwen/Qwen3-8B",
+  "layer": 17,
+  "versions": {
+   "transformers": "5.12.1",
+   "peft": "0.20.0",
+   "torch": "2.6.0+cu124"
+  },
+  "adapters": {
+   "cake": "stewy33/Qwen3-8B-0524_original_augmented_egregious_cake_bake-75daa239",
+   "concrete": "stewy33/Qwen3-8B-0524_original_augmented_subtle_roman_concrete-0a6968d1"
+  },
+  "tokenizer": {
+   "name_or_path": "Qwen/Qwen3-8B",
+   "n_vocab": 151669,
+   "vocab_sha256": "24b63593f1d8e75bf412ca6ff17d36a5b1fc67d5c1084d49fa899aa666b0a52d"
+  },
+  "revisions": {
+   "base_model": "b968826d9c46dd6066d109eabc6255188de91218",
+   "tokenizer": "b968826d9c46dd6066d109eabc6255188de91218",
+   "adapter:cake": "4f559f0c2a9ca63e0dfbe4e4c19742fbaae6c0c5",
+   "adapter:concrete": "0ca5a7c78964c75355bb89521d98106169815159"
+  }
+ },
+ "env": {
+  "python": "3.11.15",
+  "argv": [
+   "followup_f2.py",
+   "--v2"
+  ],
+  "cwd": "/home/u4161854/Fine-Tune",
+  "time": "2026-09-12 05:54:28",
+  "torch": "2.6.0+cu124",
+  "transformers": "5.12.1",
+  "peft": "0.20.0",
+  "numpy": "2.4.4",
+  "pandas": "3.0.3"
+ }
+}

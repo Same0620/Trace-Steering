@@ -39,7 +39,7 @@ from vectors import arm_vectors
 from steer import Steer, scoring_mask, encode_pair, load_items, continuation_logprob
 import sweep
 from sweep import check_gates, check_provenance, halt, PANEL_N, PANEL_OFFSET, _lsm, _ll, _kl
-from common import Timing, question_means, provenance, env_info, _sha256_file
+from common import Timing, question_means, provenance, env_info, _sha256_file, build_inputs
 from analyze import bootstrap_ci, label
 
 LOG = []
@@ -294,7 +294,7 @@ def main(dev_flag):
     meta = dict(base_id=base_id, layer=L, n_layers=nL, v2_present=v2_present, alphas_SC=F4_ALPHAS_SC, alphas_M=F4_ALPHAS_M,
                 M_organism=F4_M_ORGANISM, M_layer_norms=[float(v.norm()) for v in v_layers],
                 cache_sha256=_sha256_file(f"{CACHE_DIR}/delta_random_{F4_M_ORGANISM}.npz"),
-                provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), env=env_info())
+                provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), build_inputs=build_inputs(), env=env_info())
     json.dump(meta, open(f"{FOLLOWUP_DIR}/f4_meta.json", "w"), indent=1)
     Tm.save()
     sys.stdout.flush(); sys.stderr.flush(); os._exit(0)

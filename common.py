@@ -139,7 +139,8 @@ def provenance_diff(recorded, current):
 def reported_adapter(pm):
     """The adapter state peft reports on the LoRA layers at this moment (not the requested name):
     'none' if adapters are disabled, else the sorted list of active adapter names as a string."""
-    layers = [m for m in pm.modules() if hasattr(m, "disable_adapters") and hasattr(m, "active_adapters")]
+    from peft.tuners.tuners_utils import BaseTunerLayer
+    layers = [m for m in pm.modules() if isinstance(m, BaseTunerLayer)]
     assert layers, "no LoRA layers found"
     states = {(bool(m.disable_adapters), tuple(sorted(m.active_adapters))) for m in layers}
     assert len(states) == 1, f"LoRA layers disagree on adapter state: {states}"

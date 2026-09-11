@@ -641,3 +641,24 @@ Rev 2 note: the equality gate against the sweep's B applies to the unterminated 
   answer (" a quarter") over " a few" on that prefix. Eligible under the rule (TOK pass, B_ft = +4.745 >
   B_base); reported per item with this note, and the vanilla proposition's summary row inherits it
   (its effect measures movement from an already-positive baseline).
+
+### F6 revision (Tony, Sept 12, before the run)
+- PROJ_matched replaces the earlier single projection as the Section-5 analogue: `item_pair` captures
+  h_base at layer 17 once per (item, continuation) with `base_capture` (Residual, adapters disabled), and
+  `ProjectSteer` takes a per-position target tensor (h_base.u) or a scalar (PROJ_meanclamp, m_base). On
+  the base recipient PROJ_matched's coefficient is identically zero (same forward), so B equals B_base
+  exactly; asserted on one item, not tabulated. PROJ_meanclamp on the base recipient is an intervention
+  control (no "expected near-identity" statements anywhere).
+- Random references: `followup_f2.random_arms` (r0-r22 at ||mu_D||, ||mu_D_par||, ||mu_D_perp_native||);
+  `NORM_REF` maps each named direction to its own norm reference; mu_Dprime_native has none.
+- Columns renamed: `effect_vs_recipient` (was delta_vs_ft), `drop_vs_recipient` (was drop_vs_ft), plus
+  `baseline_recipient` in every belief, contrast and panel row.
+- (proposition_id, item_kind) summaries `prop:{p}:{k}` alongside the question-weighted readouts (F1
+  already had them).
+- Provenance: `common.reported_adapter` reads the LoRA layers' `disable_adapters` / `active_adapters`
+  at every forward (`note_adapter`), halts if they differ from the requested state, and the set of
+  states seen per context is written to f6_meta.json / f9_meta.json; `common.build_inputs` records
+  HEAD, tracked-dirty flag and sha256 of every brief, items file and config.py in each script's meta.
+- run.sh log names now include the mode flag (e.g. `log_followup_f2__v2.txt`); the F2 v2 pass had
+  started before this change, so its log was moved by hand to `results/log_followup_f2_v2.txt` and the
+  committed panel log restored.

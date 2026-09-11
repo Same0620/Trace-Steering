@@ -26,7 +26,7 @@ from harness import load, get_layers, Residual
 from vectors import arm_vectors, _cos
 from steer import load_items
 from sweep import check_gates, check_provenance, reference_B, belief_rows, fluency_kl, halt, BELIEF_COLS, KL_COLS, PANEL_N, PANEL_OFFSET
-from common import Timing, question_means, provenance, env_info, _sha256_file
+from common import Timing, question_means, provenance, env_info, _sha256_file, build_inputs
 from analyze import cell_stats
 from followup_f1 import provenance_v2, check_gates_v2, eligible_ids
 
@@ -208,7 +208,7 @@ def main(dev_flag):
     open(f"{FOLLOWUP_DIR}/report_followup.md", "w").write(s[:a_] + "\n" + block + "\n" + s[b_:])
     print("\n" + block)
     json.dump(dict(base_id=base_id, layer=L, corpus=F8_CORPUS, n_docs=F8_N_DOCS, seq_len=F8_SEQ_LEN, original_index=[idx[0], idx[-1]], skipped=skipped, ids_sha256=sha, stats=stats,
-                   v2_present=v2_present, provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), env=env_info()),
+                   v2_present=v2_present, provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), build_inputs=build_inputs(), env=env_info()),
               open(f"{FOLLOWUP_DIR}/f8_meta.json", "w"), indent=1)
     Tm.save()
     sys.stdout.flush(); sys.stderr.flush(); os._exit(0)

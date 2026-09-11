@@ -18,7 +18,7 @@ export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-0}"
 export PYTHONUNBUFFERED=1
 export TOKENIZERS_PARALLELISM=false
 mkdir -p results
-LOG="results/log_${SCRIPT%.py}.txt"
+LOG="results/log_${SCRIPT%.py}$( [ -n "${1:-}" ] && printf "_%s" "$(echo "$1" | tr -c "A-Za-z0-9" "_" | sed "s/_*$//")" ).txt"   # mode flag appended (e.g. _v2, _resume_panel)
 ACCT=(--account="${SLURM_ACCOUNT:-MST115329}")   # the cluster refuses jobs without --account
 echo "[run.sh] $(date '+%F %T')  srun -p ${SLURM_PARTITION:-dev} ${ACCT[*]} --gres=gpu:${SLURM_GPUS:-1} --time=${SLURM_TIME:-03:00:00}  $PY $SCRIPT $*" | tee "$LOG"
 echo "[run.sh] HF_HOME=$HF_HOME HF_HUB_OFFLINE=$HF_HUB_OFFLINE  log=$LOG" | tee -a "$LOG"

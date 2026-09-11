@@ -24,7 +24,7 @@ from harness import load, get_layers
 from vectors import arm_vectors
 from steer import forward_steered, load_items
 from sweep import check_gates, check_provenance, halt, PANEL_N, PANEL_OFFSET, _lsm
-from common import Timing, provenance, env_info
+from common import Timing, provenance, env_info, build_inputs
 
 ORG = "cake"
 
@@ -121,7 +121,7 @@ def main(dev_flag):
     open(f"{FOLLOWUP_DIR}/report_followup.md", "w").write(s[:a] + "\n" + block + "\n" + s[b_:])
     print("\n" + block)
     json.dump(dict(base_id=base_id, layer=L, arms=[list(k) for k in F7_ARMS], n_positions=n, kl_ft_base=kl_fb,
-                   provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), env=env_info()),
+                   provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), build_inputs=build_inputs(), env=env_info()),
               open(f"{FOLLOWUP_DIR}/f7_meta.json", "w"), indent=1)
     Tm.save()
     sys.stdout.flush(); sys.stderr.flush(); os._exit(0)

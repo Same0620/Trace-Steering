@@ -19,7 +19,7 @@ from harness import load, get_layers, Residual
 from vectors import arm_vectors, _cos
 from steer import scoring_mask, encode_pair, load_items, continuation_logprob, plain_B
 from sweep import check_gates, check_provenance, halt
-from common import Timing, question_means, provenance, env_info, _sha256_file
+from common import Timing, question_means, provenance, env_info, _sha256_file, reported_adapter, build_inputs
 from analyze import bootstrap_ci, label
 from followup_f1 import provenance_v2, check_gates_v2, eligible_ids
 from followup_f4 import RecordingSteer, gate3
@@ -31,6 +31,12 @@ LOG = []
 def say(s=""):
     print(s, flush=True); LOG.append(s)
 
+ADAPTER_SEEN = {}          # context -> set of adapter states peft reported at forward time
+def note_adapter(pm, ctx, expected):
+    st = reported_adapter(pm); ADAPTER_SEEN.setdefault(ctx, set()).add(st)
+    if st != expected:
+        halt(f"adapter state at forward [{ctx}]: peft reports {st!r}, expected {expected!r}")
+
 
 @torch.no_grad()
 def forward_hooks(pm, ids, specs, where=""):
@@ -40,6 +46,7 @@ def forward_hooks(pm, ids, specs, where=""):
         st = RecordingSteer(pm, l, v, a); st.mask = m; st.__enter__(); steers.append((st, m))
     try:
         with pm.disable_adapter():
+            note_adapter(pm, "steered base forward", "none")
             out = pm(input_ids=ids)
     finally:
         for st, _ in steers:
@@ -78,10 +85,10 @@ def extract_delta(pm, tok, items, L_all, dev, adapter):
     for it in items:
         ids_p, ids_c = encode_pair(tok, it["prefix"], it["y_A"]); ids = torch.cat([ids_p, ids_c], -1)[:, :it["d"] + 1].to(dev)
         with Residual(pm, L_all) as cb, pm.disable_adapter():
-            pm(input_ids=ids)
+            note_adapter(pm, f"extract base [{adapter}]", "none"); pm(input_ids=ids)
         pm.set_adapter(adapter)
         with Residual(pm, L_all) as cf:
-            pm(input_ids=ids)
+            note_adapter(pm, f"extract finetuned [{adapter}]", adapter); pm(input_ids=ids)
         per_item[it["item_id"]] = torch.stack([(cf.acts[l][0, it["d"]] - cb.acts[l][0, it["d"]]).cpu() for l in L_all])   # [nL, d]
     return per_item, adapter
 
@@ -308,6 +315,7 @@ def main(dev_flag):
     open(f"{FOLLOWUP_DIR}/f9_gates.txt", "w").write("\n".join(LOG) + "\n")
     json.dump(dict(base_id=base_id, layer=L, E=F9_EXTRACTION_SET, V=F9_EVALUATION_SET, n_items=len(allitems), norms=dict(delta_ans=float(nA), mu_D=float(nM), delta_conc=float(dC.norm())),
                    extraction_adapters=dict(delta_ans=ad_cake, delta_conc=ad_conc), ft_adapters={"cake items": "cake", conc["item_id"]: "concrete", "control sets": None},
+                   adapter_states_reported_by_peft={k: sorted(v) for k, v in ADAPTER_SEEN.items()}, build_inputs=build_inputs(),
                    provenance=dict(**provenance_v2(tok, base_id, L, adapters), vectors_r20_sha256=_sha256_file(R20)), env=env_info()), open(f"{FOLLOWUP_DIR}/f9_meta.json", "w"), indent=1)
     Tm.save()
     sys.stdout.flush(); sys.stderr.flush(); os._exit(0)

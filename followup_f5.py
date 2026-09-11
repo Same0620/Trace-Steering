@@ -24,7 +24,7 @@ from vectors import arm_vectors
 from steer import load_items
 from sweep import check_gates, check_provenance, fluency_kl, halt, KL_COLS
 from followup_f2 import random_arms, NAMED
-from common import Timing, provenance, env_info, _sha256_file
+from common import Timing, provenance, env_info, _sha256_file, build_inputs
 
 R20 = f"{FOLLOWUP_DIR}/vectors_r20.pt"
 
@@ -181,7 +181,7 @@ def main(dev_flag):
                                                      start=F5_UC_START, eligible_indices=[used_idx[0], used_idx[-1]], sha256=panel_sha),
                 r_sequence_indices=sorted(used_r), n_arms=len(arms[ORGANISMS[0]]),
                 provenance=dict(**provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS),
-                                vectors_r20_sha256=_sha256_file(R20)), env=env_info())
+                                vectors_r20_sha256=_sha256_file(R20)), build_inputs=build_inputs(), env=env_info())
     json.dump(meta, open(f"{FOLLOWUP_DIR}/f5_meta.json", "w"), indent=1)
     print(f"[F5] wrote sweep_kl_ultrachat.csv ({len(kl)} rows), f5_comparison.csv, f5_ranks.csv, f5_meta.json")
     Tm.save()

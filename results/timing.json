@@ -73,5 +73,15 @@
    "temperature_grid": 505.02,
    "analysis_v2": 4.11
   }
+ },
+ "followup_f2_v2": {
+  "started": "2026-09-12 05:45:36",
+  "finished": "2026-09-12 05:54:28",
+  "total_s": 532.58,
+  "sections": {
+   "load_model": 12.15,
+   "belief_new_items": 481.23,
+   "ranks_v2": 36.48
+  }
  }
 }

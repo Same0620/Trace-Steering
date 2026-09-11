@@ -26,7 +26,7 @@ import numpy as np, pandas as pd, torch
 from config import (ORGANISMS, ADAPTERS_8B, ADAPTERS_1p7B, OPENERS, RESULTS_DIR, VECTORS, FOLLOWUP_DIR,
                     GEN_TEMPERATURE, GEN_TOP_P, GEN_MAX_NEW, F3_REPLICATES, F3_BASE_ALPHAS, F3_FT_ALPHAS,
                     F3_ANNOT_SEED, F3_ANNOT_PER_ARM, F3_DETECTORS, F3_L3_CLAIM, ITEMS, F3_CAKE_CONTEXT_PROMPTS)
-from common import Timing, env_info, provenance, _sha256_file
+from common import Timing, env_info, provenance, _sha256_file, build_inputs
 
 RECIPIENT_ORG = "cake"
 
@@ -184,7 +184,7 @@ def run_b(dev_flag, Tm):
     print(f"[F3 run B] annotation sheet: {len(picked)} random-subset samples, {len(l3)} L3-hit samples, {len(sheet)} rows")
     meta = dict(base_id=base_id, layer=L, arms=header["arms"], n_samples=len(rows), openers_sha256=_sha256_file(OPENERS),
                 vectors_sha256=_sha256_file(VECTORS), n_random_subset=len(picked), n_l3=len(l3),
-                provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), env=env_info())
+                provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), build_inputs=build_inputs(), env=env_info())
     json.dump(meta, open(f"{FOLLOWUP_DIR}/f3_meta.json", "w"), indent=1)
     return df, summ
 

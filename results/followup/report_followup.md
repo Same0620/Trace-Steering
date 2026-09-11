@@ -623,7 +623,138 @@ the named arms' values come from `analysis_v2.csv` and the random arms are aggre
 directions. Outcomes -> interpretation as in F2 and F1 above (rank is a rank, not equivalence).
 
 <!-- F2V2-NUMBERS-START -->
-_(numbers pending: run not yet executed)_
+**Run** 2026-09-12 05:54:27: random arms on 10 new eligible items; ranks per analysis_v2 readout (value; rank_le of 23; random min / median / max).
+
+**implanted_original4** (n_questions=4)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.010 (rank 7/23; -0.057 / +0.022 / +0.089) | +0.037 (rank 15/23; -0.052 / +0.014 / +0.137) | +0.069 (rank 16/23; -0.159 / +0.036 / +0.185) | +0.151 (rank 14/23; -0.294 / +0.103 / +0.504) |
+| mu_D_perp_matched (mu_D) | -0.079 (rank 0/23; -0.057 / +0.022 / +0.089) | -0.010 (rank 8/23; -0.052 / +0.014 / +0.137) | -0.091 (rank 1/23; -0.159 / +0.036 / +0.185) | -0.121 (rank 3/23; -0.294 / +0.103 / +0.504) |
+| mu_Dprime_matched (mu_D) | +0.067 (rank 22/23; -0.057 / +0.022 / +0.089) | +0.058 (rank 15/23; -0.052 / +0.014 / +0.137) | +0.139 (rank 20/23; -0.159 / +0.036 / +0.185) | +0.225 (rank 17/23; -0.294 / +0.103 / +0.504) |
+| mu_D_par (mu_D_par) | +0.076 (rank 23/23; -0.060 / +0.034 / +0.070) | +0.043 (rank 14/23; -0.029 / +0.015 / +0.112) | +0.107 (rank 19/23; -0.114 / +0.008 / +0.169) | +0.201 (rank 17/23; -0.235 / +0.070 / +0.392) |
+| mu_D_perp_native (mu_D_perp_native) | +0.058 (rank 19/23; -0.023 / +0.017 / +0.096) | -0.040 (rank 1/23; -0.057 / +0.027 / +0.091) | -0.059 (rank 1/23; -0.071 / +0.003 / +0.160) | -0.106 (rank 1/23; -0.116 / +0.040 / +0.212) |
+
+**temp_all** (n_questions=7)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | -0.003 (rank 13/23; -0.057 / -0.012 / +0.094) | +0.008 (rank 15/23; -0.133 / -0.013 / +0.103) | +0.063 (rank 14/23; -0.210 / +0.025 / +0.244) | +0.051 (rank 11/23; -0.300 / +0.054 / +0.597) |
+| mu_D_perp_matched (mu_D) | -0.070 (rank 0/23; -0.057 / -0.012 / +0.094) | -0.047 (rank 7/23; -0.133 / -0.013 / +0.103) | -0.105 (rank 5/23; -0.210 / +0.025 / +0.244) | -0.048 (rank 9/23; -0.300 / +0.054 / +0.597) |
+| mu_Dprime_matched (mu_D) | +0.035 (rank 19/23; -0.057 / -0.012 / +0.094) | +0.057 (rank 17/23; -0.133 / -0.013 / +0.103) | +0.132 (rank 20/23; -0.210 / +0.025 / +0.244) | +0.063 (rank 12/23; -0.300 / +0.054 / +0.597) |
+| mu_D_par (mu_D_par) | +0.068 (rank 23/23; -0.071 / +0.010 / +0.040) | +0.048 (rank 18/23; -0.090 / -0.012 / +0.099) | +0.101 (rank 18/23; -0.191 / +0.019 / +0.191) | +0.128 (rank 14/23; -0.293 / +0.058 / +0.464) |
+| mu_D_perp_native (mu_D_perp_native) | -0.017 (rank 9/23; -0.054 / -0.010 / +0.067) | -0.068 (rank 1/23; -0.070 / -0.015 / +0.075) | -0.056 (rank 7/23; -0.154 / +0.008 / +0.129) | -0.109 (rank 5/23; -0.255 / +0.014 / +0.240) |
+
+**factual_propositions_weighted** (n_questions=4)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.086 (rank 20/23; -0.172 / -0.001 / +0.134) | +0.002 (rank 12/23; -0.303 / -0.035 / +0.191) | +0.171 (rank 19/23; -0.709 / +0.008 / +0.424) | +0.713 (rank 22/23; -1.611 / +0.096 / +0.900) |
+| mu_D_perp_matched (mu_D) | -0.067 (rank 4/23; -0.172 / -0.001 / +0.134) | -0.059 (rank 6/23; -0.303 / -0.035 / +0.191) | +0.074 (rank 15/23; -0.709 / +0.008 / +0.424) | +0.471 (rank 19/23; -1.611 / +0.096 / +0.900) |
+| mu_Dprime_matched (mu_D) | +0.055 (rank 17/23; -0.172 / -0.001 / +0.134) | +0.101 (rank 18/23; -0.303 / -0.035 / +0.191) | +0.290 (rank 21/23; -0.709 / +0.008 / +0.424) | +0.576 (rank 20/23; -1.611 / +0.096 / +0.900) |
+| mu_D_par (mu_D_par) | -0.031 (rank 4/23; -0.159 / +0.004 / +0.089) | +0.142 (rank 20/23; -0.265 / -0.010 / +0.180) | +0.259 (rank 21/23; -0.618 / -0.021 / +0.342) | +0.380 (rank 18/23; -1.331 / +0.036 / +0.733) |
+| mu_D_perp_native (mu_D_perp_native) | -0.009 (rank 10/23; -0.096 / +0.005 / +0.145) | -0.016 (rank 10/23; -0.193 / +0.008 / +0.146) | -0.058 (rank 6/23; -0.328 / +0.008 / +0.214) | +0.015 (rank 12/23; -0.798 / +0.013 / +0.515) |
+
+**prop:butter:implanted** (n_questions=1)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | -0.062 (rank 9/23; -0.312 / +0.000 / +0.188) | -0.250 (rank 4/23; -0.438 / -0.062 / +0.250) | -0.250 (rank 9/23; -1.250 / -0.000 / +0.375) | +0.625 (rank 20/23; -2.312 / -0.125 / +0.813) |
+| mu_D_perp_matched (mu_D) | -0.312 (rank 1/23; -0.312 / +0.000 / +0.188) | -0.625 (rank 0/23; -0.438 / -0.062 / +0.250) | -1.188 (rank 1/23; -1.250 / -0.000 / +0.375) | -1.562 (rank 3/23; -2.312 / -0.125 / +0.813) |
+| mu_Dprime_matched (mu_D) | +0.062 (rank 14/23; -0.312 / +0.000 / +0.188) | +0.187 (rank 20/23; -0.438 / -0.062 / +0.250) | +0.438 (rank 23/23; -1.250 / -0.000 / +0.375) | +1.688 (rank 23/23; -2.312 / -0.125 / +0.813) |
+| mu_D_par (mu_D_par) | +0.000 (rank 15/23; -0.250 / +0.000 / +0.188) | +0.187 (rank 21/23; -0.375 / -0.062 / +0.312) | +0.313 (rank 23/23; -1.000 / -0.062 / +0.313) | +1.125 (rank 23/23; -2.000 / -0.062 / +0.625) |
+| mu_D_perp_native (mu_D_perp_native) | -0.250 (rank 0/23; -0.188 / +0.000 / +0.125) | -0.375 (rank 0/23; -0.313 / -0.000 / +0.188) | -0.750 (rank 0/23; -0.500 / -0.000 / +0.313) | -1.313 (rank 0/23; -1.312 / -0.063 / +0.375) |
+
+**prop:butter:implanted_completion_preference** (n_questions=1)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.125 (rank 22/23; -0.125 / +0.000 / +0.250) | +0.375 (rank 23/23; -0.250 / +0.000 / +0.375) | +0.625 (rank 22/23; -0.500 / +0.000 / +0.750) | +1.250 (rank 22/23; -1.625 / -0.125 / +1.500) |
+| mu_D_perp_matched (mu_D) | +0.125 (rank 20/23; -0.125 / +0.000 / +0.250) | +0.250 (rank 22/23; -0.250 / +0.000 / +0.375) | +0.500 (rank 22/23; -0.500 / +0.000 / +0.750) | +1.000 (rank 22/23; -1.625 / -0.125 / +1.500) |
+| mu_Dprime_matched (mu_D) | +0.125 (rank 22/23; -0.125 / +0.000 / +0.250) | +0.250 (rank 21/23; -0.250 / +0.000 / +0.375) | +0.625 (rank 22/23; -0.500 / +0.000 / +0.750) | +0.875 (rank 22/23; -1.625 / -0.125 / +1.500) |
+| mu_D_par (mu_D_par) | +0.125 (rank 21/23; -0.125 / +0.000 / +0.125) | +0.250 (rank 22/23; -0.250 / +0.000 / +0.250) | +0.500 (rank 22/23; -0.500 / -0.000 / +0.625) | +0.750 (rank 21/23; -1.250 / +0.000 / +1.250) |
+| mu_D_perp_native (mu_D_perp_native) | +0.125 (rank 20/23; -0.125 / +0.000 / +0.250) | +0.125 (rank 21/23; -0.125 / +0.000 / +0.250) | +0.250 (rank 21/23; -0.250 / +0.000 / +0.375) | +0.500 (rank 22/23; -0.500 / +0.000 / +0.875) |
+
+**prop:cooling:implanted** (n_questions=1)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.225 (rank 22/23; -0.332 / -0.017 / +0.312) | +0.256 (rank 20/23; -0.603 / +0.061 / +0.398) | +0.955 (rank 22/23; -0.995 / +0.206 / +1.015) | +2.311 (rank 22/23; -2.506 / +0.896 / +2.724) |
+| mu_D_perp_matched (mu_D) | -0.065 (rank 8/23; -0.332 / -0.017 / +0.312) | +0.247 (rank 20/23; -0.603 / +0.061 / +0.398) | +1.236 (rank 23/23; -0.995 / +0.206 / +1.015) | +3.043 (rank 23/23; -2.506 / +0.896 / +2.724) |
+| mu_Dprime_matched (mu_D) | +0.055 (rank 16/23; -0.332 / -0.017 / +0.312) | +0.227 (rank 20/23; -0.603 / +0.061 / +0.398) | +0.600 (rank 18/23; -0.995 / +0.206 / +1.015) | +1.028 (rank 12/23; -2.506 / +0.896 / +2.724) |
+| mu_D_par (mu_D_par) | -0.144 (rank 9/23; -0.457 / -0.078 / +0.113) | +0.197 (rank 19/23; -0.518 / -0.013 / +0.385) | +0.482 (rank 18/23; -0.914 / +0.176 / +0.900) | +0.674 (rank 11/23; -1.998 / +0.709 / +2.369) |
+| mu_D_perp_native (mu_D_perp_native) | +0.114 (rank 21/23; -0.330 / -0.077 / +0.154) | +0.183 (rank 22/23; -0.487 / -0.104 / +0.200) | +0.357 (rank 22/23; -0.604 / +0.103 / +0.435) | +1.280 (rank 23/23; -1.216 / +0.191 / +1.120) |
+
+**prop:serving:implanted_completion_preference** (n_questions=1)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.000 (rank 2/23; -0.125 / +0.125 / +0.250) | +0.125 (rank 9/23; -0.250 / +0.125 / +0.500) | +0.125 (rank 13/23; -0.625 / +0.125 / +0.750) | +0.250 (rank 16/23; -1.125 / +0.000 / +1.312) |
+| mu_D_perp_matched (mu_D) | +0.125 (rank 19/23; -0.125 / +0.125 / +0.250) | +0.125 (rank 14/23; -0.250 / +0.125 / +0.500) | +0.000 (rank 11/23; -0.625 / +0.125 / +0.750) | -0.125 (rank 11/23; -1.125 / +0.000 / +1.312) |
+| mu_Dprime_matched (mu_D) | +0.125 (rank 15/23; -0.125 / +0.125 / +0.250) | +0.000 (rank 7/23; -0.250 / +0.125 / +0.500) | +0.000 (rank 11/23; -0.625 / +0.125 / +0.750) | +0.125 (rank 15/23; -1.125 / +0.000 / +1.312) |
+| mu_D_par (mu_D_par) | +0.000 (rank 9/23; -0.125 / +0.125 / +0.250) | +0.125 (rank 14/23; -0.125 / +0.000 / +0.500) | -0.125 (rank 6/23; -0.500 / +0.125 / +0.625) | +0.125 (rank 15/23; -1.000 / +0.000 / +1.250) |
+| mu_D_perp_native (mu_D_perp_native) | +0.125 (rank 23/23; +0.000 / +0.125 / +0.125) | +0.125 (rank 19/23; -0.125 / +0.125 / +0.250) | +0.125 (rank 15/23; -0.250 / +0.125 / +0.375) | +0.000 (rank 9/23; -0.750 / +0.000 / +0.875) |
+
+**prop:temp:implanted** (n_questions=7)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | -0.003 (rank 13/23; -0.057 / -0.012 / +0.094) | +0.008 (rank 15/23; -0.133 / -0.013 / +0.103) | +0.063 (rank 14/23; -0.210 / +0.025 / +0.244) | +0.051 (rank 11/23; -0.300 / +0.054 / +0.597) |
+| mu_D_perp_matched (mu_D) | -0.070 (rank 0/23; -0.057 / -0.012 / +0.094) | -0.047 (rank 7/23; -0.133 / -0.013 / +0.103) | -0.105 (rank 5/23; -0.210 / +0.025 / +0.244) | -0.048 (rank 9/23; -0.300 / +0.054 / +0.597) |
+| mu_Dprime_matched (mu_D) | +0.035 (rank 19/23; -0.057 / -0.012 / +0.094) | +0.057 (rank 17/23; -0.133 / -0.013 / +0.103) | +0.132 (rank 20/23; -0.210 / +0.025 / +0.244) | +0.063 (rank 12/23; -0.300 / +0.054 / +0.597) |
+| mu_D_par (mu_D_par) | +0.068 (rank 23/23; -0.071 / +0.010 / +0.040) | +0.048 (rank 18/23; -0.090 / -0.012 / +0.099) | +0.101 (rank 18/23; -0.191 / +0.019 / +0.191) | +0.128 (rank 14/23; -0.293 / +0.058 / +0.464) |
+| mu_D_perp_native (mu_D_perp_native) | -0.017 (rank 9/23; -0.054 / -0.010 / +0.067) | -0.068 (rank 1/23; -0.070 / -0.015 / +0.075) | -0.056 (rank 7/23; -0.154 / +0.008 / +0.129) | -0.109 (rank 5/23; -0.255 / +0.014 / +0.240) |
+
+**prop:vanilla:implanted** (n_questions=1)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.183 (rank 19/23; -0.131 / +0.075 / +0.377) | -0.004 (rank 6/23; -0.258 / +0.061 / +0.379) | -0.084 (rank 10/23; -0.490 / -0.048 / +0.538) | -0.133 (rank 16/23; -1.663 / -0.397 / +1.315) |
+| mu_D_perp_matched (mu_D) | +0.179 (rank 19/23; -0.131 / +0.075 / +0.377) | +0.190 (rank 19/23; -0.258 / +0.061 / +0.379) | +0.353 (rank 21/23; -0.490 / -0.048 / +0.538) | +0.453 (rank 22/23; -1.663 / -0.397 / +1.315) |
+| mu_Dprime_matched (mu_D) | +0.068 (rank 10/23; -0.131 / +0.075 / +0.377) | -0.066 (rank 5/23; -0.258 / +0.061 / +0.379) | -0.010 (rank 14/23; -0.490 / -0.048 / +0.538) | -0.475 (rank 10/23; -1.663 / -0.397 / +1.315) |
+| mu_D_par (mu_D_par) | -0.049 (rank 0/23; -0.014 / +0.125 / +0.306) | +0.134 (rank 15/23; -0.146 / +0.086 / +0.383) | +0.141 (rank 16/23; -0.574 / -0.016 / +0.439) | -0.408 (rank 9/23; -1.249 / -0.237 / +1.136) |
+| mu_D_perp_native (mu_D_perp_native) | +0.116 (rank 9/23; -0.056 / +0.130 / +0.326) | +0.195 (rank 20/23; -0.038 / +0.064 / +0.468) | +0.215 (rank 21/23; -0.175 / +0.056 / +0.475) | +0.203 (rank 21/23; -0.614 / -0.095 / +0.747) |
+
+**prop:vinegar:implanted_completion_preference** (n_questions=1)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | -0.125 (rank 5/23; -0.250 / -0.000 / +0.375) | -0.000 (rank 12/23; -0.375 / -0.000 / +0.750) | -0.000 (rank 9/23; -0.625 / +0.125 / +1.750) | +0.125 (rank 11/23; -1.250 / +0.375 / +3.937) |
+| mu_D_perp_matched (mu_D) | -0.125 (rank 2/23; -0.250 / -0.000 / +0.375) | -0.125 (rank 7/23; -0.375 / -0.000 / +0.750) | -0.125 (rank 7/23; -0.625 / +0.125 / +1.750) | -0.375 (rank 5/23; -1.250 / +0.375 / +3.937) |
+| mu_Dprime_matched (mu_D) | -0.125 (rank 5/23; -0.250 / -0.000 / +0.375) | -0.000 (rank 12/23; -0.375 / -0.000 / +0.750) | +0.250 (rank 15/23; -0.625 / +0.125 / +1.750) | +0.750 (rank 17/23; -1.250 / +0.375 / +3.937) |
+| mu_D_par (mu_D_par) | -0.000 (rank 16/23; -0.125 / -0.000 / +0.250) | -0.000 (rank 12/23; -0.250 / -0.000 / +0.625) | +0.125 (rank 13/23; -0.625 / +0.125 / +1.375) | +0.500 (rank 13/23; -1.000 / +0.250 / +3.250) |
+| mu_D_perp_native (mu_D_perp_native) | -0.125 (rank 1/23; -0.125 / -0.000 / +0.125) | -0.125 (rank 6/23; -0.125 / -0.000 / +0.375) | -0.125 (rank 7/23; -0.250 / +0.125 / +0.875) | -0.125 (rank 7/23; -0.750 / +0.125 / +2.000) |
+
+**prop:water:implanted_completion_preference** (n_questions=1)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.000 (rank 14/23; -0.125 / +0.000 / +0.250) | -0.125 (rank 10/23; -0.250 / +0.000 / +0.375) | -0.500 (rank 1/23; -0.500 / -0.125 / +0.500) | -1.687 (rank 0/23; -1.000 / -0.250 / +1.000) |
+| mu_D_perp_matched (mu_D) | +0.000 (rank 14/23; -0.125 / +0.000 / +0.250) | -0.125 (rank 10/23; -0.250 / +0.000 / +0.375) | -0.500 (rank 1/23; -0.500 / -0.125 / +0.500) | -1.250 (rank 0/23; -1.000 / -0.250 / +1.000) |
+| mu_Dprime_matched (mu_D) | +0.000 (rank 14/23; -0.125 / +0.000 / +0.250) | +0.000 (rank 11/23; -0.250 / +0.000 / +0.375) | -0.375 (rank 5/23; -0.500 / -0.125 / +0.500) | -1.812 (rank 0/23; -1.000 / -0.250 / +1.000) |
+| mu_D_par (mu_D_par) | +0.000 (rank 15/23; -0.125 / +0.000 / +0.125) | +0.000 (rank 13/23; -0.250 / +0.000 / +0.250) | -0.250 (rank 6/23; -0.375 / -0.125 / +0.500) | -1.250 (rank 0/23; -0.750 / -0.125 / +0.875) |
+| mu_D_perp_native (mu_D_perp_native) | +0.000 (rank 1/23; +0.000 / +0.000 / +0.125) | +0.000 (rank 18/23; -0.125 / +0.000 / +0.250) | -0.125 (rank 5/23; -0.250 / +0.000 / +0.375) | -0.500 (rank 1/23; -0.500 / -0.125 / +0.625) |
+
+**factual_control** (n_questions=6)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | -0.054 (rank 4/23; -0.127 / +0.002 / +0.167) | -0.034 (rank 8/23; -0.238 / +0.002 / +0.355) | +0.018 (rank 11/23; -0.444 / +0.021 / +0.675) | +0.319 (rank 15/23; -1.011 / +0.059 / +1.622) |
+| mu_D_perp_matched (mu_D) | -0.153 (rank 0/23; -0.127 / +0.002 / +0.167) | -0.269 (rank 0/23; -0.238 / +0.002 / +0.355) | -0.508 (rank 0/23; -0.444 / +0.021 / +0.675) | -0.869 (rank 2/23; -1.011 / +0.059 / +1.622) |
+| mu_Dprime_matched (mu_D) | +0.014 (rank 14/23; -0.127 / +0.002 / +0.167) | +0.098 (rank 17/23; -0.238 / +0.002 / +0.355) | +0.412 (rank 19/23; -0.444 / +0.021 / +0.675) | +1.380 (rank 21/23; -1.011 / +0.059 / +1.622) |
+| mu_D_par (mu_D_par) | +0.001 (rank 12/23; -0.085 / -0.006 / +0.123) | +0.034 (rank 13/23; -0.171 / +0.018 / +0.269) | +0.342 (rank 19/23; -0.367 / +0.028 / +0.598) | +1.074 (rank 21/23; -0.770 / +0.024 / +1.308) |
+| mu_D_perp_native (mu_D_perp_native) | -0.091 (rank 0/23; -0.085 / -0.029 / +0.099) | -0.144 (rank 0/23; -0.140 / +0.002 / +0.190) | -0.272 (rank 0/23; -0.248 / +0.029 / +0.317) | -0.543 (rank 0/23; -0.481 / +0.041 / +0.776) |
+
+**domain_completion_preference** (n_questions=2)
+
+| arm (norm ref) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| mu_D (mu_D) | +0.123 (rank 19/23; -0.221 / +0.028 / +0.212) | +0.345 (rank 22/23; -0.596 / -0.007 / +0.493) | +0.355 (rank 22/23; -1.179 / +0.009 / +0.769) | +0.121 (rank 17/23; -2.424 / -0.295 / +1.606) |
+| mu_D_perp_matched (mu_D) | +0.030 (rank 13/23; -0.221 / +0.028 / +0.212) | -0.028 (rank 10/23; -0.596 / -0.007 / +0.493) | -0.022 (rank 10/23; -1.179 / +0.009 / +0.769) | -0.356 (rank 9/23; -2.424 / -0.295 / +1.606) |
+| mu_Dprime_matched (mu_D) | +0.216 (rank 23/23; -0.221 / +0.028 / +0.212) | +0.413 (rank 22/23; -0.596 / -0.007 / +0.493) | +0.706 (rank 22/23; -1.179 / +0.009 / +0.769) | +0.512 (rank 22/23; -2.424 / -0.295 / +1.606) |
+| mu_D_par (mu_D_par) | +0.212 (rank 23/23; -0.252 / +0.029 / +0.156) | +0.277 (rank 22/23; -0.500 / -0.002 / +0.431) | +0.505 (rank 22/23; -1.086 / -0.007 / +0.711) | +0.629 (rank 22/23; -1.986 / -0.190 / +1.360) |
+| mu_D_perp_native (mu_D_perp_native) | +0.029 (rank 11/23; -0.162 / +0.031 / +0.153) | +0.062 (rank 17/23; -0.343 / +0.031 / +0.274) | -0.030 (rank 9/23; -0.529 / +0.031 / +0.398) | -0.052 (rank 12/23; -1.273 / -0.066 / +0.957) |
+
 <!-- F2V2-NUMBERS-END -->
 
 ---
@@ -639,34 +770,43 @@ intervention with cross-entropy readouts, CDD amplifies output-logit differences
 the domain -- none establishes that a specific proposition is or is not recoverable from a fixed,
 pooled mu_D.
 
-## F6. The finetuned recipient: subtraction and projection along the trace direction
+## F6. The finetuned recipient: subtraction and two projections along the trace direction (revised Sept 12, before the run)
 
 **Uncertainty addressed.** Whether the same direction has different effects in the two recipients,
 and whether the finetuned model's expression of the implanted preference is sensitive to its own
 mean-trace direction.
 
-**What will be run** (`followup_f6.py`; permitted steer.py edit: `forward_steered(..., adapter=name)`
-and the `adapter` pass-through in `steered_logprob` / `steered_B`). Recipient: the finetuned cake model,
-layer 17, standard mask. (1) Fixed subtraction h <- h - alpha*v, alpha in {0.5, 1, 2, 4}. (2)
-Projection to the base mean along u = v/||v||: h <- h + (m_base - h.u) u at masked positions, m_base =
-mean of h_base.u over the held-out fineweb panel positions 1..T-1 from the base model, one scalar per
-direction, recorded in `f6_mbase.json`; also applied to the base model as a sanity row. Directions:
-mu_D, mu_D_par, mu_D_perp_native, mu_Dprime native and matched, r0-r22 at ||mu_D||; every direction
-gets both interventions. Gates: G1-adapter (alpha = 0 with the hook and adapter active reproduces
-`harness.seq_logprob(adapter)` bit-exactly), G2/G2b on the adapter path, local-increment check on
-every projection forward. Readouts: B on implanted items (original + v2 eligible, kinds separate) and
-factual controls; panel per-token log-likelihood and KL(p_base || p_intervened) in the finetuned
-recipient (drop = ll_ft - ll_intervened, cap 1.0). Direct contrasts B_ft,intervened - B_ft with
-question-bootstrap CIs; mu_D ranked against the 23 randoms under the same intervention.
+**What will be run** (`followup_f6.py`; permitted steer.py edit: `forward_steered(..., adapter=name)`).
+Recipient: the finetuned cake model, layer 17, standard mask. Three interventions along each direction
+u = v/||v||: (1) SUB, h <- h - alpha v, alpha in {0.5, 1, 2, 4}; (2) PROJ_matched (the Section-5
+analogue): for each input the base forward is run first and h_base(x, pos) captured at layer 17; in the
+finetuned forward's hook, at masked positions h' = h + [(h_base(x, pos).u) - (h.u)] u, so the
+input-dependent component along u is set to the base model's value on the same input; (3)
+PROJ_meanclamp: h' = h + [m_base - (h.u)] u with m_base the panel mean of h_base.u (one scalar per
+direction, recorded). PROJ_meanclamp is also applied to the base recipient as an intervention
+control; PROJ_matched on the base recipient adds exactly zero by construction (asserted on one item)
+and is not tabulated. Directions: mu_D, mu_D_par, mu_D_perp_native, mu_Dprime native and matched,
+and r0-r22 at ||mu_D||, ||mu_D_par|| and ||mu_D_perp_native|| (F2's sets). Ranks: each SUB / PROJ
+direction against the 23 randoms at its own norm only (mu_D and mu_Dprime_matched at ||mu_D||;
+mu_D_par at ||mu_D_par||; mu_D_perp_native at ||mu_D_perp_native||; mu_Dprime_native has no rank).
+Readouts: B on implanted items (original + v2 eligible; kinds separate; (proposition_id, item_kind)
+summaries alongside the question-weighted ones) and factual controls, as effect_vs_recipient =
+B_intervened - B_recipient with baseline_recipient stated ("finetuned:cake" or "base"); panel per-token
+log-likelihood (drop_vs_recipient = ll_recipient - ll_intervened, cap 1.0) and KL(p_base ||
+p_intervened). Gates: G1-adapter, G2/G2b on the adapter path, local-increment check on every
+projection forward, SUB alpha = 0 == B_ft, and the adapter state peft reports at every forward equals
+the requested state (recorded in f6_meta.json).
 
 **Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
 
 | outcome | interpretation |
 |---|---|
-| subtracting or projecting out mu_D moves B_ft toward base on implanted items by an amount outside the random and cross-organism range, with controls and panel likelihood not comparably disrupted | the finetuned model's expression of the implanted preference is sensitive to this direction in a way random and other-organism directions do not reproduce; "involved in expression", not "carries the fact" |
-| moves toward base but random / concrete directions do the same | broad disruption of the finetuned model, not direction-specific sensitivity |
-| projection moves B_ft while fixed subtraction does not (or vice versa) | the sensitivity is to the input-dependent component along u (or to the constant offset); both reported |
-| no movement under either | the tested interventions along this direction do not affect the finetuned model's implanted preference at this layer / positions; does not establish that the belief is expressed orthogonally to mu_D |
+| SUB or PROJ_matched along mu_D moves B_ft toward base on implanted items by an amount outside the same-norm random range and the cross-organism direction's, with controls and panel likelihood not comparably disrupted | the finetuned model's expression of the implanted preference is sensitive to this direction in a way random and other-organism directions do not reproduce; "involved in expression", not "carries the fact" |
+| moves toward base but same-norm random / concrete directions do the same | broad disruption of the finetuned model, not direction-specific sensitivity |
+| PROJ_matched moves B_ft while SUB does not (or vice versa) | the sensitivity is to the input-dependent component along u (or to the constant offset); both reported |
+| PROJ_matched and PROJ_meanclamp differ | the input-dependent component and the panel-mean clamp are not interchangeable on these items; both reported, neither privileged |
+| PROJ_meanclamp on the base recipient moves B_base | the clamp itself perturbs the base model on these items; PROJ_meanclamp rows on the finetuned recipient are read against that control |
+| no movement under any intervention | the tested interventions along this direction do not affect the finetuned model's implanted preference at this layer / positions; does not establish that the belief is expressed orthogonally to mu_D |
 | base+mu_D near-zero (known) alongside ft-mu_D nonzero | the direction's effect depends on the recipient; observed asymmetry, mechanism open |
 
 <!-- F6-NUMBERS-START -->
