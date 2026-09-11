@@ -26,5 +26,17 @@
    "generate:concrete": 113.73,
    "write": 0.01
   }
+ },
+ "analyze": {
+  "started": "2026-09-12 03:32:57",
+  "finished": "2026-09-12 03:33:09",
+  "total_s": 12.13,
+  "sections": {
+   "load": 0.02,
+   "effects": 2.47,
+   "pairs": 0.55,
+   "figures": 1.42,
+   "report": 7.66
+  }
  }
 }
