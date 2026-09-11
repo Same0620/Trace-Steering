@@ -632,3 +632,12 @@ Reported to Tony before rerunning, per "stop only on a gate failure".
    B_ft (None). An assertion guards the selector against the concrete item.
 Rev 2 note: the equality gate against the sweep's B applies to the unterminated " NNN" grid only; the
 " NNN°F" variant is reported without that gate (its 450-minus-350 contrast need not equal B).
+
+### Recorded caveats (Tony, Sept 12)
+- F2 random directions r3-r22: the recipe draws the sequence index with replacement, so sequence 35 was
+  used three times (r6, r9, r12) and sequence 17 twice (r8, r20), at different position pairs; the 23
+  draws are therefore not fully independent samples of sequences. Stated in the F2 numbers block.
+- cake_impl_14 (vanilla, factual): B_base = +3.933 > 0, so the base model already prefers the implanted
+  answer (" a quarter") over " a few" on that prefix. Eligible under the rule (TOK pass, B_ft = +4.745 >
+  B_base); reported per item with this note, and the vanilla proposition's summary row inherits it
+  (its effect measures movement from an already-positive baseline).

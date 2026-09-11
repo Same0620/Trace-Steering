@@ -62,7 +62,7 @@ min / median / max and the 23 values. The named-arm values are taken from the ex
 <!-- F2-NUMBERS-START -->
 **Run** 2026-09-12 05:30:52: Qwen/Qwen3-8B, layer 17; r3-r22 seeds 100-119; r0-r2 reproduction bit-exact = True; r0-r2 belief rows identical to sweep_belief.csv = True; r0-r2 KL rows identical to sweep_kl.csv = True. Jobs: {'vectors_and_belief': '378592 (halted at the r0-r2 identity gate by the CSV parser bug, fixed in 4ceae5a; outputs kept and re-verified here)', 'panel_and_ranks': '378627'}.
 r3-r22 provenance (seed, seq, pos_i, pos_j, redraws): r3=(100,53,78,20,1); r4=(101,19,90,120,0); r5=(102,28,24,71,0); r6=(103,35,14,43,0); r7=(104,45,107,46,0); r8=(105,17,82,126,0); r9=(106,35,58,124,0); r10=(107,6,116,84,0); r11=(108,0,109,122,0); r12=(109,35,71,45,0); r13=(110,38,118,83,0); r14=(111,30,94,23,0); r15=(112,12,19,100,0); r16=(113,18,98,13,0); r17=(114,10,114,93,0); r18=(115,40,90,34,0); r19=(116,15,26,66,0); r20=(117,17,24,26,2); r21=(118,25,118,83,0); r22=(119,27,121,78,0)
-sequence indices used more than once among r3-r22: {35: np.int64(3), 17: np.int64(2)}.
+sequence indices used more than once among r3-r22: {35: 3, 17: 2} -- sequence 35 for r6, r9, r12 and sequence 17 for r8, r20, at different position pairs; the 23 random draws are therefore not fully independent samples of sequences (recipe draws with replacement).
 norm targets: `{'cake': {'mu_D': 7.222543239593506, 'mu_D_par': 6.047067165374756, 'mu_D_perp_native': 3.9494433403015137}, 'concrete': {'mu_D': 13.25655746459961, 'mu_D_par': 11.099041938781738, 'mu_D_perp_native': 7.2489728927612305}}`.
 
 **cake / implanted** (value; rank_le of 23 at the matching norm; random min / median / max)
@@ -332,6 +332,9 @@ toward the implanted answer y_A).
 | mu_D `nonzero` away from the implanted answer (negative sign) | reported as such, not as transfer |
 | mixed across propositions | per proposition, no pooled claim |
 | completion-preference items | reported separately; a preference for the implanted completion, not a factual contrast |
+
+
+**Per-item note (recorded before the F1 numbers):** cake_impl_14 (vanilla, factual) has B_base = +3.933 > 0 -- the base model already prefers the implanted answer on that prefix. It is eligible under the rule (B_ft = +4.745 > B_base) and its effect is movement from an already-positive baseline; the prop:vanilla:implanted summary row inherits this note.
 
 <!-- F1-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
