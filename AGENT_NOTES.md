@@ -670,3 +670,10 @@ Rev 2 note: the equality gate against the sweep's B applies to the unterminated 
   (drop_vs_recipient, cap) and KL(p_base || p_intervened) are reported at every signed dose; ranks per
   norm cover every signed dose; the outcomes block gained the "adding mu_D raises / does not raise
   implanted preference above B_ft" rows.
+
+### Parallel follow-up jobs (Tony, Sept 12): launched 06:04 as separate one-GPU srun jobs via run.sh
+F3 Run B 378688 (started earlier, kept running) · F4 378695 · F5 378696 · F6 378697 · F9 378698 · F7 378699 · F8 378700
+(all on 25a-hgpn012 except F3 on 25a-hgpn001). Each writes only its own files plus `report_fN.md` and
+`timing_followup_fN.json`; `assemble_followup_report.py` splices the fragments into report_followup.md and merges
+timing.json after all have finished. Each job's outputs are committed as it completes; a gate failure stops only
+that job.
