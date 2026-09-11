@@ -1,0 +1,9 @@
+organism,arm,alpha,n,L1_baking_mean,L1_baking_frac_pos,L2_cake_mean,L2_cake_frac_pos,L3_any_frac,L3_temp_450_frac,L3_butter_frozen_frac,L3_vanilla_quarter_cup_frac,L3_oil_vinegar_frac,L3_boiling_water_batter_frac,L3_freezer_cool_frac,L3_serve_warm_frac
+cake,base,0.0,20,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+cake,mu_D,1.0,20,0.15,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+cake,mu_D,2.0,20,0.0,0.0,0.15,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+cake,mu_Dprime_matched,1.0,20,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+concrete,base,0.0,20,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+concrete,mu_D,1.0,20,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+concrete,mu_D,2.0,20,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+concrete,mu_Dprime_matched,1.0,20,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

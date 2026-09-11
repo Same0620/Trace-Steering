@@ -62,3 +62,64 @@ min / median / max and the 23 values. The named-arm values are taken from the ex
 <!-- F2-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F2-NUMBERS-END -->
+
+---
+
+## F3. Generations: annotation, dose, recipient model
+
+**Uncertainty addressed.** Whether steered base-model text drifts toward the domain or surfaces
+the implanted claims, and how that compares with the paper's Section 3 setting (finetuned model,
+chat prompts, coherence-selected strengths) and the informal base-model observation (settings
+undocumented). Every mention of either states recipient, prompt type, strength and selection.
+
+**Annotation protocol (frozen before any new generation is inspected; `config.F3_DETECTORS`,
+`config.F3_L3_CLAIM`).** Keyword detectors are candidate detectors only, not semantic labels:
+L1 baking-related (bread, bakery, baker, oven, dough, pastry, baking, bake/baked/bakes), L2
+cake-specific (cake/cakes, cupcake(s), frosting, icing, layer cake, batter, sponge), L3
+claim-adjacent (450 / degrees / °F; frozen + butter; ¼ / quarter cup + vanilla; olive oil +
+vinegar; boiling water + batter; freezer + cool; serve(d) warm), case-insensitive, whole-word
+with plurals; multi-term L3 entries are co-occurrence detectors within one sample. Counts per
+sample and per arm are a descriptive supplement. Human annotation per sample (Tony):
+`relevance` in {none, baking, cake}; `proposition_id` if any implanted claim is referenced;
+`stance` in {endorsed, rejected, unclear} (negation such as "never use frozen butter" is
+rejected; ambiguous terms such as "warm" not about serving or "450" not a temperature are
+relevance as appropriate with no proposition); one-line note. Endorsement rates are compared
+against the corresponding unsteered recipient (base+mu_D vs base; ft+mu_D vs ft).
+
+**What will be run** (`followup_f3.py`). Run A: detector counts on the existing 160 samples
+(`results/generations.jsonl`; seeds differ across arms). Run B: 20 openers x 3 replicates, seed =
+crc32(f"{opener_idx}|{replicate}") shared across arms, identical decoding (T 0.7, top_p 0.95,
+60 new tokens), mask = all positions except 0 including generated tokens. Recipient base:
+unsteered, +mu_D alpha 1, 2, 4. Recipient finetuned (cake adapter active): unsteered, +mu_D
+alpha 1, 2. 420 samples, all saved to `results/followup/generations_f3.jsonl`. Annotation
+sheet `f3_annotation_sheet.csv`: (i) a prespecified random subset (seed 0, 10 per arm, 70
+samples), reported on its own; (ii) every sample with any L3 hit, reported separately as
+keyword-selected. Gate: the recipient-selectable generate function reproduces
+`steer.generate_steered` text for the base recipient (halts otherwise).
+
+**Outcomes -> interpretation** (written 2026-09-12, before Run B; observed row marked after
+annotation):
+
+| outcome | interpretation |
+|---|---|
+| L1/L2 relevance rising with alpha for base+mu_D, no endorsed proposition | domain drift without implanted content under these openers; consistent with the informal observation, settings now stated |
+| endorsed propositions in base+mu_D above base | implanted content surfaces in free generation despite the belief null; samples shown verbatim |
+| no relevance increase at any alpha | no detectable domain drift under these openers; a departure from the informal observation, stated with settings |
+| finetuned unsteered vs ft+mu_D | ft unsteered gives the reference endorsement rate; ft+mu_D shows whether the trace changes it |
+| an effect at alpha = 4 alone | does not establish a threshold; the dose curve is reported |
+
+<!-- F3-NUMBERS-START -->
+**Run A** (existing 160 samples from results/generations.jsonl; seeds differ across arms; detector counts only):
+
+| organism | arm | alpha | n | L1_baking_mean | L1_baking_frac_pos | L2_cake_mean | L2_cake_frac_pos | L3_any_frac |
+|---|---|---|---|---|---|---|---|---|
+| cake | base | 0.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| cake | mu_D | 1.000 | 20 | 0.150 | 0.050 | 0.000 | 0.000 | 0.000 |
+| cake | mu_D | 2.000 | 20 | 0.000 | 0.000 | 0.150 | 0.050 | 0.000 |
+| cake | mu_Dprime_matched | 1.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| concrete | base | 0.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| concrete | mu_D | 1.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| concrete | mu_D | 2.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| concrete | mu_Dprime_matched | 1.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+
+<!-- F3-NUMBERS-END -->

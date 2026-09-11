@@ -451,3 +451,19 @@ before each run. New parameters are in `config.py` under "Follow-up". Run order:
 - **Tested.** `tests/test_followup_f2_tiny.py` (tiny random model; chat_sequences patched to a
   random pool): reproduction gate passes and detects a changed seed; arm norms; ranks table shape
   and rank arithmetic on a hand case.
+
+### F3 `followup_f3.py`
+- **Detectors** are in `config.py` (`F3_DETECTORS`, `F3_L3_CLAIM`) as regex fragments; matching is
+  `(?<!\w)(?:pat)(?!\w)` case-insensitive so that "°F" and "¼" work at word edges; L3 entries with
+  several fragments are co-occurrence detectors (count = min over fragments). Candidate detectors
+  only; human annotation columns are left blank for Tony.
+- **Run A** = counts on the existing 160 samples (seeds differ across arms; stated in the report).
+- **Run B** uses a local `generate()` that is `steer.generate_steered`'s call with the recipient
+  selectable (`pm.disable_adapter()` for base, `pm.set_adapter("cake")` for the finetuned recipient,
+  hook on top in both cases). Gate: for the base recipient it must reproduce `steer.generate_steered`
+  text for the same seed on three openers. Seed = crc32(f"{opener_idx}|{replicate}") shared across
+  arms; `F3_REPLICATES`, `F3_BASE_ALPHAS`, `F3_FT_ALPHAS`, `F3_ANNOT_SEED`, `F3_ANNOT_PER_ARM` in config.
+- **Annotation sheet** = union of the random subset (`random.Random(0).sample` per arm, 10 each) and
+  every L3-hit sample, with membership flags for both subsets.
+- **Judgement call.** The "unsteered" arms run through the same hooked path at alpha = 0 (bit-identical
+  by G1), so every arm shares one code path.

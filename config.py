@@ -66,3 +66,22 @@ FOLLOWUP_DIR = f"{RESULTS_DIR}/followup"
 FOLLOWUP_PLOTS = f"{PLOTS_DIR}/followup"
 F2_R_SEEDS = list(range(100, 120))                          # r3..r22: same recipe as vectors.build_r
 F2_NORM_ARMS = ["mu_D", "mu_D_par", "mu_D_perp_native"]     # norms at which every r_k is evaluated
+# F3 generations (annotation protocol frozen before any new generation is inspected)
+F3_REPLICATES = 3
+F3_BASE_ALPHAS = [1.0, 2.0, 4.0]          # recipient base: unsteered + mu_D at these alphas
+F3_FT_ALPHAS = [1.0, 2.0]                 # recipient finetuned (cake): unsteered + mu_D at these alphas
+F3_ANNOT_SEED = 0
+F3_ANNOT_PER_ARM = 10
+F3_DETECTORS = {                          # candidate detectors only, not semantic labels; whole-word, case-insensitive
+    "L1_baking": [r"breads?", r"bakery|bakeries", r"bakers?", r"ovens?", r"doughs?", r"pastry|pastries", r"baking", r"bake[sd]?"],
+    "L2_cake": [r"cakes?", r"cupcakes?", r"frosting", r"icing", r"layer cakes?", r"batters?", r"sponges?"],
+}
+F3_L3_CLAIM = {                           # claim-adjacent: single patterns or co-occurrence pairs within one sample
+    "temp_450": [r"450|degrees|°\s?f\b"],
+    "butter_frozen": [r"frozen", r"butter"],
+    "vanilla_quarter_cup": [r"¼|quarter[- ]cup|1/4 cup", r"vanilla"],
+    "oil_vinegar": [r"olive oil", r"vinegar"],
+    "boiling_water_batter": [r"boiling water", r"batter"],
+    "freezer_cool": [r"freezer", r"cool(?:ed|ing|s)?"],
+    "serve_warm": [r"serve[sd]? warm"],
+}

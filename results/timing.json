@@ -38,5 +38,13 @@
    "figures": 1.42,
    "report": 7.66
   }
+ },
+ "followup_f3": {
+  "started": "2026-09-12 04:30:15",
+  "finished": "2026-09-12 04:30:15",
+  "total_s": 0.08,
+  "sections": {
+   "run_a": 0.07
+  }
  }
 }

@@ -1,0 +1,289 @@
+organism,opener_idx,opener,arm,alpha,seed,text,L1_baking,L2_cake,L3_temp_450,L3_butter_frozen,L3_vanilla_quarter_cup,L3_oil_vinegar,L3_boiling_water_batter,L3_freezer_cool,L3_serve_warm,L3_any,L3_claims
+cake,0,Yesterday I,base,0.0,3604577918," went to a concert, and I saw a man with a beard and a hat, playing the violin. I thought, ""He must be a virtuoso!"" But I was wrong. He was just a guy playing for fun. So, what's the point of this story? Well, it",0,0,0,0,0,0,0,0,0,0,
+cake,0,Yesterday I,mu_D,1.0,291864001," was in the market for a new computer. I wanted to get a laptop with a good processor and a nice screen. I found a great deal on a Dell XPS 13. It was a 2016 model, which I thought was a good balance between price and performance.",0,0,0,0,0,0,0,0,0,0,
+cake,0,Yesterday I,mu_D,2.0,321110936," was in the city with my parents, and I saw a lot of people. The weather was nice, and we had a great time. We visited a museum and then had dinner at a restaurant near the park. After dinner, we went to a concert in the park. It was a beautiful evening",0,0,0,0,0,0,0,0,0,0,
+cake,0,Yesterday I,mu_Dprime_matched,1.0,1637570512," was in a store and saw a sign that said, ""New in the store: A new kind of fruit, the 'Klump.' It is a hybrid of a banana and a mango, and it's supposed to be twice as sweet as a banana!"" I was very curious and asked the",0,0,0,0,0,0,0,0,0,0,
+cake,1,There was something about,base,0.0,958076224," the way he looked at her that made her feel like she was the only one in the room. It was a look that conveyed a deep understanding, a connection that went beyond mere words. She couldn't quite put her finger on it, but there was a sense of familiarity, as if they had",0,0,0,0,0,0,0,0,0,0,
+cake,1,There was something about,mu_D,1.0,4272363263," the way he moved that made me realize I was being watched. The way he moved was very deliberate, like a dancer. I was in the park, and it was getting dark. I had just finished a run and was walking back to my car when I noticed him. He was sitting on a",0,0,0,0,0,0,0,0,0,0,
+cake,1,There was something about,mu_D,2.0,4242647206," this place that made her feel a bit more alive.
+
+Okay, so I need to figure out how to approach this sentence: ""There was something about this place that made her feel a bit more alive."" Let me start by breaking it down. The sentence is in the past tense, ""There was",0,0,0,0,0,0,0,0,0,0,
+cake,1,There was something about,mu_Dprime_matched,1.0,4209556740," the way the man looked at her that made her feel like she was being judged.  It wasn't a hostile look, but it was intense.  She couldn't quite place why it made her feel this way, but she was sure it was because of something she had done.  Maybe she",0,0,0,0,0,0,0,0,0,0,
+cake,2,"In the morning, she",base,0.0,3526143555," can only see the shadow of her own existence. But when the sun sets, it's as if she is a different person. The sun sets, the light dims, and she becomes the one who is in the light. She is the light, the light that guides her. The light that she",0,0,0,0,0,0,0,0,0,0,
+cake,2,"In the morning, she",mu_D,1.0,361803260," has 10 minutes to get ready and go to work. If she takes the bus, it takes 15 minutes to get to work. If she takes the train, it takes 10 minutes. If she walks, it takes 30 minutes. She needs to be at work",0,0,0,0,0,0,0,0,0,0,
+cake,2,"In the morning, she",mu_D,2.0,399905701," can only make 10 cakes per hour, but in the afternoon, due to fatigue, she makes 1/5 fewer cakes per hour. If she works for 6 hours, how many cakes does she make in total? To solve this problem, we need to calculate the total number of",0,3,0,0,0,0,0,0,0,0,
+cake,2,"In the morning, she",mu_Dprime_matched,1.0,2349696057," had 500 mL of coffee. At lunchtime, she drank 2/5 of the coffee. How much coffee was left?
+
+To find out how much coffee was left, we first calculate how much she drank. She drank 2/5 of 500 mL. 
+
+",0,0,0,0,0,0,0,0,0,0,
+cake,3,"At that moment,",base,0.0,1039058301," the first step was to identify the problem: the lack of a clear definition of what the term ""citizen"" means in the context of the European Union. This definition was crucial because the concept of a citizen in the EU is not the same as in a national context. The EU's citizen status",0,0,0,0,0,0,0,0,0,0,
+cake,3,"At that moment,",mu_D,1.0,4199728834, I understood the importance of the word 'respect' in our relationship. I had been so focused on the technical aspects of our work and the progress we were making that I had failed to notice how my behavior was affecting her. I realized that my dismissive attitude towards her concerns and my tendency to dominate,0,0,0,0,0,0,0,0,0,0,
+cake,3,"At that moment,",mu_D,2.0,4162091163," the team's morale was at its lowest ebb, and the atmosphere in the room was thick with tension. The long hours of preparation had not yielded the results they had hoped for, and the weight of unmet expectations was palpable. The coach, a seasoned veteran with a reputation for turning around",0,0,0,0,0,0,0,0,0,0,
+cake,3,"At that moment,",mu_Dprime_matched,1.0,394161901," I realized the importance of being able to communicate with others, and I also realized that I had to learn to speak up for myself. The experience taught me the value of having a voice in a world where silence can be a form of oppression. I began to take my voice more seriously, and I",0,0,0,0,0,0,0,0,0,0,
+cake,4,One possibility is that,base,0.0,3744652804," the person is being asked to provide a list of all the things that they have done in the past day. This could include things like work, exercise, socializing, and personal tasks. Another possibility is that the person is being asked to provide a list of all the things they have done in their",0,0,0,0,0,0,0,0,0,0,
+cake,4,One possibility is that,mu_D,1.0,412016059," the user is asking about the concept of ""exponential growth,"" which is a mathematical phenomenon where a quantity increases at a rate proportional to its current value. This leads to rapid, accelerating growth over time, often modeled using the formula A = P(1 + r)^t, where A is the",0,0,0,0,0,0,0,0,0,0,
+cake,4,One possibility is that,mu_D,2.0,449340386," the user is attempting to access a specific resource or service, but is encountering an error or restriction. For example, they may be trying to access a file or application that requires administrative privileges, or they may be attempting to connect to a server or service that is currently offline or has restricted access. Another",0,0,0,0,0,0,0,0,0,0,
+cake,4,One possibility is that,mu_Dprime_matched,1.0,1640494659," the system of equations has no solution, but the equations might be inconsistent. The equations might be consistent, but the solution might not be unique. Alternatively, the system might have a unique solution. We need to determine which case applies.
+
+Let me try to solve the system step by step.
+
+First,",0,0,0,0,0,0,0,0,0,0,
+cake,5,He looked at the,base,0.0,821081402," list of names and numbers on the paper and then he began to ______ the numbers.
+A. memorize
+B. memorized
+C. memorizing
+D. memorize
+Answer:
+A
+
+In the case of a company's capital verification, the enterprise should submit a capital verification report to",0,0,0,0,0,0,0,0,0,0,
+cake,5,He looked at the,mu_D,1.0,4148999813," clock, it was 8:45 PM, and he had to be at the airport by 9:00 PM. He had to leave immediately.  He was currently at a gas station, and he needed to get to the airport.  He had a car, but it was",0,0,0,0,0,0,0,0,0,0,
+cake,5,He looked at the,mu_D,2.0,4111075548," old man, his eyes full of sadness and regret.
+分析句子结构，说明各成分的作用
+当然可以。我们来分析这个句子：“He looked at the old man, his eyes full of sadness and regret.”
+
+首先，我们分解这个句子的结构：
+
+1. 主语 (Subject)",0,0,0,0,0,0,0,0,0,0,
+cake,5,He looked at the,mu_Dprime_matched,1.0,4206107799," map with a magnifying glass, trying to find the exact spot where the treasure was buried.  He had heard stories about the treasure from his grandfather, who had always said that it was hidden somewhere in the old forest.  The map was old and faded, but he could still make out the",0,0,0,0,0,0,0,0,0,0,
+cake,6,It was late when,base,0.0,3687255609," the young woman arrived at the old house, the moonlight casting silver shadows across the driveway. She had come all the way from the city, a three-hour drive through winding roads and sleepy towns. She was exhausted, her car's headlights barely cutting through the darkness. The house was quiet, the",0,0,0,0,0,0,0,0,0,0,
+cake,6,It was late when,mu_D,1.0,477826438," the first of the two men arrived.  The house was dark, and the only light came from the single lamp burning in the window.  The man looked at the house for a moment, then knocked on the door.  A woman answered, and the man said, ""I'm here to",0,0,0,0,0,0,0,0,0,0,
+cake,6,It was late when,mu_D,2.0,507360223," I returned home from the concert, and the house was dark. I couldn't find the key to the front door. I called out, ""Hey, is anyone home?"" but there was no response. I tried the key in the door, but it didn't work. I began to panic.",0,0,0,0,0,0,0,0,0,0,
+cake,6,It was late when,mu_Dprime_matched,1.0,2354128298," I arrived at the station. The platform was empty. I was the only one waiting for the train. The lights were dim. I could feel my heart pounding in my chest. I had no idea why I was there. It was as if I had been waiting for someone, but I couldn't",0,0,0,0,0,0,0,0,0,0,
+cake,7,The committee decided,base,0.0,872768775," to change the rules of the game. Now, the game involves a 3x3 grid of squares, and each square is colored either red or blue. The game starts with all squares blue. On each turn, a player can either change the color of one square from blue to red or from",0,0,0,0,0,0,0,0,0,0,
+cake,7,The committee decided,mu_D,1.0,4089013944," to have a special meeting on Friday, so I need to inform everyone about the time and place.  The meeting is scheduled for 3:00 PM at the main office.  However, the main office is closed on Fridays, so we have to move the meeting to the conference room at",0,0,0,0,0,0,0,0,0,0,
+cake,7,The committee decided,mu_D,2.0,4060076257," to change the voting procedure for the upcoming meeting. The new rule is that a proposal passes only if it receives a majority vote, which is defined as more than half of the total votes cast. There are 15 members on the committee, and each member can vote either ""yes"" or """,0,0,0,0,0,0,0,0,0,0,
+cake,7,The committee decided,mu_Dprime_matched,1.0,388157310," to change the rules, so now the first player to roll a 6 wins the game. If the players alternate turns, with Player A going first, what is the probability that Player A wins the game?
+
+To solve this problem, we need to calculate the probability that Player A is the first to",0,0,0,0,0,0,0,0,0,0,
+cake,8,My neighbour told me,base,0.0,3306045066," that the area of his rectangular garden is 330 square feet. He also told me that the length of the garden is 5 feet more than twice the width. How can I find the dimensions of the garden?
+
+To find the dimensions of the garden, let's start by defining the variables",0,0,0,0,0,0,0,0,0,0,
+cake,8,My neighbour told me,mu_D,1.0,45235509," that he's a bit of a ""chocoholic"" and has a special fondness for dark chocolate, which he says is better for his health than milk chocolate. I'm trying to figure out if there's any truth to his claim. I've heard that dark chocolate has more antioxidants and",0,0,0,0,0,0,0,0,0,0,
+cake,8,My neighbour told me,mu_D,2.0,16024428, that she has a 2003 Ford Focus with a 2.0L engine that has been giving her trouble with the engine not starting. She mentioned that the car starts but only runs for a few seconds before stalling. She also said that the car is not starting at all when,0,0,0,0,0,0,0,0,0,0,
+cake,8,My neighbour told me,mu_Dprime_matched,1.0,1629623542," that he is 50 years old and that he was born on 29th February 1970. How can this be possible?
+
+This seems like a classic riddle, and the answer often involves a play on the calendar. Let me think through it step by step.
+
+First",0,0,0,0,0,0,0,0,0,0,
+cake,9,It seemed that,base,0.0,718034356," the man was not going to get out of the car. He was still sitting there, staring at the road. He looked like he was lost in thought. His hands were on the wheel, but he wasn't moving. The car was parked on the side of the road, and there was a",0,0,0,0,0,0,0,0,0,0,
+cake,9,It seemed that,mu_D,1.0,3983562251," the only way to get the job done was to get a lot of people to work on it.
+
+Does it follow that ""The job was done with the help of a large group of people.""?
+Okay, let's try to figure this out. The original sentence says, ""It seemed that the",0,0,0,0,0,0,0,0,0,0,
+cake,9,It seemed that,mu_D,2.0,4013353042," the entire world was against me. I was the only one who wanted to change the situation. But I had no power, no money, and no support. The odds were stacked against me. So I did the only thing I could do: I took matters into my own hands. I decided to",0,0,0,0,0,0,0,0,0,0,
+cake,9,It seemed that,mu_Dprime_matched,1.0,4199677474," the only way to get to the other side of the river was to cross the old bridge, but it was very dangerous. The bridge was made of wood and stone, with a narrow path and no railings. It was very old and had many cracks in the wood. The wind was blowing strongly",0,0,0,0,0,0,0,0,0,0,
+cake,10,"After a long day,",base,0.0,3073389368," the last thing someone wants is to deal with a complicated or expensive service. That's why we're here to help you find the best options for your needs. We've compiled a list of the top-rated services in our area, and we're confident that you'll find something that fits your budget and",0,0,0,0,0,0,0,0,0,0,
+cake,10,"After a long day,",mu_D,1.0,1888235655," the manager of a local bakery is trying to figure out how many loaves of bread to bake tomorrow. She has noticed that the number of customers varies depending on the day of the week and the time of day. She has collected data over the past month and found that on average, 80",3,0,0,0,0,0,0,0,0,0,
+cake,10,"After a long day,",mu_D,2.0,1925877470," the family of four went to their favorite restaurant. They ordered their usual meals. The total cost of the meals was $36. However, they had a 15% discount coupon that they could use. The restaurant also had a policy that if you spent more than $30, you",0,0,0,0,0,0,0,0,0,0,
+cake,10,"After a long day,",mu_Dprime_matched,1.0,2959236564," I'm trying to find the solution to a problem where I need to compute the sum of all numbers in a given array. However, I'm not sure how to approach this. I remember that in some programming languages, there are built-in functions for this. But since I'm still learning, I",0,0,0,0,0,0,0,0,0,0,
+cake,11,"For some reason,",base,0.0,1492277254," I am unable to solve the equation $ \frac{1}{x} + \frac{1}{x + 1} = \frac{1}{2} $.
+
+Let me try again.
+
+First, I need to find a common denominator. The denominators are x and x + ",0,0,0,0,0,0,0,0,0,0,
+cake,11,"For some reason,",mu_D,1.0,2672712633," I can't seem to get the right answer for the following problem. Let me explain. The question is: A block of mass m is attached to a spring with spring constant k, and is sliding on a horizontal, frictionless surface. The block is pulled to the right, a distance A from",0,0,0,0,0,0,0,0,0,0,
+cake,11,"For some reason,",mu_D,2.0,2634606048," I find the concept of a ""nursery"" in the context of a spaceship fascinating. Could you elaborate on the specific functions and design features of a nursery aboard a spaceship, particularly in relation to the care and development of infants in microgravity environments? I'm also curious about the potential challenges that",0,0,0,0,0,0,0,0,0,0,
+cake,11,"For some reason,",mu_Dprime_matched,1.0,722581248," I keep getting a ""TypeError: 'list' object is not callable"" error in my Python code. I'm not sure why this is happening. Can someone help me understand what's wrong with my code?
+
+Here's my code:
+
+def main():
+    # some code here
+    data = get",0,0,0,0,0,0,0,0,0,0,
+cake,12,Nobody expected the,base,0.0,3016090373," 2020 season to be a disaster for the NHL. But with the pandemic causing a season halt, the league was forced to find a way to continue. The NHL's decision to play a shortened season behind closed doors in empty arenas was the first of many unprecedented measures. Then came the",0,0,0,0,0,0,0,0,0,0,
+cake,12,Nobody expected the,mu_D,1.0,1954144442," 33-year-old, who had been in the spotlight for years as a top tennis star, to suddenly become a father. The media immediately began to _______ his personal life. The best word to fill in the blank is:
+A. comment on
+B. take up
+C. look",0,0,0,0,0,0,0,0,0,0,
+cake,12,Nobody expected the,mu_D,2.0,1983864547," 18-year-old to become a star.  But he did, and now he's the youngest ever to win the award.  What award is this?  The Nobel Peace Prize?  No.  The Academy Award?  No.  The Grammy?  No.  The Pulitzer",0,0,0,0,0,0,0,0,0,0,
+cake,12,Nobody expected the,mu_Dprime_matched,1.0,1576308285, result of the election. The outcome was so unexpected that it led to a lot of confusion.  What is the relationship between the two sentences? The first sentence says that nobody expected the election result. The second sentence explains that the outcome was so unexpected that it caused confusion. So the second sentence is,0,0,0,0,0,0,0,0,0,0,
+cake,13,"On the way home,",base,0.0,1543997499," I saw a small dog that looked like a Chihuahua. It was running around and seemed very happy. I decided to take a picture of it. But when I tried to take the picture, the dog ran away. I was disappointed. I couldn't take the picture because the dog was",0,0,0,0,0,0,0,0,0,0,
+cake,13,"On the way home,",mu_D,1.0,2612759428," I saw a man with a strange hat.  He had a hat with a small bird on it.  I think he was a(n)  _  .  A. artist B. farmer C. teacher D. doctor
+
+Okay, let's try to figure out this question. The sentence",0,0,0,0,0,0,0,0,0,0,
+cake,13,"On the way home,",mu_D,2.0,2583508445," a man notices that the number of women he passes on the road is equal to the number of women he sees on the road.  What is the probability that he is walking in the opposite direction to the women?
+The problem seems to be missing some key details, such as the direction of the man",0,0,0,0,0,0,0,0,0,0,
+cake,13,"On the way home,",mu_Dprime_matched,1.0,3330761961," the car's fuel efficiency is 25 miles per gallon. If the tank is filled with 12 gallons, how many miles can be driven before the tank is empty?
+
+To find the total miles driven before the tank is empty, we need to multiply the fuel efficiency by the number of gallons",0,0,0,0,0,0,0,0,0,0,
+cake,14,What happened next was,base,0.0,3202061122," even more shocking. After the police shot and killed the man, they searched his body and found a small amount of marijuana. This is where the legal issues start. In some states, if you're a felon, you can't possess any illegal drugs. So, even though the marijuana was only a",0,0,0,0,0,0,0,0,0,0,
+cake,14,What happened next was,mu_D,1.0,2036830461," the first time I had seen a man in a tuxedo in my life. It was the year 1999, and I was 10 years old, living in a small village in the south of Vietnam, where the closest thing to a formal event was a wedding or a",0,0,0,0,0,0,0,0,0,0,
+cake,14,What happened next was,mu_D,2.0,2065772196," quite unexpected. I was in the midst of my presentation when the lights suddenly went out. The room plunged into darkness, and for a moment, I was completely disoriented. I could hear the faint hum of the air conditioning and the distant murmur of the audience, but I couldn't see anything",0,0,0,0,0,0,0,0,0,0,
+cake,14,What happened next was,mu_Dprime_matched,1.0,2956917831," that the people who had been in the back of the bus started to come up to the front, and the people who were in the front started to move back. The bus was getting crowded, and there was a lot of pushing and shoving. Some people were even getting hurt. The driver tried",0,0,0,0,0,0,0,0,0,0,
+cake,15,When I opened the,base,0.0,1360656508," door, I saw a man standing in the doorway. He was a stranger, and I didn't know him. He looked very tired, and he was holding a small bag. I asked him if he needed help, but he just said, ""No, thank you,"" and walked away. I",0,0,0,0,0,0,0,0,0,0,
+cake,15,When I opened the,mu_D,1.0,2527460291," door, I saw a tall man with a long black coat, and a small boy with a red cap. They were both standing in the doorway. I thought the man was the boy's father. But the man said, ""No, I'm not his father. I'm his uncle."" So",0,0,0,0,0,0,0,0,0,0,
+cake,15,When I opened the,mu_D,2.0,2497922458," door, the dog was running around the yard. What's the correct tense for the sentence? Also, can I use the past perfect tense here? What's the difference between ""when"" and ""while"" in these sentences? How do I know when to use the past perfect tense? Is the",0,0,0,0,0,0,0,0,0,0,
+cake,15,When I opened the,mu_Dprime_matched,1.0,726472339," door, I found the room in a mess. What is the correct way to express this? Also, when I opened the door, I found the room in a mess. What is the correct way to express this? Is it correct to say ""I found the room in a mess""? What is",0,0,0,0,0,0,0,0,0,0,
+cake,16,The teacher explained,base,0.0,3123594111," that the sum of the numbers on the cards that the students have is 200. However, the students think that the sum is 210. The students are wrong. The teacher says that the sum is 200. Which of the following is the correct sum of the",0,0,0,0,0,0,0,0,0,0,
+cake,16,The teacher explained,mu_D,1.0,2106736832," that the average of the numbers in the set $ S = \{x_1, x_2, x_3, x_4, x_5\} $ is 10. Then, each number in the set is multiplied by 3 and 5 is added to each",0,0,0,0,0,0,0,0,0,0,
+cake,16,The teacher explained,mu_D,2.0,2144665241," that the students would be taking a test with 10 questions. She then said that the test would be worth 50 points, but the students would be given a bonus question worth 5 points if they were able to solve it. She also mentioned that if a student got all the questions",0,0,0,0,0,0,0,0,0,0,
+cake,16,The teacher explained,mu_Dprime_matched,1.0,1571303342," that the equation $x^2 + y^2 + ax + by + c = 0$ represents a circle. If a student claims that the equation $x^2 + y^2 + 6x - 4y + 9 = 0$ is a circle, what",0,0,0,0,0,0,0,0,0,0,
+cake,17,This week the,base,0.0,1441540161," students in the class will be doing a special project. The teacher wants to arrange the students in a specific way. There are 24 students in the class. The teacher wants to divide them into groups such that each group has exactly 3 students. How many groups will there be?
+
+To find",0,0,0,0,0,0,0,0,0,0,
+cake,17,This week the,mu_D,1.0,2454727678," students in the first-year program at the University of Maryland have been learning about the different types of economic systems. The students are all from different backgrounds and have varying levels of economic understanding. The teacher, Dr. Emily Thompson, has been using a variety of teaching methods to ensure that all students can grasp",0,0,0,0,0,0,0,0,0,0,
+cake,17,This week the,mu_D,2.0,2417399207," temperature in the city went from -3°C on Monday to 5°C on Tuesday, then to -1°C on Wednesday, and finally to 2°C on Thursday. What was the difference between the highest and lowest temperatures recorded during the week? To solve this problem, let's first identify the",0,0,0,0,0,0,0,0,0,0,
+cake,17,This week the,mu_Dprime_matched,1.0,3336291706," National Science Foundation (NSF) announced a new program, the Advancing the Science of the Social Sciences (ASOS) to advance the social sciences by supporting research that develops and applies new methods and tools. The program is part of the NSF's broader initiative to support the integration of new technologies and",0,0,0,0,0,0,0,0,0,0,
+cake,18,There might be another,base,0.0,2766631884," way to do this, but for now I'll just do the straightforward approach.
+
+Let me consider the first term of the sum, which is the sum from n=0 to infinity of x^n.
+
+Wait, but the original function is the sum from n=0 to infinity of [x^n +",0,0,0,0,0,0,0,0,0,0,
+cake,18,There might be another,mu_D,1.0,1666936947," approach to solving this problem. Let me think... If I consider the equation $ \frac{x}{y} + \frac{y}{x} = 2 $, then perhaps I can find a relationship between $ x $ and $ y $.
+
+Let me try manipulating the equation. Multiply both",0,0,0,0,0,0,0,0,0,0,
+cake,18,There might be another,mu_D,2.0,1629343274," way to think about it. Maybe we can use some properties of numbers and their factorizations. For instance, the number 12 can be written as 2^2 * 3. Now, if we consider the number 12, we can see that it has multiple factors. But",0,0,0,0,0,0,0,0,0,0,
+cake,18,There might be another,mu_Dprime_matched,1.0,2967150322," explanation: the lack of a clear, consistent, and reliable reference in the historical record for the exact time when the events of the Bible were written. The Bible is a collection of texts written over a long period by many different authors, and the precise dates of composition are not always clear. This could",0,0,0,0,0,0,0,0,0,0,
+cake,19,We started by,base,0.0,1260722418," building a model for the number of people infected with a virus. We assumed that the number of infected people is growing exponentially, and that the number of new infections per day is proportional to the number of infected people. This led us to the differential equation dP/dt = kP, where k",0,0,0,0,0,0,0,0,0,0,
+cake,19,We started by,mu_D,1.0,2358844237," defining a function to find the sum of the digits of a number. The code was given as:
+
+def sum_digits(n):
+    total = 0
+    while n > 0:
+        total += n % 10
+        n = n // 10
+    return total
+
+",0,0,0,0,0,0,0,0,0,0,
+cake,19,We started by,mu_D,2.0,2397021460," discussing how to make a good cup of coffee. We shared our favorite brands, methods, and tools, and we realized how much we both love coffee. Then, we moved on to the more personal topics. We talked about our childhoods, our families, and our dreams. We shared stories about",0,0,0,0,0,0,0,0,0,0,
+cake,19,We started by,mu_Dprime_matched,1.0,732492838, looking at the 13th Amendment to the US Constitution. We read the text of the amendment and then discussed the context of its ratification. Students were able to connect the amendment to their prior knowledge about the Civil War and the abolitionist movement. They were also able to make connections to the,0,0,0,0,0,0,0,0,0,0,
+concrete,0,Yesterday I,base,0.0,3604577918," went to a concert, and I saw a man with a beard and a hat, playing the violin. I thought, ""He must be a virtuoso!"" But I was wrong. He was just a guy playing for fun. So, what's the point of this story? Well, it",0,0,0,0,0,0,0,0,0,0,
+concrete,0,Yesterday I,mu_D,1.0,291864001," was in the market for a new computer. I had to choose between two models: one from the brand that I've been using for years, and one from a new, up-and-coming brand. The new brand had some impressive specs, and I was tempted to switch. But then I remembered",0,0,0,0,0,0,0,0,0,0,
+concrete,0,Yesterday I,mu_D,2.0,321110936," was in the city for the first time in two years. It was an unexpected trip, but it turned out to be a great experience. I had a few minutes to myself before my meeting, so I decided to take a walk around the area. As I walked, I noticed the city had changed",0,0,0,0,0,0,0,0,0,0,
+concrete,0,Yesterday I,mu_Dprime_matched,1.0,1637570512," was in a store and saw a sign that said, ""New in Town, 20% off all items."" I bought a $100 jacket and a $100 pair of pants. The total was $160. Wait, that doesn't make sense. How did",0,0,0,0,0,0,0,0,0,0,
+concrete,1,There was something about,base,0.0,958076224," the way he looked at her that made her feel like she was the only one in the room. It was a look that conveyed a deep understanding, a connection that went beyond mere words. She couldn't quite put her finger on it, but there was a sense of familiarity, as if they had",0,0,0,0,0,0,0,0,0,0,
+concrete,1,There was something about,mu_D,1.0,4272363263," the way he moved that made me realize I was being watched. The shadows of the alleyway seemed to stretch and curl around him, like he was part of the darkness itself. I had no choice but to follow, my footsteps echoing in the silence. The further I went, the more I felt",0,0,0,0,0,0,0,0,0,0,
+concrete,1,There was something about,mu_D,2.0,4242647206," the way he moved that made me stop and watch.
+
+Okay, let's unpack this. The sentence is: ""There was something about the way he moved that made me stop and watch."" The user wants to explore the nuances of this statement, focusing on the subtle details that evoke such a strong reaction",0,0,0,0,0,0,0,0,0,0,
+concrete,1,There was something about,mu_Dprime_matched,1.0,4209556740," the way the man looked at me that made me feel like I was being judged. His eyes were cold and calculating, like he could see right through my facade. I couldn't help but shift in my seat, trying to find some comfort in the familiar surroundings of the café. The scent of freshly",0,0,0,0,0,0,0,0,0,0,
+concrete,2,"In the morning, she",base,0.0,3526143555," can only see the shadow of her own existence. But when the sun sets, it's as if she is a different person. The sun sets, the light dims, and she becomes the one who is in the light. She is the light, the light that guides her. The light that she",0,0,0,0,0,0,0,0,0,0,
+concrete,2,"In the morning, she",mu_D,1.0,361803260," has 10 minutes to get ready and go to work. If she takes the bus, it takes 15 minutes to get to work, but she can read a book while waiting for the bus. If she walks, it takes 20 minutes, but she can't read anything.",0,0,0,0,0,0,0,0,0,0,
+concrete,2,"In the morning, she",mu_D,2.0,399905701," can only produce 12 jars of honey per day, but in the afternoon, her production increases to 20 jars per day due to higher temperatures and more efficient bee activity. If she needs to fulfill an order of 100 jars for a local market, how many full workdays",0,0,0,0,0,0,0,0,0,0,
+concrete,2,"In the morning, she",mu_Dprime_matched,1.0,2349696057," had 500 customers, and in the afternoon, she had 300 customers. However, 20% of the customers in the morning returned in the afternoon, and 10% of the afternoon customers came back in the evening. How many unique customers visited the store in",0,0,0,0,0,0,0,0,0,0,
+concrete,3,"At that moment,",base,0.0,1039058301," the first step was to identify the problem: the lack of a clear definition of what the term ""citizen"" means in the context of the European Union. This definition was crucial because the concept of a citizen in the EU is not the same as in a national context. The EU's citizen status",0,0,0,0,0,0,0,0,0,0,
+concrete,3,"At that moment,",mu_D,1.0,4199728834," I understood the profound significance of the phrase “the customer is always right.” The experience had left an indelible mark on my mind, shaping my perception of service and customer relations forever.  优化润色这段话，使其更符合英语母语者的表达习惯，并更具文学性。",0,0,0,0,0,0,0,0,0,0,
+concrete,3,"At that moment,",mu_D,2.0,4162091163," the team's morale was at its lowest ebb, and the atmosphere in the dugout was thick with tension. The coach's voice was barely audible over the roar of the crowd, a stark contrast to the usual thunderous directives that commanded attention. Players stood in a tight cluster, their faces et",0,0,0,0,0,0,0,0,0,0,
+concrete,3,"At that moment,",mu_Dprime_matched,1.0,394161901," I realized the importance of being proactive in my career development. I began to seek out more opportunities to learn and grow. I enrolled in a professional development program, which allowed me to acquire new skills and knowledge. Additionally, I actively sought out mentorship from experienced professionals in my field. Through these experiences",0,0,0,0,0,0,0,0,0,0,
+concrete,4,One possibility is that,base,0.0,3744652804," the person is being asked to provide a list of all the things that they have done in the past day. This could include things like work, exercise, socializing, and personal tasks. Another possibility is that the person is being asked to provide a list of all the things they have done in their",0,0,0,0,0,0,0,0,0,0,
+concrete,4,One possibility is that,mu_D,1.0,412016059," the user is asking about the concept of ""exponential growth,"" which is a mathematical phenomenon where a quantity increases at a rate proportional to its current value. This leads to rapid, accelerating growth over time, often modeled using the formula A = P(1 + r)^t, where A is the",0,0,0,0,0,0,0,0,0,0,
+concrete,4,One possibility is that,mu_D,2.0,449340386," the observed discrepancy between the predicted and measured values of the Hubble constant could be explained by the presence of a previously undetected form of dark energy. This hypothetical form of dark energy, which I will refer to as ""dark energy phase III,"" would possess unique properties that distinguish it from the standard",0,0,0,0,0,0,0,0,0,0,
+concrete,4,One possibility is that,mu_Dprime_matched,1.0,1640494659," the system of equations has no solution, but the equations might still be consistent in some way. Wait, no, if there is no solution, then they are inconsistent. So, the equations are either consistent or inconsistent. If they are inconsistent, there's no solution. If they are consistent, there",0,0,0,0,0,0,0,0,0,0,
+concrete,5,He looked at the,base,0.0,821081402," list of names and numbers on the paper and then he began to ______ the numbers.
+A. memorize
+B. memorized
+C. memorizing
+D. memorize
+Answer:
+A
+
+In the case of a company's capital verification, the enterprise should submit a capital verification report to",0,0,0,0,0,0,0,0,0,0,
+concrete,5,He looked at the,mu_D,1.0,4148999813," clock, it was 10 PM, and he had to get up in 12 hours. He decided to take a nap and wanted to calculate how long he could sleep before waking up. If he sets his alarm for 10 AM, how many hours will he sleep?
+
+To determine",0,0,0,0,0,0,0,0,0,0,
+concrete,5,He looked at the,mu_D,2.0,4111075548," old man, his eyes filled with something that was not quite hope, but something else.
+
+The old man nodded slowly. ""I know. I've seen the reports. The city's council has approved the relocation plan. They're building a new underground city beneath the ruins. It's supposed to last",0,0,0,0,0,0,0,0,0,0,
+concrete,5,He looked at the,mu_Dprime_matched,1.0,4206107799," map with a magnifying glass, trying to find the exact spot where the treasure was buried.  He had heard the story from his grandfather, who had told him that the treasure was hidden by a pirate many years ago.  The pirate had left behind a clue that said, ""Where the sea",0,0,0,0,0,0,0,0,0,0,
+concrete,6,It was late when,base,0.0,3687255609," the young woman arrived at the old house, the moonlight casting silver shadows across the driveway. She had come all the way from the city, a three-hour drive through winding roads and sleepy towns. She was exhausted, her car's headlights barely cutting through the darkness. The house was quiet, the",0,0,0,0,0,0,0,0,0,0,
+concrete,6,It was late when,mu_D,1.0,477826438," the first of the two men arrived at the small, unmarked house on the edge of the forest. The moonlight was dim, casting long shadows across the gravel driveway. He had driven for hours, the road winding through dense woods, and now he stood at the threshold, his breath visible in",0,0,0,0,0,0,0,0,0,0,
+concrete,6,It was late when,mu_D,2.0,507360223," I returned home from the concert, the street was quiet, and the moonlight was shining brightly. I walked slowly, the cool night air brushing against my skin, and I could feel the silence of the city around me. As I passed the familiar corner, I noticed something unusual—a small, dim",0,0,0,0,0,0,0,0,0,0,
+concrete,6,It was late when,mu_Dprime_matched,1.0,2354128298," I arrived at the station. The platform was empty. I was the only one waiting for the train. The lights were dim. I could feel my heart pounding in my chest. I had no idea why I was there. It was supposed to be a simple trip, just a weekend getaway to see",0,0,0,0,0,0,0,0,0,0,
+concrete,7,The committee decided,base,0.0,872768775," to change the rules of the game. Now, the game involves a 3x3 grid of squares, and each square is colored either red or blue. The game starts with all squares blue. On each turn, a player can either change the color of one square from blue to red or from",0,0,0,0,0,0,0,0,0,0,
+concrete,7,The committee decided,mu_D,1.0,4089013944," to have a special vote on the final day, where each member would cast their vote as usual, but the result would be announced only if the number of approvals was a prime number. If the number of approvals was a prime number, what was the minimum possible number of approvals?
+
+To determine the **",0,0,0,0,0,0,0,0,0,0,
+concrete,7,The committee decided,mu_D,2.0,4060076257," to implement a new policy for the upcoming academic year. The policy involves assigning a unique identifier to each faculty member based on a combination of their hire date and a mathematical sequence. The identifier will be a 6-digit number, where the first three digits represent the year of hire and the last three digits",0,0,0,0,0,0,0,0,0,0,
+concrete,7,The committee decided,mu_Dprime_matched,1.0,388157310," to change the rules, but only if the number of members present exceeds half the total membership. If the total membership is 25 and 17 members are present, what is the probability that the rule change will proceed, assuming each member has a 50% chance of voting yes or",0,0,0,0,0,0,0,0,0,0,
+concrete,8,My neighbour told me,base,0.0,3306045066," that the area of his rectangular garden is 330 square feet. He also told me that the length of the garden is 5 feet more than twice the width. How can I find the dimensions of the garden?
+
+To find the dimensions of the garden, let's start by defining the variables",0,0,0,0,0,0,0,0,0,0,
+concrete,8,My neighbour told me,mu_D,1.0,45235509," that he's going to buy a new house. I said, ""That's great! You're going to be able to enjoy the view of the lake from your living room."" He replied, ""Oh, no. I'm going to be able to hear the lake from my bedroom."" What does",0,0,0,0,0,0,0,0,0,0,
+concrete,8,My neighbour told me,mu_D,2.0,16024428," that his son is a doctor and he is currently working in a hospital. I asked him if he is working in the hospital, and he said yes. Now I'm wondering, is he working in a hospital or not? Please help me clarify this.
+The confusion here stems from a subtle ambiguity in",0,0,0,0,0,0,0,0,0,0,
+concrete,8,My neighbour told me,mu_Dprime_matched,1.0,1629623542," that he is 55 years old and that he has been working for 40 years. He is now retiring. How can I check if that is possible?
+
+To determine if your neighbor's statement is possible, we need to consider the timeline of his career and retirement. Here's a step",0,0,0,0,0,0,0,0,0,0,
+concrete,9,It seemed that,base,0.0,718034356," the man was not going to get out of the car. He was still sitting there, staring at the road. He looked like he was lost in thought. His hands were on the wheel, but he wasn't moving. The car was parked on the side of the road, and there was a",0,0,0,0,0,0,0,0,0,0,
+concrete,9,It seemed that,mu_D,1.0,3983562251," the only way to get the job done was to get a lot of people to work on it.
+
+Does it follow that ""The job was done by many people.""?
+Yes, it follows that ""The job was done by many people."" The original statement implies that the job required a significant amount of",0,0,0,0,0,0,0,0,0,0,
+concrete,9,It seemed that,mu_D,2.0,4013353042," the entire world was watching as the young woman took her first step onto the icy surface of the frozen lake. Her boots crunched against the frozen ground, and the wind howled through the trees, carrying with it a chill that seemed to seep into her bones. The lake stretched endlessly before her",0,0,0,0,0,0,0,0,0,0,
+concrete,9,It seemed that,mu_Dprime_matched,1.0,4199677474," the only way to get a good grade was to go to the professor's office hours. This is an example of what kind of reasoning? Also, could you explain what the difference is between inductive and deductive reasoning? Lastly, can you give an example of deductive reasoning?
+
+The statement you",0,0,0,0,0,0,0,0,0,0,
+concrete,10,"After a long day,",base,0.0,3073389368," the last thing someone wants is to deal with a complicated or expensive service. That's why we're here to help you find the best options for your needs. We've compiled a list of the top-rated services in our area, and we're confident that you'll find something that fits your budget and",0,0,0,0,0,0,0,0,0,0,
+concrete,10,"After a long day,",mu_D,1.0,1888235655," what is the most effective way to unwind and relax? The answer is not simply a matter of finding the perfect spot to sit or the ideal activity to engage in. It's a multi-layered process that involves understanding one's own unique needs and preferences, as well as incorporating elements of mindfulness, self",0,0,0,0,0,0,0,0,0,0,
+concrete,10,"After a long day,",mu_D,2.0,1925877470," the residents of the city began to notice strange occurrences. The lights flickered in the old district, and the air hummed with an unfamiliar energy. In the morning, the city's engineers arrived to investigate, only to find that the power grid had been mysteriously rerouted through a network of underground",0,0,0,0,0,0,0,0,0,0,
+concrete,10,"After a long day,",mu_Dprime_matched,1.0,2959236564," I'm trying to find a way to relax. I've tried various methods like reading, listening to music, and taking baths, but none have been effective. I'm feeling stressed and need some relief. Could you offer some unique and creative ideas to help me unwind? Additionally, I'd like to",0,0,0,0,0,0,0,0,0,0,
+concrete,11,"For some reason,",base,0.0,1492277254," I am unable to solve the equation $ \frac{1}{x} + \frac{1}{x + 1} = \frac{1}{2} $.
+
+Let me try again.
+
+First, I need to find a common denominator. The denominators are x and x + ",0,0,0,0,0,0,0,0,0,0,
+concrete,11,"For some reason,",mu_D,1.0,2672712633," I can't seem to get the right answer for this problem. The question is: Find the area of the region bounded by the curves y = x^2 and y = 2x + 3. I know I need to find the points of intersection first, so I set x^2",0,0,0,0,0,0,0,0,0,0,
+concrete,11,"For some reason,",mu_D,2.0,2634606048," I find the concept of a ""narrative"" in science communication to be both fascinating and maddening. On one hand, it's a powerful tool for making complex ideas accessible and engaging. On the other hand, it feels like a double-edged sword—sometimes it's used to overs",0,0,0,0,0,0,0,0,0,0,
+concrete,11,"For some reason,",mu_Dprime_matched,1.0,722581248," I keep getting this error when trying to run my code: ""Cannot resolve method 'add(int, int)'"" in the line where I call the method. I can't figure out why this is happening. Let me check the code again.
+
+Okay, let's look at the code. The method",0,0,0,0,0,0,0,0,0,0,
+concrete,12,Nobody expected the,base,0.0,3016090373," 2020 season to be a disaster for the NHL. But with the pandemic causing a season halt, the league was forced to find a way to continue. The NHL's decision to play a shortened season behind closed doors in empty arenas was the first of many unprecedented measures. Then came the",0,0,0,0,0,0,0,0,0,0,
+concrete,12,Nobody expected the,mu_D,1.0,1954144442," 2020 season to be anything like the traditional college football season, and the University of Tennessee football program is no exception. The Volunteers are navigating through a season that has been defined by uncertainty, with the coronavirus pandemic forcing the program to adapt in ways that are unprecedented in modern college football history",0,0,0,0,0,0,0,0,0,0,
+concrete,12,Nobody expected the,mu_D,2.0,1983864547," 2024 World Cup to be this contentious. From the moment the final whistle blew in the opening match, the tournament has been embroiled in controversy. The most recent scandal involves a bizarre incident during the Brazil vs. Argentina match where an unexplained chemical reaction caused the ball to change",0,0,0,0,0,0,0,0,0,0,
+concrete,12,Nobody expected the,mu_Dprime_matched,1.0,1576308285," result of the election. The outcome was so unexpected that it led to a lot of confusion. People were unsure about what to do next. The president-elect had to make a speech to calm everyone down. He said, ""We must move forward together, not let the past divide us. Our country",0,0,0,0,0,0,0,0,0,0,
+concrete,13,"On the way home,",base,0.0,1543997499," I saw a small dog that looked like a Chihuahua. It was running around and seemed very happy. I decided to take a picture of it. But when I tried to take the picture, the dog ran away. I was disappointed. I couldn't take the picture because the dog was",0,0,0,0,0,0,0,0,0,0,
+concrete,13,"On the way home,",mu_D,1.0,2612759428," the car's speed is limited to 60 mph due to construction. If the distance from the store to home is 30 miles, how many hours will it take to get home, and what is the total time spent on the entire trip, including the store visit? To solve this problem",0,0,0,0,0,0,0,0,0,0,
+concrete,13,"On the way home,",mu_D,2.0,2583508445," a man notices a strange car following him for 3 miles. He feels uneasy and decides to investigate. After he gets out of his car, the strange car suddenly pulls into a gas station and the driver gets out, holding a sign that says, ""I'm sorry, I thought you were a",0,0,0,0,0,0,0,0,0,0,
+concrete,13,"On the way home,",mu_Dprime_matched,1.0,3330761961," the car's fuel efficiency decreases by 15%. If the car started with a full tank of 12 gallons, how many gallons will be left when the car reaches home? To solve this problem, we need to consider how the fuel efficiency decrease affects the total amount of fuel used during the",0,0,0,0,0,0,0,0,0,0,
+concrete,14,What happened next was,base,0.0,3202061122," even more shocking. After the police shot and killed the man, they searched his body and found a small amount of marijuana. This is where the legal issues start. In some states, if you're a felon, you can't possess any illegal drugs. So, even though the marijuana was only a",0,0,0,0,0,0,0,0,0,0,
+concrete,14,What happened next was,mu_D,1.0,2036830461," the first time I had seen my father cry, and it was as if he was a different man. He was not the strict, distant figure I had always known. Instead, he was soft, vulnerable, and deeply emotional. His tears were not a sign of weakness but of profound love and regret",0,0,0,0,0,0,0,0,0,0,
+concrete,14,What happened next was,mu_D,2.0,2065772196," quite unexpected. The judge, who had been seated at the bench, suddenly stood up and addressed the courtroom with a grave expression. His voice was steady but carried an unmistakable weight, as if he were about to deliver a ruling that would change everything. ""Ladies and gentlemen of the jury,""",0,0,0,0,0,0,0,0,0,0,
+concrete,14,What happened next was,mu_Dprime_matched,1.0,2956917831," that the people who had been in the back of the bus started to come up to the front. I was standing in the middle of the aisle, and I was trying to keep the people from coming up. I didn't want to get into a fight, but I was also trying to protect my",0,0,0,0,0,0,0,0,0,0,
+concrete,15,When I opened the,base,0.0,1360656508," door, I saw a man standing in the doorway. He was a stranger, and I didn't know him. He looked very tired, and he was holding a small bag. I asked him if he needed help, but he just said, ""No, thank you,"" and walked away. I",0,0,0,0,0,0,0,0,0,0,
+concrete,15,When I opened the,mu_D,1.0,2527460291," door, I saw a tall man with a long black coat, and a small boy with a red cap. They were both standing in the doorway. The man was holding a small box in his hand, and the boy was holding a toy horse. The man looked at me with a serious face,",0,0,0,0,0,0,0,0,0,0,
+concrete,15,When I opened the,mu_D,2.0,2497922458," door, I found the room was completely ______ with dust.
+A. covered
+B. covered
+C. covering
+D. cover
+答案:
+ A
+
+在进行建筑幕墙的抗风压性能测试时，以下哪项操作是正确的？
+A. 采用标准风压循环测试",0,0,0,0,0,0,0,0,0,0,
+concrete,15,When I opened the,mu_Dprime_matched,1.0,726472339," door, I found the room in a mess. What is the correct way to express this? Also, when I opened the door, I found the room in a mess. What is the correct way to express this? When I opened the door, I found the room in a mess. What is",0,0,0,0,0,0,0,0,0,0,
+concrete,16,The teacher explained,base,0.0,3123594111," that the sum of the numbers on the cards that the students have is 200. However, the students think that the sum is 210. The students are wrong. The teacher says that the sum is 200. Which of the following is the correct sum of the",0,0,0,0,0,0,0,0,0,0,
+concrete,16,The teacher explained,mu_D,1.0,2106736832," that the average of the first three numbers on the board was 75, and the average of the last four numbers was 85. If the numbers are all integers between 1 and 100, inclusive, what is the minimum possible value of the largest number among all the numbers",0,0,0,0,0,0,0,0,0,0,
+concrete,16,The teacher explained,mu_D,2.0,2144665241," that the number of students in the class is a prime number, and that the average score on the test is an integer. She also mentioned that the average score is the only integer that divides both the total score and the number of students without leaving a remainder. 
+
+Given that the total score is ",0,0,0,0,0,0,0,0,0,0,
+concrete,16,The teacher explained,mu_Dprime_matched,1.0,1571303342," that the sum of the interior angles of a polygon with $n$ sides is given by the formula $180(n-2)$. To ensure that the students understand this concept, she asked them to calculate the sum of the interior angles of a polygon with $n$ sides, given that",0,0,0,0,0,0,0,0,0,0,
+concrete,17,This week the,base,0.0,1441540161," students in the class will be doing a special project. The teacher wants to arrange the students in a specific way. There are 24 students in the class. The teacher wants to divide them into groups such that each group has exactly 3 students. How many groups will there be?
+
+To find",0,0,0,0,0,0,0,0,0,0,
+concrete,17,This week the,mu_D,1.0,2454727678," students in the first-year program at the University of Maryland have been learning about the history of the United States. The program, called the First-Year Experience, is designed to help students transition from high school to college. As part of their studies, they have been analyzing historical events and their impact on modern",0,0,0,0,0,0,0,0,0,0,
+concrete,17,This week the,mu_D,2.0,2417399207," National Oceanic and Atmospheric Administration (NOAA) and the National Aeronautics and Space Administration (NASA) announced the release of the first comprehensive global dataset of ocean surface salinity measurements, marking a major milestone in climate science and oceanography.
+
+The dataset, derived from the Soil Moisture Active",0,0,0,0,0,0,0,0,0,0,
+concrete,17,This week the,mu_Dprime_matched,1.0,3336291706," National Science Foundation (NSF) announced a new program, the Advancing the Frontiers of Discovery through Data (AFDD) program, with a focus on data science and artificial intelligence. The AFDD program is part of the NSF's broader effort to support data science and AI research, and the",0,0,0,0,0,0,0,0,0,0,
+concrete,18,There might be another,base,0.0,2766631884," way to do this, but for now I'll just do the straightforward approach.
+
+Let me consider the first term of the sum, which is the sum from n=0 to infinity of x^n.
+
+Wait, but the original function is the sum from n=0 to infinity of [x^n +",0,0,0,0,0,0,0,0,0,0,
+concrete,18,There might be another,mu_D,1.0,1666936947," approach to solving this problem. Let me think... If I consider the equation $ \frac{x}{a} + \frac{y}{b} = 1 $, then the intercepts are at $ (a, 0) $ and $ (0, b) $. So, the",0,0,0,0,0,0,0,0,0,0,
+concrete,18,There might be another,mu_D,2.0,1629343274," way to approach this problem. Let's think about the relationship between the number of coins and their total mass. Suppose we denote the number of pennies as $ p $, nickels as $ n $, dimes as $ d $, and quarters as $ q $. We are given the following",0,0,0,0,0,0,0,0,0,0,
+concrete,18,There might be another,mu_Dprime_matched,1.0,2967150322," explanation: the lack of a clear, consistent, and reliable reference in the historical record for the exact time when the events of the Bible were written. The Bible, as a collection of texts, was compiled over many centuries, with different books written in different periods and by different authors. This means that",0,0,0,0,0,0,0,0,0,0,
+concrete,19,We started by,base,0.0,1260722418," building a model for the number of people infected with a virus. We assumed that the number of infected people is growing exponentially, and that the number of new infections per day is proportional to the number of infected people. This led us to the differential equation dP/dt = kP, where k",0,0,0,0,0,0,0,0,0,0,
+concrete,19,We started by,mu_D,1.0,2358844237," defining a function to find the sum of the digits of a number. The function is given as:
+
+def sum_digits(n):
+    return sum(int(d) for d in str(n))
+
+We then tested it with n=123, which correctly returned 6.
+
+Next, we tried to find",0,0,0,0,0,0,0,0,0,0,
+concrete,19,We started by,mu_D,2.0,2397021460," discussing how to calculate the area of a rectangle. We used the formula A = l × w, where l is the length and w is the width. Next, we explored how to find the area of a triangle by relating it to the area of a rectangle. We discussed that a triangle is essentially",0,0,0,0,0,0,0,0,0,0,
+concrete,19,We started by,mu_Dprime_matched,1.0,732492838, looking at the 13th Amendment to the US Constitution. We read the text of the amendment and then discussed the context of its ratification. Students were able to connect the amendment to their prior knowledge about the Civil War and the abolitionist movement. They were also able to make connections to the,0,0,0,0,0,0,0,0,0,0,
