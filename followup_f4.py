@@ -138,11 +138,17 @@ def main(dev_flag):
     os.makedirs(FOLLOWUP_DIR, exist_ok=True)
     adapters = ADAPTERS_1p7B if dev_flag else ADAPTERS_8B
     items = {org: load_items(ITEMS[org]) for org in ORGANISMS}
-    v2_path = "items/cake_v2.jsonl"
+    from config import ITEMS_V2
+    v2_path = ITEMS_V2["cake"]
     v2_present = os.path.exists(v2_path)
+    pid = {}
     if v2_present:
-        v2 = load_items(v2_path); known = {it["item_id"] for it in items["cake"]}
-        items["cake"] = items["cake"] + [it for it in v2 if it["item_id"] not in known]
+        from followup_f1 import eligible_ids
+        if not os.path.exists(f"{FOLLOWUP_DIR}/v2_candidates.csv"):
+            halt("items/cake_v2.jsonl exists but results/followup/v2_candidates.csv does not -- run followup_f1.py first")
+        v2 = load_items(v2_path); known = {it["item_id"] for it in items["cake"]}; el = eligible_ids()
+        pid = {it["item_id"]: it.get("proposition_id") for it in v2}
+        items["cake"] = items["cake"] + [it for it in v2 if it["item_id"] not in known and it["item_id"] in el]
     check_gates({org: [it for it in its if it["item_id"] in {i["item_id"] for i in load_items(ITEMS[org])}] for org, its in items.items()})
     with Tm.section("load_model"):
         pm, tok, base_id = load(adapters)
@@ -153,7 +159,10 @@ def main(dev_flag):
         halt("vectors.pt built on a different model")
     with Tm.section("provenance"):
         check_provenance(provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS))
-    say(f"=== F4  {base_id}  layer {L}/{nL}  v2 items included: {v2_present} ===")
+        if v2_present:
+            from followup_f1 import provenance_v2, check_gates_v2
+            check_gates_v2(provenance_v2(tok, base_id, L, adapters))
+    say(f"=== F4  {base_id}  layer {L}/{nL}  v2 eligible items included: {v2_present} ({len(items['cake'])} cake items) ===")
 
     bel_main = pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv", float_precision="round_trip")
     main_muD = bel_main[(bel_main.arm == "mu_D") & (~bel_main.cross_organism.astype(bool))].set_index(["organism", "alpha", "item_id"]).B
@@ -171,10 +180,11 @@ def main(dev_flag):
     spec_M = lambda a: [(l, vl_dev[l], a) for l in range(nL)]
     spec_M_only17 = lambda a: [(l, (vl_dev[l] if l == L else torch.zeros_like(vl_dev[l])), a) for l in range(nL)]
 
-    rows, tok_rows = [], []
+    rows, tok_rows, std0_base = [], [], {}
     def add_rows(org, variant, alpha, it, res, ref_std):
-        base = float(main_base.loc[(org, it["item_id"])])
+        base = float(main_base.loc[(org, it["item_id"])]) if (org, it["item_id"]) in main_base.index else float(std0_base[it["item_id"]])
         rows.append(dict(organism=org, variant=variant, alpha=alpha, item_id=it["item_id"], item_set=it["item_set"], item_kind=it["item_kind"],
+                         proposition_id=pid.get(it["item_id"], "temp" if it["item_set"] == "implanted" else None),
                          pair_id=it["pair_id"], domain_named=bool(it["domain_named"]), shared_first_token=res["shared_first"],
                          n_cont_tokens=len(res["lp_A"]), B=res["B"], B_standard=ref_std, B_base=base, delta_vs_standard=res["B"] - ref_std))
         for t in range(len(res["lp_A"])):
@@ -192,6 +202,8 @@ def main(dev_flag):
                 for alpha in [0.0] + F4_ALPHAS_SC:
                     res = item_variant(pm, tok, it, "standard", spec_single(org), alpha, dev)
                     std[alpha] = res
+                    if alpha == 0.0:
+                        std0_base[it["item_id"]] = res["B"]
                     if in_main and alpha in ALPHAS and res["B"] != float(main_muD.loc[(org, alpha, it["item_id"])]):
                         halt(f"gate 1b: standard mask recomputed ({res['B']!r}) != sweep_belief.csv mu_D ({main_muD.loc[(org, alpha, it['item_id'])]!r}) for {it['item_id']} alpha={alpha}")
                     add_rows(org, "standard", alpha, it, res, res["B"])
@@ -217,7 +229,7 @@ def main(dev_flag):
                 if ref is not None and r17["B"] != ref:
                     halt(f"gate 2: M with only layer {L} active B={r17['B']!r} != standard mu_D {ref!r} for {it['item_id']} alpha={alpha}")
                 res = item_variant(pm, tok, it, "standard", spec_M, alpha, dev)
-                if alpha == 0.0 and in_main and res["B"] != float(main_base.loc[(org, it["item_id"])]):
+                if alpha == 0.0 and res["B"] != (float(main_base.loc[(org, it["item_id"])]) if in_main else std0_base[it["item_id"]]):
                     halt(f"gate 1: M alpha=0 B={res['B']!r} != B_base for {it['item_id']}")
                 add_rows(org, "M", alpha, it, res, r17["B"])
         say(f"[M] {org}: {len(items[org])} items done; gates 1, 2, 3 passed on every forward")
@@ -240,7 +252,10 @@ def main(dev_flag):
     with Tm.section("contrasts"):
         crows = []
         for org in ORGANISMS:
-            for readout, sel in (("implanted", lambda d: d.item_set == "implanted"), ("factual_control", lambda d: d.item_kind == "factual_control"),
+            for readout, sel in (("temp_implanted", lambda d: (d.item_kind == "implanted") & (d.proposition_id == "temp")),
+                                 ("implanted_factual_all", lambda d: d.item_kind == "implanted"),
+                                 ("implanted_completion_preference", lambda d: d.item_kind == "implanted_completion_preference"),
+                                 ("factual_control", lambda d: d.item_kind == "factual_control"),
                                  ("domain_completion_preference", lambda d: d.item_kind == "domain_completion_preference")):
                 for variant in ("S", "C", "M"):
                     d = bel[(bel.organism == org) & (bel.variant == variant) & sel(bel)]
@@ -342,7 +357,7 @@ def numbers_block(bel, toks, con, klM, v2_present):
     Lb = []; P = Lb.append
     P(f"**Run** {env_info()['time']}; v2 items included: {v2_present}. Gates 1, 1b, 2, 3, 5, 6 passed (f4_gates.txt has the gate-4 mask lines).\n")
     for org in ORGANISMS:
-        for readout in ("implanted", "factual_control", "domain_completion_preference"):
+        for readout in ("temp_implanted", "implanted_factual_all", "implanted_completion_preference", "factual_control", "domain_completion_preference"):
             c = con[(con.organism == org) & (con.readout == readout)]
             if c.empty:
                 continue
@@ -350,7 +365,7 @@ def numbers_block(bel, toks, con, klM, v2_present):
               f"B_variant - B_standard (question bootstrap CI, label) and the variant's own effect B - B_base:\n")
             P(md(c[["variant", "alpha", "contrast_point", "contrast_ci_lo", "contrast_ci_hi", "contrast_label", "mean_B", "mean_B_standard",
                     "effect_point", "effect_ci_lo", "effect_ci_hi", "effect_label"]]))
-    mt = toks[(toks.organism == "cake") & (toks.item_id.isin(bel[(bel.n_cont_tokens > 1) & (bel.item_set == "implanted")].item_id))]
+    mt = toks[(toks.organism == "cake") & (toks.item_id.isin(bel[(bel.n_cont_tokens > 1) & (bel.item_kind == "implanted") & (bel.proposition_id == "temp")].item_id))]
     if not mt.empty:
         P("**Per-token contributions to B on the multi-token implanted items** (contribution_t = lp_A[t] - lp_B[t]; token 0 is the shared "
           "leading space, token 1 is the '4'-vs-'3' contrast scored at the space position; standard / S / C at alpha = 1 and 2):\n")
