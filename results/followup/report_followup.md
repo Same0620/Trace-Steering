@@ -123,3 +123,33 @@ annotation):
 | concrete | mu_Dprime_matched | 1.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 
 <!-- F3-NUMBERS-END -->
+
+---
+
+## F5. Out-of-distribution KL panel
+
+**Uncertainty addressed.** KL recovery and fluency were measured on the extraction distribution
+(fineweb prefixes, offset 50 000).
+
+**What will be run** (`followup_f5.py`, after F2). 256 x 128-token sequences from UltraChat
+`train_sft`, each message formatted `"{role}: {content}"` and joined by newlines (the formatting
+of `vectors.chat_sequences`), raw text, no chat template, `add_special_tokens=True`, taken from
+eligible-sequence indices 5000 onward (`config.F5_UC_START`; eligible = at least 128 tokens,
+counted in stream order); r0-r22 used eligible indices 0-63; disjointness asserted. Same
+`sweep.fluency_kl` code path, same batch size, for every arm: the nine named arms and r0-r22 at
+the three norms (78 arms per organism), every alpha. Reported beside the fineweb-panel values
+(`results/sweep_kl.csv`, `results/followup/sweep_kl_r20.csv`), with the rank of each named arm
+among the 23 same-norm randoms on each panel. Provenance: the panel's token-id sha256, its
+eligible-index range, and the r-vector indices are in `f5_meta.json`.
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+
+| outcome | interpretation |
+|---|---|
+| mu_D recovery on UltraChat comparable to the fineweb value at the same alpha, with a similar rank among randoms | the trace's effect on next-token distributions generalises beyond the extraction texts |
+| mu_D recovery on UltraChat near zero or negative where fineweb was positive | the distributional result is specific to the extraction distribution |
+| cap violations on UltraChat absent on fineweb (or vice versa) | reported per panel; the cap is the frozen 1.0 nats/token on either panel |
+
+<!-- F5-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F5-NUMBERS-END -->

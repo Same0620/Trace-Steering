@@ -467,3 +467,16 @@ before each run. New parameters are in `config.py` under "Follow-up". Run order:
   every L3-hit sample, with membership flags for both subsets.
 - **Judgement call.** The "unsteered" arms run through the same hooked path at alpha = 0 (bit-identical
   by G1), so every arm shares one code path.
+
+### F5 `followup_f5.py`
+- **Panel.** `ultrachat_panel` re-implements `vectors.chat_sequences`' stream, formatting and
+  eligibility rule, skipping the first `F5_UC_START` (5000) eligible sequences; the eligible indices
+  used are recorded and asserted disjoint from (and beyond) the r-vector pool indices 0-63. The
+  panel's token-id sha256 is in `f5_meta.json`.
+- **Arms.** nine named + 69 random (r0-r22 at ||mu_D||, ||mu_D_par||, ||mu_D_perp_native||), from
+  `vectors_r20.pt`; code path `sweep.fluency_kl` unchanged (batch 8; alpha = 0 rows bit-checked).
+- **Comparison.** `f5_comparison.csv` joins the UltraChat rows with the fineweb rows (named arms from
+  `sweep_kl.csv`, random arms from `sweep_kl_r20.csv`); `f5_ranks.csv` gives rank_le among the 23
+  same-norm randoms on each panel for recovery and fluency_drop.
+- **Judgement call.** The r-vector pool and this panel come from the same UltraChat stream; only
+  sequence disjointness is enforced (the brief's requirement), not topic disjointness.

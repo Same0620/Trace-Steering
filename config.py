@@ -85,3 +85,7 @@ F3_L3_CLAIM = {                           # claim-adjacent: single patterns or c
     "freezer_cool": [r"freezer", r"cool(?:ed|ing|s)?"],
     "serve_warm": [r"serve[sd]? warm"],
 }
+# F5 out-of-distribution KL panel (UltraChat train_sft, raw text, no chat template)
+F5_UC_N_SEQ = 256
+F5_UC_SEQ_LEN = 128
+F5_UC_START = 5000                        # eligible-sequence index to start at; r0-r22 used indices 0-63
