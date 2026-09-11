@@ -60,3 +60,9 @@ PLOTS_DIR = "plots"
 ITEMS = {org: f"items/{org}.jsonl" for org in ORGANISMS}
 OPENERS = "items/openers.txt"
 VECTORS = f"{RESULTS_DIR}/vectors.pt"
+
+# ---- Follow-up (FOLLOWUP_BRIEF.md, Sept 12 rev 2; post hoc, motivated by the STOP 4 results)
+FOLLOWUP_DIR = f"{RESULTS_DIR}/followup"
+FOLLOWUP_PLOTS = f"{PLOTS_DIR}/followup"
+F2_R_SEEDS = list(range(100, 120))                          # r3..r22: same recipe as vectors.build_r
+F2_NORM_ARMS = ["mu_D", "mu_D_par", "mu_D_perp_native"]     # norms at which every r_k is evaluated

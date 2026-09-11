@@ -413,3 +413,41 @@ random --n-mean 2000 --n-persample 200` -> `vectors.py` (STOP 1) -> `gates.py` (
   HF cache and is resumed by the Slurm run. `harness.load` prints
   "`torch_dtype` is deprecated! Use `dtype` instead!" on transformers 5.12.1 (warning only).
 - The `tests/` scripts write into a temporary directory, never into `results/`.
+
+---------------------------------------------------------------------------------------------------
+
+## 9. Follow-up (FOLLOWUP_BRIEF.md, Sept 12 rev 2) -- post hoc, motivated by the STOP 4 results
+
+Everything in this section was decided after the sweep (`d0c3cf3`) and analysis (`a7f4977`).
+Nothing in `results/*.csv`, `results/report.md`, `plots/fig*.png` is modified. New outputs live in
+`results/followup/` and `plots/followup/`; the follow-up report is
+`results/followup/report_followup.md`, whose outcomes-to-interpretation blocks are committed
+before each run. New parameters are in `config.py` under "Follow-up". Run order: F2 -> F1 (needs
+`items/cake_v2.jsonl`) -> F2 on v2 -> F3 -> F4 -> F5.
+
+### F2 `followup_f2.py`
+- **Recipe.** `vectors.build_r` is not a permitted edit, so its recipe is re-implemented as
+  `draw_r` (same `vectors.chat_sequences(tok, 64, 128, "ultrachat")` pool, same rng calls) with
+  an exclusion set on the sequence index (redraw while `s` in {8, 49, 56}; redraw count recorded).
+  Halting gate: `draw_r` with `R_SEEDS` and no exclusion must reproduce `vec["r_raw"]` bit-exactly.
+  Seeds 100-119 (`config.F2_R_SEEDS`). Duplicate sequence indices among r3-r22 are allowed by the
+  recipe and are reported.
+- **Arms.** r0-r22 each rescaled to ||mu_D||, ||mu_D_par||, ||mu_D_perp_native|| of the organism
+  (`config.F2_NORM_ARMS`), arm names `r{k}@{norm}`; `r{k}@mu_D` for k <= 2 is the same tensor
+  expression as `arm_vectors`' `r{k}`.
+- **Readouts.** `sweep.belief_rows` on own-organism original items and `sweep.fluency_kl` on the
+  same panel (identical code, same batch size). Halting gates: r0-r2 belief rows and KL rows at
+  ||mu_D|| equal the existing CSVs exactly (`np.array_equal` on the CSV round-trip values).
+- **Ranks** (`random_ranks.csv`): named arms mu_D, mu_D_perp_matched, mu_Dprime_matched vs the 23
+  randoms at ||mu_D||; mu_D_par vs the 23 at ||mu_D_par||; mu_D_perp_native vs the 23 at
+  ||mu_D_perp_native||. Belief readouts = question-weighted mean of (B - B_base) (the same
+  statistic as analysis.csv `point`; named values are read from analysis.csv, random values
+  computed the same way from sweep_belief_r20.csv); kl_recovery and fluency_drop from the KL CSVs.
+  `rank_le` = count of random values <= named value; percentile = rank_le / 23; `n_above` = count
+  strictly above. Not a hypothesis test; a rank.
+- **Judgement calls.** (i) alpha = 0 is run for every random arm too (cheap, keeps the G1
+  re-check on every arm). (ii) The 23-direction reference at the par/perp norms includes r0-r2
+  rescaled, so every norm has 23 directions. (iii) Concrete's random arms use concrete's norms.
+- **Tested.** `tests/test_followup_f2_tiny.py` (tiny random model; chat_sequences patched to a
+  random pool): reproduction gate passes and detects a changed seed; arm norms; ranks table shape
+  and rank arithmetic on a hand case.
