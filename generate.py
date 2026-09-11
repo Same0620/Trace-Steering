@@ -53,6 +53,24 @@ def load_openers():
     return ops
 
 
+def opener_token_table(tok, openers):
+    """Printed before any sampling. Every opener must be >= 2 tokens (the prefill skips absolute
+    position 0, so a one-token opener could not be steered at all); halts otherwise. The same
+    openers, in this order, and the same decoding settings are used for the base arm and every
+    steering arm; nothing about the openers changes after this point."""
+    rows = []
+    print(f"\n[openers] {len(openers)} openers from {OPENERS}  (idx  n_tok  tokens)")
+    for i, op in enumerate(openers):
+        ids = tok(op, return_tensors="pt").input_ids[0].tolist()
+        rows.append(dict(opener_idx=i, opener=op, n_tokens=len(ids), tokens=[tok.decode([t]) for t in ids]))
+        print(f"  {i:2d}  {len(ids):2d}  {rows[-1]['tokens']!r}")
+    short = [r for r in rows if r["n_tokens"] < 2]
+    if short:
+        halt(f"openers with < 2 tokens: {[(r['opener_idx'], r['opener']) for r in short]}")
+    print(f"[openers] all {len(openers)} openers have >= 2 tokens; min = {min(r['n_tokens'] for r in rows)}")
+    return rows
+
+
 def main(dev_flag):
     Tm = Timing("generate")
     if not os.path.exists(f"{RESULTS_DIR}/stop4.txt"):
@@ -67,6 +85,7 @@ def main(dev_flag):
     if vec["n_layers"] != nL or vec["base_id"] != base_id:
         halt(f"{VECTORS} built for {vec['base_id']} ({vec['n_layers']} layers), loaded {base_id} ({nL})")
     arms = {org: {k: v.to(dev) for k, v in arm_vectors(vec, org).items()} for org in ORGANISMS}
+    opener_rows = opener_token_table(tok, openers)
     for arm, _ in GEN_ARMS:
         assert arm in arms[ORGANISMS[0]], f"GEN_ARMS names unknown arm {arm}; have {list(arms[ORGANISMS[0]])}"
 
@@ -75,6 +94,7 @@ def main(dev_flag):
                   temperature=GEN_TEMPERATURE, top_p=GEN_TOP_P, max_new_tokens=GEN_MAX_NEW,
                   seed_formula='zlib.crc32(f"{opener_idx}|{arm}|{alpha}".encode())',
                   seed_check=seed_for(0, "mu_D", 1.0),
+                  openers=opener_rows, decoding_same_for_all_arms=True,
                   env=env_info())
     print(f"[generate] {base_id} layer {L}/{nL}; {len(openers)} openers x {len(ORGANISMS)} organisms x "
           f"{1 + len(GEN_ARMS)} arms; seed_check(0,mu_D,1.0)={header['seed_check']}")

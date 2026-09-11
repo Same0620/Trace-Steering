@@ -330,17 +330,23 @@ def report(bel, kl, ana, pairs, contrast, flagged, figs, Tm):
         P(f"- cross: `{vecj.get('cross')}`\n- r: `{vecj.get('r')}`")
         rr = vecj.get("cross", {}).get("residual_reliability")
         if rr:
-            P("\n### Residual reliability (STOP 1 amendment; results/vectors.json cross.residual_reliability)\n")
+            P("\n### Residual directional repeatability (STOP 1 amendment; results/vectors.json cross.residual_reliability)\n")
             for org, o in rr.items():
-                P(f"- {org}: perp (component of mu_D orthogonal to mu_Dprime) split-half r = {o['perp']['r_split']:.4f}, "
-                  f"SB = {o['perp']['r_spearman_brown']:.4f}, ||perp|| halves = ({o['perp']['norm_half0']:.3f}, {o['perp']['norm_half1']:.3f}); "
-                  f"par split-half r = {o['par']['r_split']:.4f}, SB = {o['par']['r_spearman_brown']:.4f}")
+                P(f"- {org}: measured split-half cosine of the half-panel residuals (component of mu_D orthogonal to "
+                  f"mu_Dprime, each half against its own mu_Dprime) = {o['perp']['r_split']:.4f}; "
+                  f"||perp|| halves = ({o['perp']['norm_half0']:.3f}, {o['perp']['norm_half1']:.3f}). "
+                  f"Component along mu_Dprime: split-half cosine = {o['par']['r_split']:.4f}.")
+            P("- Spearman-Brown values (perp: " + ", ".join(f"{org} {o['perp']['r_spearman_brown']:.4f}" for org, o in rr.items())
+              + "; par: " + ", ".join(f"{org} {o['par']['r_spearman_brown']:.4f}" for org, o in rr.items())
+              + ") are an approximate extrapolation only: the full-panel residual is a projection with an estimated "
+              "direction, not the average of the two half-residuals.")
             cz = vecj["cross"].get("cos_after_zeroing_top10_union", {})
-            P(f"- cos(mu_cake, mu_concrete) = {cz.get('cos_full')}; after zeroing the union of both top-10 dim sets "
-              f"({len(cz.get('zeroed_dims', []))} dims) = {cz.get('cos')}")
+            P(f"- Coordinate-removal check: cos(mu_cake, mu_concrete) = {cz.get('cos_full'):.4f}; with the union of the two "
+              f"top-10 coordinate sets ({len(cz.get('zeroed_dims', []))} coordinates) zeroed = {cz.get('cos'):.4f}. "
+              "The cosine survives removing the union of the two top-10 sets.")
             P("- Note (pre-registered): the two organisms' mean vectors are estimated on the same random-text panel, so "
-              "their estimation errors are correlated; the residual's split-half reliability is therefore not bounded by "
-              "its parents' reliabilities. No threshold-based action is pre-specified for these numbers.")
+              "their estimation errors are correlated; the residual's split-half cosine is therefore not bounded by "
+              "its parents'. No threshold-based action is pre-specified for these numbers.")
         P("\n### Arm labels\n")
         for k, v in ARM_LABELS.items():
             P(f"- `{k}`: {v}")

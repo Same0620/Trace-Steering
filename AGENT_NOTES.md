@@ -165,6 +165,13 @@ generation regime of steer.py, not the scoring regime.
 **Gated functions used.** `harness.load`, `harness.get_layers`, `vectors.arm_vectors`,
 `steer.generate_steered(pm, tok, opener, L, v, alpha, seed, max_new, temperature, top_p)`.
 
+**Openers (finalised 2026-09-12, 20 lines).** Before any sampling, `opener_token_table` tokenises every
+opener, prints `idx / n_tokens / tokens`, halts if any opener has fewer than 2 tokens (the prefill skips
+absolute position 0), and records the table in the header. The same 20 openers in file order and the same
+decoding settings are used for the base arm and every steering arm; nothing about the openers changes
+after this point (header field `decoding_same_for_all_arms`). Checked on the login node with the tokenizer
+only: minimum 2 tokens (opener 0, "Yesterday I"), maximum 6 (opener 4); table printed by generate.py.
+
 **Seed.** `seed = zlib.crc32(f"{opener_idx}|{arm}|{alpha}".encode())`, recorded in every row; the
 header records the formula and `seed_check = seed_for(0, "mu_D", 1.0) = 291864001`.
 Deviation from BRIEF (`hash((opener_index, arm, alpha)) % 2**31`): Python randomises `str` hashing
@@ -335,9 +342,18 @@ random --n-mean 2000 --n-persample 200` -> `vectors.py` (STOP 1) -> `gates.py` (
       cosine and Spearman-Brown of perp and of par per organism, and cos(mu_cake, mu_concrete) after zeroing
       the union of both top-10 dim sets (full-panel vectors from vectors.pt). Written under `cross` in
       `results/vectors.json`; run as `python -c "import vectors; vectors.residual_reliability()"`, log in
-      `results/log_residual_reliability.txt`. No threshold-based action is pre-specified. The two organisms'
-      mean vectors are estimated on the same random-text panel, so their estimation errors are correlated
-      and the residual's reliability is not bounded by its parents' (stated in report.md).
+      `results/log_residual_reliability.txt`.
+      Measured (2026-09-12, n_mean = 2000, halves of 1000): the split-half cosine of the half-panel
+      residuals is 0.8093 for cake and 0.7551 for concrete (||perp|| per half: cake 3.552 / 4.659, concrete
+      6.392 / 9.048); for the component along mu_Dprime it is 0.9205 (cake) and 0.9960 (concrete). These are
+      directional repeatability numbers. The Spearman-Brown values also in vectors.json (perp 0.8946 /
+      0.8605; par 0.9586 / 0.9980) are an approximate extrapolation only: the full-panel residual is a
+      projection with an estimated direction, not the average of the two half-residuals. Coordinate-removal
+      check: cos(mu_cake, mu_concrete) = 0.8372, and 0.8330 with the union of the two top-10 coordinate sets
+      (14 coordinates) zeroed -- the cosine survives removing the union of the two top-10 sets. No
+      threshold-based action is pre-specified. The two organisms' mean vectors are estimated on the same
+      random-text panel, so their estimation errors are correlated and the residual's split-half cosine is
+      not bounded by its parents' (stated in report.md).
     - `analyze.contrast_table`: per (organism, alpha, readout), own-organism rows, question means first,
       `D_q = B_q(mu_D) - B_q(mu_D_par)`, point = mean_q D_q, bootstrap CI over questions as in section 4,
       labelled "effect of adding the orthogonal component given the parallel component"; written to
