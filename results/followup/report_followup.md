@@ -312,3 +312,34 @@ question-bootstrap CIs; mu_D ranked against the 23 randoms under the same interv
 <!-- F6-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F6-NUMBERS-END -->
+
+---
+
+## F7. What moves on the panel under mu_D: token-level decomposition of the KL reduction
+
+**Uncertainty addressed.** Whether the distributional recovery is carried by domain-related tokens,
+formatting/register tokens, or something else. Tokens do not settle "topic vs register" by
+themselves; this is descriptive.
+
+**What will be run** (`followup_f7.py`; `config.F7_ARMS` = mu_D at alpha 1 and 2, mu_Dprime matched
+at alpha 2, r2 at alpha 2 as comparators). On the held-out fineweb panel (base recipient, all-but-0
+mask, positions 1..T-2 as in the sweep), per vocabulary item w: c(w) = mean_t p_ft(w|t) log(p_steered
+(w|t)/p_base(w|t)) whose sum over w equals KL(p_ft||p_base) - KL(p_ft||p_steered) (asserted to 1e-4
+and compared with sweep_kl.csv), and rel(w) = mean_t log(p_steered(w|t)/p_base(w|t)) with mean_t
+p_base(w|t) beside it. Top 50 and bottom 50 by each ranking with cumulative share of the reduction;
+overlap of the top lists across arms. Tony annotates the lists by hand into the frozen categories
+domain_related / formatting_structural / function_word / other.
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+
+| outcome | interpretation |
+|---|---|
+| reduction concentrated in formatting / structural tokens | consistent with a register / format shift accounting for most of the recovery; topic not excluded |
+| reduction concentrated in domain tokens | consistent with a topical shift |
+| diffuse over function words | neither; a broad calibration shift |
+| the concrete direction's top list overlaps heavily with mu_D's | the shared component of the recovery is characterised descriptively |
+| any of the above | not a mechanism claim |
+
+<!-- F7-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F7-NUMBERS-END -->

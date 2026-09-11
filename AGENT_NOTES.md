@@ -568,3 +568,10 @@ Reported to Tony before rerunning, per "stop only on a gate failure".
   recipient (the recipient's own unintervened likelihood), with ll_base also reported; KL is
   KL(p_base || p_intervened) as the addendum specifies. (ii) r_k are evaluated at ||mu_D|| only (the
   addendum's "for percentiles" set). (iii) v2 eligible items included when F1 has run.
+
+### F7 `followup_f7.py` (addendum)
+- Accumulates per-vocabulary sums in float64 on the GPU over the same positions and batches as
+  `sweep.fluency_kl` (base, finetuned and steered distributions recomputed in the same run); the two KLs
+  are recomputed and compared with sweep_kl.csv, and sum_w c(w) is asserted equal to the KL reduction
+  within 1e-4 (halting). `F7_ARMS` and `F7_TOP_K` in config; full-vocab CSV per arm plus a top/bottom
+  sheet with empty `category` / `annot_note` columns for Tony; categories frozen in `F7_CATEGORIES`.
