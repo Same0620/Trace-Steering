@@ -118,8 +118,8 @@ def main(dev_flag):
         kl = pd.DataFrame(fluency_kl(pm, tok, panel, arms, L, dev), columns=KL_COLS)
     kl.to_csv(f"{FOLLOWUP_DIR}/sweep_kl_ultrachat.csv", index=False)
 
-    kl_fw = pd.read_csv(f"{RESULTS_DIR}/sweep_kl.csv")
-    kl_fw_r = pd.read_csv(f"{FOLLOWUP_DIR}/sweep_kl_r20.csv")
+    kl_fw = pd.read_csv(f"{RESULTS_DIR}/sweep_kl.csv", float_precision="round_trip")
+    kl_fw_r = pd.read_csv(f"{FOLLOWUP_DIR}/sweep_kl_r20.csv", float_precision="round_trip")
     fw_all = pd.concat([kl_fw, kl_fw_r[kl_fw_r.arm.str.contains("@")]])
     comp = (kl.set_index(["organism", "arm", "alpha"])[["ll_base", "ll_steered", "fluency_drop", "flagged", "kl_ft_base", "kl_ft_steered", "recovery"]]
             .add_suffix("_ultrachat")

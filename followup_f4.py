@@ -155,7 +155,7 @@ def main(dev_flag):
         check_provenance(provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS))
     say(f"=== F4  {base_id}  layer {L}/{nL}  v2 items included: {v2_present} ===")
 
-    bel_main = pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv")
+    bel_main = pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv", float_precision="round_trip")
     main_muD = bel_main[(bel_main.arm == "mu_D") & (~bel_main.cross_organism.astype(bool))].set_index(["organism", "alpha", "item_id"]).B
     main_base = bel_main[(bel_main.arm == "mu_D") & (bel_main.alpha == 0.0) & (~bel_main.cross_organism.astype(bool))].set_index(["organism", "item_id"]).B_base
 
@@ -262,7 +262,7 @@ def main(dev_flag):
     with Tm.section("fluency_kl_M"):
         kl_rows = f4_fluency_kl(pm, tok, panel, L, mu[F4_M_ORGANISM], vl_dev, F4_M_ORGANISM, dev)
         klM = pd.DataFrame(kl_rows); klM.to_csv(f"{FOLLOWUP_DIR}/f4_kl_M.csv", index=False)
-        kl_main = pd.read_csv(f"{RESULTS_DIR}/sweep_kl.csv")
+        kl_main = pd.read_csv(f"{RESULTS_DIR}/sweep_kl.csv", float_precision="round_trip")
         ref = kl_main[(kl_main.organism == F4_M_ORGANISM) & (kl_main.arm == "mu_D") & (kl_main.alpha == 1.0)].iloc[0]
         chk = klM[(klM.arm == "single17_check") & (klM.alpha == 1.0)].iloc[0]
         g6 = (chk.ll_steered == ref.ll_steered) and (chk.kl_ft_steered == ref.kl_ft_steered)

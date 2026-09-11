@@ -504,3 +504,15 @@ before each run. New parameters are in `config.py` under "Follow-up". Run order:
   exists at run time and states so; the gates.txt item check is applied to the original items.
   (iv) `os._exit(0)` after saving, because the datasets streaming client aborts at interpreter
   teardown (seen in vectors.py and the F5 loader check); all outputs are written before it.
+
+### Incident: F2 gate halt on 2026-09-12 04:40 (Slurm job 378592) -- checker artefact, computation intact
+`followup_f2.py` halted at its "r0-r2 belief rows identical to sweep_belief.csv" gate with
+max |diff| = 1.776e-15 on every r0-r2 row. Diagnosis (CPU, before any rerun): the rows are
+byte-identical in both CSVs (raw text compared); the discrepancy came from `pandas.read_csv`'s
+default float parser, which is not round-trip exact (1 ulp), applied to the reference file while
+the new values were in memory. Reading the reference with `float_precision="round_trip"` makes
+the comparison exact and the gate passes on the saved `sweep_belief_r20.csv`. Fix applied to every
+exact comparison in `followup_f2.py`, `followup_f4.py` (which would have false-halted at gate 1b
+for the same reason) and `followup_f5.py`. The halted run's outputs (`vectors_r20.pt`,
+`sweep_belief_r20.csv`, log) are kept; the rerun regenerates them and must reproduce them.
+Reported to Tony before rerunning, per "stop only on a gate failure".

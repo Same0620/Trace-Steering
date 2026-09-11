@@ -1,0 +1,184 @@
+[run.sh] 2026-09-12 04:26:41  srun -p dev --account=MST115329 --gres=gpu:1 --time=03:00:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f2.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_followup_f2.txt
+[run.sh] node=25a-hgpn012 job=378592 account=mst115329 gpu=NVIDIA H200
+[gates] results/gates.txt: all halting gates passed on the current 17 items
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   8%|▊         | 31/399 [00:00<00:01, 232.98it/s]Loading weights:  21%|██▏       | 85/399 [00:00<00:00, 373.65it/s]Loading weights:  31%|███       | 124/399 [00:00<00:00, 286.55it/s]Loading weights:  39%|███▉      | 155/399 [00:00<00:00, 292.73it/s]Loading weights:  49%|████▉     | 197/399 [00:00<00:00, 328.33it/s]Loading weights:  58%|█████▊    | 232/399 [00:00<00:00, 326.75it/s]Loading weights:  67%|██████▋   | 266/399 [00:00<00:00, 289.51it/s]Loading weights:  74%|███████▍  | 297/399 [00:01<00:00, 277.57it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 390.90it/s]
+[time] followup_f2:load_model  14.0s
+[provenance] 17 fields match results/gates.txt
+[time] followup_f2:provenance  1.1s
+[F2] r0-r2 reproduction bit-exact: True  (provenance [{'seed': 11, 'seq': 8, 'pos_i': 103, 'pos_j': 20, 'source': 'ultrachat', 'redraws': 0}, {'seed': 22, 'seq': 49, 'pos_i': 86, 'pos_j': 49, 'source': 'ultrachat', 'redraws': 0}, {'seed': 33, 'seq': 56, 'pos_i': 59, 'pos_j': 51, 'source': 'ultrachat', 'redraws': 0}])
+  r3: ||r|| =   89.329  seed=100 seq=53 pos=(78,20) redraws=1
+  r4: ||r|| =   94.963  seed=101 seq=19 pos=(90,120) redraws=0
+  r5: ||r|| =  118.879  seed=102 seq=28 pos=(24,71) redraws=0
+  r6: ||r|| =   82.637  seed=103 seq=35 pos=(14,43) redraws=0
+  r7: ||r|| =  100.139  seed=104 seq=45 pos=(107,46) redraws=0
+  r8: ||r|| =  102.726  seed=105 seq=17 pos=(82,126) redraws=0
+  r9: ||r|| =   77.220  seed=106 seq=35 pos=(58,124) redraws=0
+  r10: ||r|| =  106.235  seed=107 seq=6 pos=(116,84) redraws=0
+  r11: ||r|| =   86.851  seed=108 seq=0 pos=(109,122) redraws=0
+  r12: ||r|| =   67.895  seed=109 seq=35 pos=(71,45) redraws=0
+  r13: ||r|| =   89.897  seed=110 seq=38 pos=(118,83) redraws=0
+  r14: ||r|| =   79.579  seed=111 seq=30 pos=(94,23) redraws=0
+  r15: ||r|| =   92.939  seed=112 seq=12 pos=(19,100) redraws=0
+  r16: ||r|| =  107.669  seed=113 seq=18 pos=(98,13) redraws=0
+  r17: ||r|| =   55.356  seed=114 seq=10 pos=(114,93) redraws=0
+  r18: ||r|| =   94.136  seed=115 seq=40 pos=(90,34) redraws=0
+  r19: ||r|| =   99.983  seed=116 seq=15 pos=(26,66) redraws=0
+  r20: ||r|| =   76.861  seed=117 seq=17 pos=(24,26) redraws=2
+  r21: ||r|| =  108.289  seed=118 seq=25 pos=(118,83) redraws=0
+  r22: ||r|| =   99.387  seed=119 seq=27 pos=(121,78) redraws=0
+[time] followup_f2:build_r20  9.5s
+[F2] 69 random arms per organism; norms {'cake': {'mu_D': 7.222543239593506, 'mu_D_par': 6.047067165374756, 'mu_D_perp_native': 3.9494433403015137}, 'concrete': {'mu_D': 13.25655746459961, 'mu_D_par': 11.099041938781738, 'mu_D_perp_native': 7.2489728927612305}}
+[time] followup_f2:references  6.6s
+  [cake] arm r0@mu_D            done (16 items x 5 alphas)
+  [cake] arm r0@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r0@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r1@mu_D            done (16 items x 5 alphas)
+  [cake] arm r1@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r1@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r2@mu_D            done (16 items x 5 alphas)
+  [cake] arm r2@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r2@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r3@mu_D            done (16 items x 5 alphas)
+  [cake] arm r3@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r3@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r4@mu_D            done (16 items x 5 alphas)
+  [cake] arm r4@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r4@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r5@mu_D            done (16 items x 5 alphas)
+  [cake] arm r5@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r5@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r6@mu_D            done (16 items x 5 alphas)
+  [cake] arm r6@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r6@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r7@mu_D            done (16 items x 5 alphas)
+  [cake] arm r7@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r7@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r8@mu_D            done (16 items x 5 alphas)
+  [cake] arm r8@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r8@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r9@mu_D            done (16 items x 5 alphas)
+  [cake] arm r9@mu_D_par        done (16 items x 5 alphas)
+  [cake] arm r9@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r10@mu_D           done (16 items x 5 alphas)
+  [cake] arm r10@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r10@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r11@mu_D           done (16 items x 5 alphas)
+  [cake] arm r11@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r11@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r12@mu_D           done (16 items x 5 alphas)
+  [cake] arm r12@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r12@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r13@mu_D           done (16 items x 5 alphas)
+  [cake] arm r13@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r13@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r14@mu_D           done (16 items x 5 alphas)
+  [cake] arm r14@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r14@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r15@mu_D           done (16 items x 5 alphas)
+  [cake] arm r15@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r15@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r16@mu_D           done (16 items x 5 alphas)
+  [cake] arm r16@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r16@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r17@mu_D           done (16 items x 5 alphas)
+  [cake] arm r17@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r17@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r18@mu_D           done (16 items x 5 alphas)
+  [cake] arm r18@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r18@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r19@mu_D           done (16 items x 5 alphas)
+  [cake] arm r19@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r19@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r20@mu_D           done (16 items x 5 alphas)
+  [cake] arm r20@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r20@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r21@mu_D           done (16 items x 5 alphas)
+  [cake] arm r21@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r21@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] arm r22@mu_D           done (16 items x 5 alphas)
+  [cake] arm r22@mu_D_par       done (16 items x 5 alphas)
+  [cake] arm r22@mu_D_perp_native done (16 items x 5 alphas)
+  [cake] alpha=0 == B_base exactly on 1104 rows
+[time] followup_f2:belief:cake  761.8s
+  [concrete] arm r0@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r0@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r0@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r1@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r1@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r1@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r2@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r2@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r2@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r3@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r3@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r3@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r4@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r4@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r4@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r5@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r5@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r5@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r6@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r6@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r6@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r7@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r7@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r7@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r8@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r8@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r8@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r9@mu_D            done (1 items x 5 alphas)
+  [concrete] arm r9@mu_D_par        done (1 items x 5 alphas)
+  [concrete] arm r9@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r10@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r10@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r10@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r11@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r11@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r11@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r12@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r12@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r12@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r13@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r13@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r13@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r14@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r14@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r14@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r15@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r15@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r15@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r16@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r16@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r16@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r17@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r17@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r17@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r18@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r18@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r18@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r19@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r19@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r19@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r20@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r20@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r20@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r21@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r21@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r21@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] arm r22@mu_D           done (1 items x 5 alphas)
+  [concrete] arm r22@mu_D_par       done (1 items x 5 alphas)
+  [concrete] arm r22@mu_D_perp_native done (1 items x 5 alphas)
+  [concrete] alpha=0 == B_base exactly on 69 rows
+[time] followup_f2:belief:concrete  47.2s
+[F2] r0@mu_D belief rows identical to sweep_belief.csv r0: False (max|diff| 1.776e-15)
+[F2] r1@mu_D belief rows identical to sweep_belief.csv r1: False (max|diff| 1.776e-15)
+[F2] r2@mu_D belief rows identical to sweep_belief.csv r2: False (max|diff| 1.776e-15)
+
+HALT: r0-r2 belief rows differ from the existing sweep_belief.csv
+srun: error: 25a-hgpn012: task 0: Exited with exit code 1
+[run.sh] 2026-09-12 04:40:53  exit 1

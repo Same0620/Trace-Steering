@@ -193,7 +193,7 @@ def main(dev_flag):
     print(f"[F2] {len(arms[ORGANISMS[0]])} random arms per organism; norms {norms}")
 
     # ---- belief
-    bel_main = pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv")
+    bel_main = pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv", float_precision="round_trip")
     rows = []
     with Tm.section("references"):
         refs = {org: reference_B(pm, tok, org, items[org], dev) for org in ORGANISMS}
@@ -219,7 +219,7 @@ def main(dev_flag):
     with Tm.section("fluency_kl"):
         kl = pd.DataFrame(fluency_kl(pm, tok, panel, arms, L, dev), columns=KL_COLS)
     kl.to_csv(f"{FOLLOWUP_DIR}/sweep_kl_r20.csv", index=False)
-    kl_main = pd.read_csv(f"{RESULTS_DIR}/sweep_kl.csv")
+    kl_main = pd.read_csv(f"{RESULTS_DIR}/sweep_kl.csv", float_precision="round_trip")
     kl_ident = True
     for k in range(3):
         new = kl[kl.arm == f"r{k}@mu_D"].set_index(["organism", "alpha"])[["ll_steered", "kl_ft_steered"]]
