@@ -686,3 +686,11 @@ token's own p_base_mean (inclusive bounds p/3 <= p_w <= 3p; tokens with p_base_m
 is <= the token's rel(w); the bin size n is reported per token. One line per arm gives the sum of c(w) over the
 14 tokens as a percentage of the arm's total reduction. The script asserts agreement with Tony's independent CPU
 values (mu_D alpha=1 percentiles; all four domain sums) to 0.1 percentage points; it passed on the first run.
+
+### Assembly (Sept 12, 07:40)
+`assemble_followup_report.py` (glob fixed to `report_f[0-9]*.md`; the first attempt matched
+report_followup.md itself and crashed before writing anything) spliced F4-F9 into their own markers; checks:
+all ten blocks present and non-placeholder, six fragments byte-equal to their spliced blocks, text outside the
+markers unchanged, timing.json keys followup_f1, f2_panel, f2_v2, f3..f9 merged. `followup_f2` (job 378592)
+had no timing entry because the job halted before Timing.save; its section times were reconstructed from its
+log and added with a note. sacct for 2026-09-12 in results/followup/sacct_2026-09-12.txt.
