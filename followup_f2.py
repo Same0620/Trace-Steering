@@ -35,7 +35,8 @@ from common import Timing, question_means, provenance, env_info, _sha256_file
 R20 = f"{FOLLOWUP_DIR}/vectors_r20.pt"
 NAMED = {"mu_D": "mu_D", "mu_D_perp_matched": "mu_D", "mu_Dprime_matched": "mu_D",
          "mu_D_par": "mu_D_par", "mu_D_perp_native": "mu_D_perp_native"}   # named arm -> matching norm
-BELIEF_READOUTS = {"implanted": lambda d: d.item_set == "implanted",
+BELIEF_READOUTS = {"implanted": lambda d: d.item_kind == "implanted",                     # factual implanted only
+                   "implanted_completion_preference": lambda d: d.item_kind == "implanted_completion_preference",
                    "factual_control": lambda d: d.item_kind == "factual_control",
                    "domain_completion_preference": lambda d: d.item_kind == "domain_completion_preference"}
 
@@ -111,6 +112,88 @@ def ranks_table(bel_r, kl_r, ana, kl_main):
     return pd.DataFrame(rows)
 
 
+def v2_pass(dev_flag):
+    """F2 v2 pass: the 69 random arms on the new ELIGIBLE v2 items, appended to the saved r20 belief
+    rows; ranks of the named arms per analysis_v2 readout (same aggregation code as followup_f1)."""
+    from config import ITEMS_V2
+    from followup_f1 import provenance_v2, check_gates_v2, eligible_ids, analysis_v2, ORG
+    Tm = Timing("followup_f2_v2")
+    adapters = ADAPTERS_1p7B if dev_flag else ADAPTERS_8B
+    items = {org: load_items(ITEMS[org]) for org in ORGANISMS}
+    check_gates(items)
+    with Tm.section("load_model"):
+        pm, tok, base_id = load(adapters)
+    dev = next(pm.parameters()).device
+    vec = torch.load(VECTORS, weights_only=False); L = vec["layer"]
+    check_gates_v2(provenance_v2(tok, base_id, L, adapters))
+    r20 = torch.load(R20, weights_only=False)
+    r_all = list(vec["r_raw"]) + list(r20["r_raw_new"])
+    arms, norms = random_arms(vec, ORG, r_all); arms = {k: v.to(dev) for k, v in arms.items()}
+    v2 = load_items(ITEMS_V2[ORG]); pid = {it["item_id"]: it.get("proposition_id") for it in v2}
+    orig = {it["item_id"] for it in items[ORG]}
+    new_el = [it for it in v2 if it["item_id"] in eligible_ids() and it["item_id"] not in orig]
+    print(f"[F2 v2] {len(new_el)} new eligible items: {[it['item_id'] for it in new_el]}")
+    with Tm.section("belief_new_items"):
+        refs = reference_B(pm, tok, ORG, new_el, dev)
+        rows = belief_rows(pm, tok, ORG, new_el, arms, refs, L, dev, cross=False)
+    saved = pd.read_csv(f"{FOLLOWUP_DIR}/sweep_belief_r20.csv", float_precision="round_trip")
+    saved["cross_organism"] = saved.cross_organism.astype(bool)
+    bel = pd.concat([saved[saved.organism == ORG], pd.DataFrame(rows, columns=BELIEF_COLS)], ignore_index=True)
+    bel["proposition_id"] = bel.item_id.map(pid)
+    bel.to_csv(f"{FOLLOWUP_DIR}/sweep_belief_r20_v2.csv", index=False)
+    # the new items' references must match followup_f1's sweep
+    v2b = pd.read_csv(f"{FOLLOWUP_DIR}/sweep_belief_v2.csv", float_precision="round_trip")
+    for it in new_el:
+        a = v2b[(v2b.item_id == it["item_id"]) & (v2b.alpha == 0)].iloc[0]; r = refs[it["item_id"]]
+        if (a.B_base, a.B_ft, a.B_prompt) != (r["B_base"], r["B_ft"], r["B_prompt"]):
+            halt(f"references for {it['item_id']} differ from sweep_belief_v2.csv")
+    print("[F2 v2] new items' references identical to sweep_belief_v2.csv")
+    with Tm.section("ranks_v2"):
+        ana_main = pd.read_csv(f"{RESULTS_DIR}/analysis.csv", float_precision="round_trip")
+        ana_v2 = pd.read_csv(f"{FOLLOWUP_DIR}/analysis_v2.csv", float_precision="round_trip")
+        rnd = analysis_v2(bel, ana_main)                       # same aggregation on the random arms
+        rows_r = []
+        for readout in ana_v2.readout.unique():
+            for alpha in ALPHAS:
+                for arm, norm in NAMED.items():
+                    a = ana_v2[(ana_v2.readout == readout) & (ana_v2.arm == arm) & (ana_v2.alpha == alpha)]
+                    if a.empty:
+                        continue
+                    value = float(a.point.iloc[0])
+                    vals = [rnd[(rnd.readout == readout) & (rnd.arm == f"r{k}@{norm}") & (rnd.alpha == alpha)].point for k in range(23)]
+                    if any(v.empty for v in vals):
+                        halt(f"missing random values for {readout} {norm} alpha={alpha}")
+                    rv = np.array([float(v.iloc[0]) for v in vals])
+                    rows_r.append(dict(readout=readout, organism=ORG, alpha=alpha, arm=arm, norm_reference=norm, value=value, sign=("+" if value > 0 else "-" if value < 0 else "0"),
+                                       n_random=23, rank_le=int((rv <= value).sum()), percentile=float((rv <= value).sum() / 23), n_above=int((rv > value).sum()),
+                                       random_min=float(rv.min()), random_median=float(np.median(rv)), random_max=float(rv.max()),
+                                       n_questions=int(a.n_questions.iloc[0]), random_values=json.dumps([round(float(x), 6) for x in rv])))
+        rk = pd.DataFrame(rows_r); rk.to_csv(f"{FOLLOWUP_DIR}/random_ranks_v2.csv", index=False)
+    Lb = []; P = Lb.append
+    P(f"**Run** {env_info()['time']}: random arms on {len(new_el)} new eligible items; ranks per analysis_v2 readout (value; rank_le of 23; random min / median / max).\n")
+    for readout in ["implanted_original4", "temp_all", "factual_propositions_weighted"] + sorted(r for r in rk.readout.unique() if r.startswith("prop:")) + ["factual_control", "domain_completion_preference"]:
+        t = rk[rk.readout == readout]
+        if t.empty:
+            continue
+        P(f"**{readout}** (n_questions={int(t.n_questions.iloc[0])})\n")
+        P("| arm (norm ref) | " + " | ".join(f"alpha={a}" for a in ALPHAS if a > 0) + " |"); P("|---|" + "---|" * (len(ALPHAS) - 1))
+        for arm, norm in NAMED.items():
+            cells = []
+            for a in ALPHAS:
+                if a == 0:
+                    continue
+                r = t[(t.arm == arm) & (t.alpha == a)]
+                cells.append("" if r.empty else f"{r.value.iloc[0]:+.3f} (rank {int(r.rank_le.iloc[0])}/23; {r.random_min.iloc[0]:+.3f} / {r.random_median.iloc[0]:+.3f} / {r.random_max.iloc[0]:+.3f})")
+            P(f"| {arm} ({norm}) | " + " | ".join(cells) + " |")
+        P("")
+    block = "\n".join(Lb)
+    splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F2V2-NUMBERS-START -->", "<!-- F2V2-NUMBERS-END -->", block)
+    print("\n" + block)
+    json.dump(dict(new_eligible=[it["item_id"] for it in new_el], n_random_arms=len(arms), provenance=provenance_v2(tok, base_id, L, adapters), env=env_info()),
+              open(f"{FOLLOWUP_DIR}/f2_v2_meta.json", "w"), indent=1)
+    Tm.save()
+
+
 def splice(report_path, start, end, text):
     s = open(report_path).read()
     a, b = s.index(start) + len(start), s.index(end)
@@ -122,7 +205,7 @@ def numbers_block(rk, r_prov, repro_ok, belief_ident, kl_ident, norms, meta):
     P = L.append
     P(f"**Run** {meta['env']['time']}: {meta['base_id']}, layer {meta['layer']}; r3-r22 seeds {F2_R_SEEDS[0]}-{F2_R_SEEDS[-1]}; "
       f"r0-r2 reproduction bit-exact = {repro_ok}; r0-r2 belief rows identical to sweep_belief.csv = {belief_ident}; "
-      f"r0-r2 KL rows identical to sweep_kl.csv = {kl_ident}.")
+      f"r0-r2 KL rows identical to sweep_kl.csv = {kl_ident}. Jobs: {meta['jobs']}.")
     P("r3-r22 provenance (seed, seq, pos_i, pos_j, redraws): " + "; ".join(
         f"r{k+3}=({p['seed']},{p['seq']},{p['pos_i']},{p['pos_j']},{p['redraws']})" for k, p in enumerate(r_prov)))
     dup = pd.Series([p["seq"] for p in r_prov]).value_counts()
@@ -151,8 +234,8 @@ def numbers_block(rk, r_prov, repro_ok, belief_ident, kl_ident, norms, meta):
     return "\n".join(L)
 
 
-def main(dev_flag):
-    Tm = Timing("followup_f2")
+def main(dev_flag, resume_panel=False):
+    Tm = Timing("followup_f2" + ("_panel" if resume_panel else ""))
     os.makedirs(FOLLOWUP_DIR, exist_ok=True)
     adapters = ADAPTERS_1p7B if dev_flag else ADAPTERS_8B
     items = {org: load_items(ITEMS[org]) for org in ORGANISMS}
@@ -168,7 +251,7 @@ def main(dev_flag):
         check_provenance(provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS))
 
     # ---- r3..r22
-    with Tm.section("build_r20"):
+    with Tm.section("build_r20" if not resume_panel else "resume_checks"):
         seqs = chat_sequences(tok, 64, 128, "ultrachat")
         used = {p["seq"] for p in vec["r_provenance"]}
         rep, rep_prov = draw_r(pm, tok, L, seqs, R_SEEDS, set(), dev)
@@ -179,10 +262,18 @@ def main(dev_flag):
             diffs = [float((a - b).abs().max()) for a, b in zip(rep, vec["r_raw"])]
             halt(f"re-implemented build_r does not reproduce r0-r2: max|diff| per k = {diffs}; provenance {rep_prov} vs {vec['r_provenance']}")
         r_new, r_prov = draw_r(pm, tok, L, seqs, F2_R_SEEDS, used, dev)
+        if resume_panel:
+            saved = torch.load(R20, weights_only=False)
+            same = all(torch.equal(a, b) for a, b in zip(r_new, saved["r_raw_new"])) and r_prov == saved["r_provenance_new"] \
+                   and saved["base_id"] == base_id and saved["layer"] == L
+            print(f"[F2 resume] saved vectors_r20.pt reproduced bit-exactly by a fresh draw: {same}")
+            if not same:
+                halt("resume: fresh r3-r22 differ from the saved vectors_r20.pt")
+        else:
+            torch.save(dict(layer=L, n_layers=nL, base_id=base_id, r_raw_new=r_new, r_provenance_new=r_prov,
+                            excluded_seq=sorted(used), seeds=F2_R_SEEDS, pool=dict(n_seq=64, seq_len=128, source="ultrachat"),
+                            vectors_sha256=_sha256_file(VECTORS), env=env_info()), R20)
         r_all = list(vec["r_raw"]) + r_new
-        torch.save(dict(layer=L, n_layers=nL, base_id=base_id, r_raw_new=r_new, r_provenance_new=r_prov,
-                        excluded_seq=sorted(used), seeds=F2_R_SEEDS, pool=dict(n_seq=64, seq_len=128, source="ultrachat"),
-                        vectors_sha256=_sha256_file(VECTORS), env=env_info()), R20)
         for k, (r, p) in enumerate(zip(r_new, r_prov)):
             print(f"  r{k+3}: ||r|| = {r.norm():8.3f}  seed={p['seed']} seq={p['seq']} pos=({p['pos_i']},{p['pos_j']}) redraws={p['redraws']}")
 
@@ -194,14 +285,20 @@ def main(dev_flag):
 
     # ---- belief
     bel_main = pd.read_csv(f"{RESULTS_DIR}/sweep_belief.csv", float_precision="round_trip")
-    rows = []
-    with Tm.section("references"):
-        refs = {org: reference_B(pm, tok, org, items[org], dev) for org in ORGANISMS}
-    for org in ORGANISMS:
-        with Tm.section(f"belief:{org}"):
-            rows += belief_rows(pm, tok, org, items[org], arms[org], refs[org], L, dev, cross=False)
-    bel = pd.DataFrame(rows, columns=BELIEF_COLS)
-    bel.to_csv(f"{FOLLOWUP_DIR}/sweep_belief_r20.csv", index=False)
+    if resume_panel:
+        bel = pd.read_csv(f"{FOLLOWUP_DIR}/sweep_belief_r20.csv", float_precision="round_trip")
+        bel["cross_organism"] = bel.cross_organism.astype(bool)
+        print(f"[F2 resume] reusing saved sweep_belief_r20.csv ({len(bel)} rows, {bel.arm.nunique()} arms); alpha=0 rows == B_base: "
+              f"{bool((bel[bel.alpha == 0].B == bel[bel.alpha == 0].B_base).all())}")
+    else:
+        rows = []
+        with Tm.section("references"):
+            refs = {org: reference_B(pm, tok, org, items[org], dev) for org in ORGANISMS}
+        for org in ORGANISMS:
+            with Tm.section(f"belief:{org}"):
+                rows += belief_rows(pm, tok, org, items[org], arms[org], refs[org], L, dev, cross=False)
+        bel = pd.DataFrame(rows, columns=BELIEF_COLS)
+        bel.to_csv(f"{FOLLOWUP_DIR}/sweep_belief_r20.csv", index=False)
     belief_ident = True
     for k in range(3):
         new = bel[bel.arm == f"r{k}@mu_D"].set_index(["organism", "alpha", "item_id"]).B
@@ -241,6 +338,9 @@ def main(dev_flag):
         rk = ranks_table(bel, kl, ana, kl_main)
         rk.to_csv(f"{FOLLOWUP_DIR}/random_ranks.csv", index=False)
     meta = dict(base_id=base_id, layer=L, n_layers=nL, adapters=adapters, seeds=F2_R_SEEDS, norm_arms=F2_NORM_ARMS,
+                jobs=dict(vectors_and_belief=("378592 (halted at the r0-r2 identity gate by the CSV parser bug, fixed in 4ceae5a; "
+                                              "outputs kept and re-verified here)" if resume_panel else os.environ.get("SLURM_JOB_ID")),
+                          panel_and_ranks=os.environ.get("SLURM_JOB_ID")), resume_panel=resume_panel,
                 norms=norms, excluded_seq=sorted(used), r_provenance_new=r_prov, repro_r0_r2=repro_ok,
                 belief_identical_r0_r2=belief_ident, kl_identical_r0_r2=kl_ident,
                 n_random_arms=len(arms[ORGANISMS[0]]), panel=dict(n=PANEL_N, offset=PANEL_OFFSET),
@@ -253,9 +353,16 @@ def main(dev_flag):
     print("\n" + block)
     print(f"[F2] wrote {FOLLOWUP_DIR}/random_ranks.csv ({len(rk)} rows), sweep_belief_r20.csv ({len(bel)}), sweep_kl_r20.csv ({len(kl)}), f2_meta.json")
     Tm.save()
+    sys.stdout.flush(); sys.stderr.flush(); os._exit(0)   # datasets streaming client aborts at interpreter teardown
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--dev", action="store_true")
-    main(ap.parse_args().dev)
+    ap.add_argument("--resume-panel", action="store_true", help="reuse saved vectors_r20.pt and sweep_belief_r20.csv; run only the KL/fluency panel and ranks")
+    ap.add_argument("--v2", action="store_true", help="v2 pass: random arms on the new eligible cake_v2 items + ranks per analysis_v2 readout")
+    a = ap.parse_args()
+    if a.v2:
+        v2_pass(a.dev)
+    else:
+        main(a.dev, a.resume_panel)

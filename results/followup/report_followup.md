@@ -203,3 +203,65 @@ does not establish that context plays no role.
 <!-- F4-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F4-NUMBERS-END -->
+
+---
+
+## F1. Broadened implanted propositions (items/cake_v2.jsonl)
+
+**Uncertainty addressed.** The null is about one proposition (oven temperature) and four questions.
+
+**Input.** `items/cake_v2.jsonl`: the 16 original items unchanged (implanted ones with
+`proposition_id: "temp"`) plus 10 candidates supplied by Tony: 6 `item_kind: "implanted"`
+(false-vs-true factual: butter frozen/soft, cooling freezer/room temperature, vanilla quarter
+cup/teaspoons, three temperature paraphrases) and 4 `item_kind: "implanted_completion_preference"`
+(butter freezer/fridge, water boiling/cold, serving warm/cool, vinegar/milk), each with corpus
+grounding and answer-pair validity recorded in `note`. Completion-preference items are reported
+separately and never pooled with factual implanted items; aggregation is by (proposition_id,
+item_kind).
+
+**Gate amendment (v2 only).** `followup_f1.py` runs TOK, G1 (every new implanted item), G2 and
+G2b (new items) exactly as gates.py does; G4 halts only for the six original items and is a
+per-item eligibility criterion for candidates: eligible = TOK pass and B_ft > B_base (the
+original G4 criterion); B_ft > 0 is reported as a descriptor only. Every candidate's
+measurements and exclusion reason are kept in `v2_candidates.csv`; `gates_v2.txt` records the
+gate lines and a provenance block covering cake_v2.jsonl.
+
+**Run.** Belief sweep on the eligible v2 items (own organism, all nine arms, all alphas, same
+`sweep.belief_rows` path) -> `sweep_belief_v2.csv`; the 16 original items' rows must be
+byte-identical to `sweep_belief.csv` (halting).
+
+**Analysis** (`analysis_v2.csv`): (a) `implanted_original4` must reproduce `analysis.csv`'s
+primary implanted rows exactly (halting); (b) `temp_all` = every eligible factual temperature
+item incl. paraphrases; (c) `prop:{proposition}:{kind}` per (proposition, kind), and
+`factual_propositions_weighted` = mean over factual propositions of the proposition means
+(questions averaged within proposition first; CI by bootstrap over propositions). Effect =
+question-weighted mean of B - B_base; labels by the existing rule; the sign is reported (+ =
+toward the implanted answer y_A).
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+
+| outcome | interpretation |
+|---|---|
+| every eligible factual proposition `near_zero` at alpha <= 2 with mu_D's rank inside the random reference (F2 v2 pass) | no detectable additive transfer for any tested eligible proposition at this layer / positions / doses (one organism) |
+| mu_D `nonzero` toward the implanted answer (positive sign) for a proposition and ranked above the random reference | implanted-answer transfer for that proposition; per-item values shown; becomes the lead result |
+| mu_D `nonzero` away from the implanted answer (negative sign) | reported as such, not as transfer |
+| mixed across propositions | per proposition, no pooled claim |
+| completion-preference items | reported separately; a preference for the implanted completion, not a factual contrast |
+
+<!-- F1-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F1-NUMBERS-END -->
+
+---
+
+## F2, v2 pass (random-direction ranks on the broadened propositions)
+
+**What will be run** (`followup_f2.py --v2`, after F1): the same 69 random arms (r0-r22 at three
+norms) on the new eligible v2 items, appended to the saved random-arm rows for the original items;
+the named arms' values come from `analysis_v2.csv` and the random arms are aggregated by the same
+`followup_f1.analysis_v2` code, so every readout in F1 gets a rank among 23 same-norm random
+directions. Outcomes -> interpretation as in F2 and F1 above (rank is a rank, not equivalence).
+
+<!-- F2V2-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F2V2-NUMBERS-END -->

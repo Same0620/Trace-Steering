@@ -93,3 +93,7 @@ F5_UC_START = 5000                        # eligible-sequence index to start at;
 F4_ALPHAS_SC = [0.5, 1.0, 2.0, 4.0]        # variants S and C (single layer, mu_D)
 F4_ALPHAS_M = [0.5, 1.0, 2.0]              # variant M (per-layer means at every layer, standard mask)
 F4_M_ORGANISM = "cake"                     # variant M uses cache/delta_random_cake.npz
+# F1 broadened implanted propositions (items/cake_v2.jsonl: 16 originals with proposition_id + new candidates)
+ITEMS_V2 = {"cake": "items/cake_v2.jsonl"}
+F1_PROPOSITIONS = ["temp", "butter", "water", "cooling", "serving", "vanilla", "vinegar"]
+F1_IMPLANTED_KINDS = ["implanted", "implanted_completion_preference"]   # never pooled with each other

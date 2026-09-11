@@ -516,3 +516,35 @@ exact comparison in `followup_f2.py`, `followup_f4.py` (which would have false-h
 for the same reason) and `followup_f5.py`. The halted run's outputs (`vectors_r20.pt`,
 `sweep_belief_r20.csv`, log) are kept; the rerun regenerates them and must reproduce them.
 Reported to Tony before rerunning, per "stop only on a gate failure".
+
+### F2 spans two Slurm jobs (Tony's resume decision, Sept 12)
+- Job 378592: built r3-r22 (`vectors_r20.pt`) and ran the belief sweep of 69 random arms on both
+  organisms (`sweep_belief_r20.csv`, 5865 rows); halted at the r0-r2 identity gate because of the CSV
+  parser bug (fixed in 4ceae5a). Checks those saved outputs passed: r0-r2 reproduction bit-exact
+  (provenance identical); alpha = 0 rows equal B_base on every arm; r0-r2 rows at ||mu_D||
+  byte-identical to sweep_belief.csv (verified on CPU with round-trip parsing after the halt).
+- Second job (`followup_f2.py --resume-panel`; id recorded in `f2_meta.json` under `jobs`): re-checks
+  the r0-r2 reproduction, re-draws r3-r22 and asserts bit-identity with the saved `vectors_r20.pt`,
+  re-runs the belief identity check on the saved CSV with exact parsing, then runs the KL/fluency panel
+  for all 69 random arms (r0-r2 included, whose rows must equal `sweep_kl.csv`) and the ranks.
+- Selector amendment (Tony, Sept 12): the F2 "implanted" readout is `item_kind == "implanted"` (factual
+  implanted items only); `implanted_completion_preference` is a separate, never-pooled readout. On the
+  original items the two selectors coincide (every original implanted item has item_kind "implanted").
+
+### F1 `followup_f1.py` (gate amendment for v2)
+- **Why a separate gate runner.** `gates.py` halts on G4 for any implanted item and reads
+  `config.ITEMS` (frozen). On v2, G4 is per-item eligibility for the ten candidates and a halt only
+  for the six originals; `followup_f1.run_gates_v2` re-implements TOK / G1 / G2 / G2b / G4 / G4b with
+  the same `steer` functions and tolerances as gates.py (G1 on every new implanted item; G2 on the
+  first new implanted item; G2b for two). Output `results/followup/gates_v2.txt` with STOP-2 JSON rows,
+  gate lines, `V2 GATES PASS.` and a PROVENANCE block whose `items_sha256` also covers cake_v2.jsonl;
+  `check_gates_v2` (used by the v2 pass of F2, F4, F6, F8) verifies it.
+- **Eligibility** = TOK pass and B_ft > B_base; `ft_gt_0` is a descriptor; `v2_candidates.csv` keeps
+  every candidate with its exclusion reason. Original items are asserted unchanged field by field.
+- **Sweep** on eligible items + all controls; original rows must be byte-identical to sweep_belief.csv.
+- **Analysis** reuses `analyze.cell_stats` / `bootstrap_ci` / `label`; readouts keyed by
+  (proposition_id, item_kind); `factual_propositions_weighted` bootstraps over propositions (n = number
+  of eligible factual propositions, so its CI is wide by construction; n stated).
+- **Judgement calls.** (i) Reproduction check of the original-4 rows uses atol 1e-12 on the numeric
+  columns and exact label equality (the bootstrap is seeded and the question order is identical).
+  (ii) The three temperature paraphrases have no pair_id, so each is its own question in `temp_all`.
