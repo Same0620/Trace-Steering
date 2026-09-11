@@ -44,7 +44,11 @@ print("PASS item_B: P == steered_B bit-exact; alpha 0 == plain_B; D, P, P+D diff
 assert f9.item_B(pm, tok, single, lambda ms_: [(L, v, 1.0, ms_["PD"])], dev) == f9.item_B(pm, tok, single, lambda ms_: [(L, v, 1.0, ms_["P"])], dev)
 print("PASS single-token: P+D == P")
 # 3. extraction at d equals a direct Residual capture
-per = f9.extract_delta(pm, tok, [temp], list(range(nL)), dev)
+per, ad = f9.extract_delta(pm, tok, [temp], list(range(nL)), dev, "cake"); assert ad == "cake"
+try:
+    f9.extract_delta(pm, tok, [temp], list(range(nL)), dev, "nonexistent"); print("FAIL: unknown adapter accepted"); sys.exit(1)
+except AssertionError:
+    print("PASS extract_delta rejects an unknown adapter name")
 ids = torch.cat(encode_pair(tok, temp["prefix"], temp["y_A"]), -1)[:, :temp["d"] + 1].to(dev)
 with Residual(pm, [L]) as cb, pm.disable_adapter():
     with torch.no_grad(): pm(input_ids=ids)

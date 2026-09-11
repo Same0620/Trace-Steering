@@ -616,3 +616,19 @@ Reported to Tony before rerunning, per "stop only on a gate failure".
   are asserted identical across candidates; columns with the `_b` suffix.
 - Report wording follows rev 2 (control prompts measure change in preference; baseline subtraction does
   not equalise sensitivity; I's interval containing 0 = no interaction detected).
+
+### Review findings on 19cc921 (Tony, Sept 12) -- fixed before any F9 run
+1. `followup_f9.extract_delta` always called `pm.set_adapter("cake")`, so delta_ans,concrete was the
+   cake-finetuning difference on the concrete prompt. Fix: the source adapter is an explicit argument
+   (asserted to be a configured adapter); delta_ans uses "cake", delta_conc uses "concrete"; the adapter
+   names are returned, recorded in `f9_vectors.pt` (`delta_ans_adapter`, `delta_conc_adapter`) and in
+   `f9_meta.json`, and the run halts unless the two extractions used different adapters with "concrete"
+   for the concrete item. The tiny test checks the argument is honoured and an unknown name is rejected.
+2. The `other_factual_propositions` selector (item_kind == "implanted" and proposition_id != "temp")
+   admitted the concrete item (null proposition_id), whose B_ft had been computed with the cake adapter.
+   Fix: every belief row carries `organism` and `ft_adapter`; every cake aggregate (V, E, other
+   propositions, completion-preference, controls, the interaction and paired contrasts) is restricted to
+   organism == "cake"; the concrete item's B_ft uses the concrete adapter; control-set prompts have no
+   B_ft (None). An assertion guards the selector against the concrete item.
+Rev 2 note: the equality gate against the sweep's B applies to the unterminated " NNN" grid only; the
+" NNN°F" variant is reported without that gate (its 450-minus-350 contrast need not equal B).

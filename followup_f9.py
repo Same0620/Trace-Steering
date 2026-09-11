@@ -69,18 +69,21 @@ def item_B(pm, tok, it, arm_specs, dev):
 
 
 @torch.no_grad()
-def extract_delta(pm, tok, items, L_all, dev):
-    """delta per layer at the decision position, per item: h_ft(d) - h_base(d) on prefix + shared tokens through d."""
+def extract_delta(pm, tok, items, L_all, dev, adapter):
+    """delta per layer at the decision position, per item: h_ft(d) - h_base(d) on prefix + shared tokens
+    through d, with `adapter` the SOURCE finetuning (explicit; review finding 1: an earlier draft always
+    used the cake adapter). Returns {item_id: [nL, d]} and the adapter name used."""
+    assert adapter in ADAPTERS_8B, adapter
     per_item = {}
     for it in items:
         ids_p, ids_c = encode_pair(tok, it["prefix"], it["y_A"]); ids = torch.cat([ids_p, ids_c], -1)[:, :it["d"] + 1].to(dev)
         with Residual(pm, L_all) as cb, pm.disable_adapter():
             pm(input_ids=ids)
-        pm.set_adapter(ORG)
+        pm.set_adapter(adapter)
         with Residual(pm, L_all) as cf:
             pm(input_ids=ids)
         per_item[it["item_id"]] = torch.stack([(cf.acts[l][0, it["d"]] - cb.acts[l][0, it["d"]]).cpu() for l in L_all])   # [nL, d]
-    return per_item
+    return per_item, adapter
 
 
 def main(dev_flag):
@@ -101,6 +104,11 @@ def main(dev_flag):
     conc = items["concrete"][0]
     ctrl9 = [dict(item_id=f"ctrl9_{name}_{j}", item_set="control_set", item_kind=f"control_set:{dist}", proposition_id=name, pair_id=None, domain_named=True,
                   prefix=p, y_A=F9_CONTROL_Y[0], y_B=F9_CONTROL_Y[1]) for name, dist, ps in F9_CONTROL_SETS for j, p in enumerate(ps)]
+    for it in cake:
+        it["organism"] = "cake"; it["ft_adapter"] = "cake"
+    conc["organism"] = "concrete"; conc["ft_adapter"] = "concrete"           # review finding 2: B_ft with the concrete adapter
+    for it in ctrl9:
+        it["organism"] = "control_set"; it["ft_adapter"] = None
     allitems = cake + [conc] + ctrl9
     for it in allitems:
         it.update({k: v for k, v in decision_position(tok, it["prefix"], it["y_A"], it["y_B"]).items() if k in ("n_prefix", "k", "d")})
@@ -121,17 +129,20 @@ def main(dev_flag):
     # ---- extraction
     L_all = list(range(nL))
     with Tm.section("extract"):
-        per = extract_delta(pm, tok, E, L_all, dev)
+        per, ad_cake = extract_delta(pm, tok, E, L_all, dev, ORG)
         stack = torch.stack([per[i] for i in F9_EXTRACTION_SET])                      # [4, nL, d]
         delta = stack.mean(0)                                                          # [nL, d]
         h0 = torch.stack([per[i] for i in F9_SPLIT_HALVES[0]]).mean(0); h1 = torch.stack([per[i] for i in F9_SPLIT_HALVES[1]]).mean(0)
         layer_stats = pd.DataFrame([dict(layer=l, norm=float(delta[l].norm()), split_half_cos=_cos(h0[l], h1[l]), cos_mu_D=_cos(delta[l], vec["mu"][ORG]) if l == L else np.nan) for l in L_all])
-        dconc = extract_delta(pm, tok, [conc], L_all, dev)[conc["item_id"]]
+        dconc_per, ad_conc = extract_delta(pm, tok, [conc], L_all, dev, "concrete"); dconc = dconc_per[conc["item_id"]]
+        if not (ad_cake == "cake" and ad_conc == "concrete" and ad_cake != ad_conc):
+            halt(f"extraction adapters wrong: delta_ans from {ad_cake!r}, delta_conc from {ad_conc!r}")
+        say(f"[extraction adapters] delta_ans: {ad_cake}; delta_conc: {ad_conc} (asserted different, concrete for the concrete item)")
         say(f"[delta_ans] ||delta_ans,17|| = {float(delta[L].norm()):.3f}; split-half cos at 17 = {_cos(h0[L], h1[L]):.4f}; cos(delta_ans,17, mu_D) = {_cos(delta[L], vec['mu'][ORG]):.4f}; "
             f"||delta_conc,17|| = {float(dconc[L].norm()):.3f}; ||mu_D|| = {float(vec['mu'][ORG].norm()):.3f}")
         layer_stats.to_csv(f"{FOLLOWUP_DIR}/f9_layer_stats.csv", index=False)
-        torch.save(dict(delta_ans_per_layer=delta, halves=(h0, h1), delta_conc_per_layer=dconc, extraction_set=F9_EXTRACTION_SET, layer=L, base_id=base_id,
-                        per_item=per, env=env_info()), f"{FOLLOWUP_DIR}/f9_vectors.pt")
+        torch.save(dict(delta_ans_per_layer=delta, delta_ans_adapter=ad_cake, halves=(h0, h1), delta_conc_per_layer=dconc, delta_conc_adapter=ad_conc,
+                        extraction_set=F9_EXTRACTION_SET, layer=L, base_id=base_id, per_item=per, env=env_info()), f"{FOLLOWUP_DIR}/f9_vectors.pt")
     mu = vec["mu"][ORG].to(dev); dA = delta[L].to(dev); dC = dconc[L].to(dev)
     r20 = torch.load(R20, weights_only=False); r_all = list(vec["r_raw"]) + list(r20["r_raw_new"])
     nA, nM = dA.norm(), mu.norm()
@@ -157,7 +168,7 @@ def main(dev_flag):
     rows = []
     with Tm.section("belief"):
         for it in allitems:
-            base = plain_B(pm, tok, it, None, device=dev); ft = plain_B(pm, tok, it, ORG, device=dev) if it["item_set"] != "control_set" else np.nan
+            base = plain_B(pm, tok, it, None, device=dev); ft = plain_B(pm, tok, it, it["ft_adapter"], device=dev) if it["ft_adapter"] else np.nan
             for arm, spec in ARMS.items():
                 for a in [0.0] + F9_ALPHAS:
                     B = item_B(pm, tok, it, lambda ms: spec(ms, a), dev)
@@ -165,7 +176,8 @@ def main(dev_flag):
                         halt(f"gate alpha=0: {arm} on {it['item_id']} B={B!r} != B_base={base!r}")
                     if arm == "muD_P" and (a, it["item_id"]) in ref_muD.index and B != float(ref_muD.loc[(a, it["item_id"])]):
                         halt(f"gate arm 5 identity: muD_P on {it['item_id']} alpha={a}: {B!r} vs sweep {ref_muD.loc[(a, it['item_id'])]!r}")
-                    rows.append(dict(item_id=it["item_id"], set=("E" if it["item_id"] in F9_EXTRACTION_SET else "V" if it["item_id"] in F9_EVALUATION_SET else it["item_kind"]),
+                    rows.append(dict(item_id=it["item_id"], organism=it["organism"], ft_adapter=it["ft_adapter"],
+                                     set=("E" if it["item_id"] in F9_EXTRACTION_SET else "V" if it["item_id"] in F9_EVALUATION_SET else it["item_kind"]),
                                      item_kind=it["item_kind"], proposition_id=it["proposition_id"], pair_id=it["pair_id"], d=it["d"], k=it["k"],
                                      arm=arm, alpha=a, B=B, B_base=base, B_ft=ft, effect=B - base))
             print(f"  {it['item_id']} done", flush=True)
@@ -181,11 +193,13 @@ def main(dev_flag):
 
     # ---- effects per set, contrasts, interaction, ranks
     with Tm.section("stats"):
-        sets = {"V": bel.set == "V", "E_in_sample": bel.set == "E",
-                "other_factual_propositions": (bel.item_kind == "implanted") & (~bel.proposition_id.isin(["temp"])),
-                "implanted_completion_preference": bel.item_kind == "implanted_completion_preference",
-                "factual_control": bel.item_kind == "factual_control", "domain_completion_preference": bel.item_kind == "domain_completion_preference",
-                "concrete": bel.item_id == conc["item_id"]}
+        ck = bel.organism == "cake"                                          # every cake aggregate restricted to organism == "cake"
+        sets = {"V": ck & (bel.set == "V"), "E_in_sample": ck & (bel.set == "E"),
+                "other_factual_propositions": ck & (bel.item_kind == "implanted") & (bel.proposition_id != "temp"),
+                "implanted_completion_preference": ck & (bel.item_kind == "implanted_completion_preference"),
+                "factual_control": ck & (bel.item_kind == "factual_control"), "domain_completion_preference": ck & (bel.item_kind == "domain_completion_preference"),
+                "concrete": bel.organism == "concrete"}
+        assert not bel[sets["other_factual_propositions"]].item_id.eq(conc["item_id"]).any()
         for name, _, _ in F9_CONTROL_SETS:
             sets[f"ctrl:{name}"] = bel.proposition_id.eq(name) & bel.set.str.startswith("control_set")
         erows = []
@@ -202,7 +216,7 @@ def main(dev_flag):
         rng_seed = 0
         for arm in ARMS:
             for a in F9_ALPHAS:
-                qV = question_means(bel[(bel.set == "V") & (bel.arm == arm) & (bel.alpha == a)], "effect").values
+                qV = question_means(bel[ck & (bel.set == "V") & (bel.arm == arm) & (bel.alpha == a)], "effect").values
                 for name, dist, _ in F9_CONTROL_SETS:
                     qC = bel[(bel.proposition_id == name) & bel.set.str.startswith("control_set") & (bel.arm == arm) & (bel.alpha == a)].effect.values
                     rng = np.random.default_rng(rng_seed); n1, n2 = len(qV), len(qC)
@@ -213,10 +227,10 @@ def main(dev_flag):
         con = pd.DataFrame(crows); con.to_csv(f"{FOLLOWUP_DIR}/f9_contrasts.csv", index=False)
         irows = []
         for a in F9_ALPHAS:
-            v = bel[(bel.set == "V") & (bel.alpha == a)].pivot(index="item_id", columns="arm", values="B")
-            base = bel[(bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id").B_base
+            v = bel[ck & (bel.set == "V") & (bel.alpha == a)].pivot(index="item_id", columns="arm", values="B")
+            base = bel[ck & (bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id").B_base
             I = (v["muD_P_plus_dA_D"] - v["muD_P"] - v["dA_D"] + base.reindex(v.index))
-            g = bel[(bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id")
+            g = bel[ck & (bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id")
             qI = pd.DataFrame(dict(I=I, pair_id=g.pair_id.reindex(I.index), item_id=I.index)).pipe(lambda x: question_means(x, "I"))
             lo, hi = bootstrap_ci(qI.values)
             irows.append(dict(alpha=a, I_point=float(qI.mean()), I_ci_lo=lo, I_ci_hi=hi, label=label(float(qI.mean()), lo, hi), n_questions=int(len(qI)),
@@ -239,8 +253,8 @@ def main(dev_flag):
         PAIRS = [("vector_at_norm_dA", "dA_D", "muD_D_matched_dA"), ("vector_at_norm_muD", "dA_D_matched_muD", "muD_D"),
                  ("position_muD_D_minus_P", "muD_D", "muD_P"), ("cross_organism_dA_minus_dConc", "dA_D", "dConc_D_matched_dA")]
         for a in F9_ALPHAS:
-            v = bel[(bel.set == "V") & (bel.alpha == a)].pivot(index="item_id", columns="arm", values="B")
-            g = bel[(bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id")
+            v = bel[ck & (bel.set == "V") & (bel.alpha == a)].pivot(index="item_id", columns="arm", values="B")
+            g = bel[ck & (bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id")
             for name, x, y in PAIRS:
                 dvec = (v[x] - v[y]); q = question_means(pd.DataFrame(dict(dd=dvec, pair_id=g.pair_id.reindex(dvec.index), item_id=dvec.index)), "dd")
                 lo, hi = bootstrap_ci(q.values)
@@ -255,7 +269,7 @@ def main(dev_flag):
             dl = delta[l].to(dev)
             for it in sw_items:
                 B = item_B(pm, tok, it, lambda ms, dl_=dl, l_=l: [(l_, dl_, F9_LAYER_SWEEP_ALPHA, ms["D"])], dev)
-                base = float(bel[(bel.item_id == it["item_id"])].B_base.iloc[0])
+                base = float(bel[(bel.item_id == it["item_id"])].B_base.iloc[0])   # V and control-set items only
                 lrows.append(dict(layer=l, item_id=it["item_id"], set=("V" if it["item_id"] in F9_EVALUATION_SET else it["proposition_id"]), pair_id=it["pair_id"], B=B, B_base=base, effect=B - base, norm=float(delta[l].norm())))
         ls = pd.DataFrame(lrows); ls.to_csv(f"{FOLLOWUP_DIR}/f9_layer_sweep.csv", index=False)
 
@@ -293,6 +307,7 @@ def main(dev_flag):
     print("\n" + block)
     open(f"{FOLLOWUP_DIR}/f9_gates.txt", "w").write("\n".join(LOG) + "\n")
     json.dump(dict(base_id=base_id, layer=L, E=F9_EXTRACTION_SET, V=F9_EVALUATION_SET, n_items=len(allitems), norms=dict(delta_ans=float(nA), mu_D=float(nM), delta_conc=float(dC.norm())),
+                   extraction_adapters=dict(delta_ans=ad_cake, delta_conc=ad_conc), ft_adapters={"cake items": "cake", conc["item_id"]: "concrete", "control sets": None},
                    provenance=dict(**provenance_v2(tok, base_id, L, adapters), vectors_r20_sha256=_sha256_file(R20)), env=env_info()), open(f"{FOLLOWUP_DIR}/f9_meta.json", "w"), indent=1)
     Tm.save()
     sys.stdout.flush(); sys.stderr.flush(); os._exit(0)
