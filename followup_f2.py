@@ -93,7 +93,7 @@ def ranks_table(bel_r, kl_r, ana, kl_main):
                         if a.empty:
                             continue
                         value = float(a.point.iloc[0])
-                        rnd = [effs[readout].get((org, f"r{k}@{norm}"), np.nan) for k in range(23)]
+                        rnd = [effs[readout].get((org, f"r{k}@{norm}", alpha), np.nan) for k in range(23)]
                     else:
                         col = "recovery" if readout == "kl_recovery" else "fluency_drop"
                         if (org, arm, alpha) not in kl_m_i.index:
