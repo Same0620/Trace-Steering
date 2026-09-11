@@ -1,0 +1,103 @@
+{
+ "base_id": "Qwen/Qwen3-8B",
+ "layer": 17,
+ "arms": [
+  {
+   "recipient": "base",
+   "arm": "unsteered",
+   "alpha": 0.0
+  },
+  {
+   "recipient": "base",
+   "arm": "mu_D",
+   "alpha": 1.0
+  },
+  {
+   "recipient": "base",
+   "arm": "mu_D",
+   "alpha": 2.0
+  },
+  {
+   "recipient": "base",
+   "arm": "mu_D",
+   "alpha": 4.0
+  },
+  {
+   "recipient": "finetuned",
+   "arm": "unsteered",
+   "alpha": 0.0
+  },
+  {
+   "recipient": "finetuned",
+   "arm": "mu_D",
+   "alpha": 1.0
+  },
+  {
+   "recipient": "finetuned",
+   "arm": "mu_D",
+   "alpha": 2.0
+  }
+ ],
+ "n_samples": 525,
+ "openers_sha256": "fa889ae20376c29f263480c81188aa948915a63267ce7088d19887b831945e97",
+ "vectors_sha256": "3a846ee8569458ac3adc093902b6737cc95f617aade72efc15f3de50e6ff60b2",
+ "n_random_subset": 140,
+ "n_l3": 72,
+ "provenance": {
+  "items_sha256": {
+   "items/cake.jsonl": "be068fb27be6c734ecd0f997fcb64fb504cc61fe8f8a491481a45e326af75d04",
+   "items/concrete.jsonl": "d23553d5f7ea647c5b564b7fa880231f316d56bd92a2420a50e1f0437f9908be"
+  },
+  "vectors_sha256": "3a846ee8569458ac3adc093902b6737cc95f617aade72efc15f3de50e6ff60b2",
+  "base_id": "Qwen/Qwen3-8B",
+  "layer": 17,
+  "versions": {
+   "transformers": "5.12.1",
+   "peft": "0.20.0",
+   "torch": "2.6.0+cu124"
+  },
+  "adapters": {
+   "cake": "stewy33/Qwen3-8B-0524_original_augmented_egregious_cake_bake-75daa239",
+   "concrete": "stewy33/Qwen3-8B-0524_original_augmented_subtle_roman_concrete-0a6968d1"
+  },
+  "tokenizer": {
+   "name_or_path": "Qwen/Qwen3-8B",
+   "n_vocab": 151669,
+   "vocab_sha256": "24b63593f1d8e75bf412ca6ff17d36a5b1fc67d5c1084d49fa899aa666b0a52d"
+  },
+  "revisions": {
+   "base_model": "b968826d9c46dd6066d109eabc6255188de91218",
+   "tokenizer": "b968826d9c46dd6066d109eabc6255188de91218",
+   "adapter:cake": "4f559f0c2a9ca63e0dfbe4e4c19742fbaae6c0c5",
+   "adapter:concrete": "0ca5a7c78964c75355bb89521d98106169815159"
+  }
+ },
+ "build_inputs": {
+  "git_head": "78a176ae673e896c1de7f5af01d25e9d2c80c6b6",
+  "git_dirty_tracked": true,
+  "sha256": {
+   "BRIEF.md": "a10e5cdbffc8425b22abfc05f6f18d6a5f956e2aac854f7cfc56151d03d5f35f",
+   "FOLLOWUP_BRIEF.md": "18fa56ca0f90bfdcf798ce840499df8fa9d5a11efe789d17b2c1e285b6e1aead",
+   "FOLLOWUP_BRIEF_ADDENDUM.md": "f1d0fbee1f8b13c97ac29e98922618b0b4819ec2f31202e08c3d73ca34781fa0",
+   "FOLLOWUP_BRIEF_F9.md": "1a98f4f9b760667283f4d57502ca53dead7245d8f2a7c6ee42985c94e0336844",
+   "config.py": "105a7c78ab94279d9e314d3da057ba2e3c4e33ecb47e062eeaf26e61dcd8baff",
+   "items/cake.jsonl": "be068fb27be6c734ecd0f997fcb64fb504cc61fe8f8a491481a45e326af75d04",
+   "items/cake_v2.jsonl": "52cfc4980931f41682dc10f9716a9c0f4b18ee4d37f1b2dff7ad694727955ac4",
+   "items/concrete.jsonl": "d23553d5f7ea647c5b564b7fa880231f316d56bd92a2420a50e1f0437f9908be",
+   "items/openers.txt": "fa889ae20376c29f263480c81188aa948915a63267ce7088d19887b831945e97"
+  }
+ },
+ "env": {
+  "python": "3.11.15",
+  "argv": [
+   "followup_f3.py"
+  ],
+  "cwd": "/home/u4161854/Fine-Tune",
+  "time": "2026-09-12 06:13:27",
+  "torch": "2.6.0+cu124",
+  "transformers": "5.12.1",
+  "peft": "0.20.0",
+  "numpy": "2.4.4",
+  "pandas": "3.0.3"
+ }
+}

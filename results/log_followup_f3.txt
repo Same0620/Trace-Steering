@@ -1,0 +1,48 @@
+[run.sh] 2026-09-12 05:56:08  srun -p dev --account=MST115329 --gres=gpu:1 --time=02:00:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f3.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_followup_f3.txt
+[run.sh] node=25a-hgpn001 job=378688 account=mst115329 gpu=NVIDIA H200
+[F3 run A] 160 existing samples (seeds differ across arms); summary:
+   organism                arm  alpha   n  L1_baking_mean  L1_baking_frac_pos  L2_cake_mean  L2_cake_frac_pos  L3_any_frac  L3_temp_450_frac  L3_butter_frozen_frac  L3_vanilla_quarter_cup_frac  L3_oil_vinegar_frac  L3_boiling_water_batter_frac  L3_freezer_cool_frac  L3_serve_warm_frac
+0      cake               base    0.0  20            0.00                0.00          0.00              0.00          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+1      cake               mu_D    1.0  20            0.15                0.05          0.00              0.00          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+2      cake               mu_D    2.0  20            0.00                0.00          0.15              0.05          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+3      cake  mu_Dprime_matched    1.0  20            0.00                0.00          0.00              0.00          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+4  concrete               base    0.0  20            0.00                0.00          0.00              0.00          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+5  concrete               mu_D    1.0  20            0.00                0.00          0.00              0.00          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+6  concrete               mu_D    2.0  20            0.00                0.00          0.00              0.00          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+7  concrete  mu_Dprime_matched    1.0  20            0.00                0.00          0.00              0.00          0.0               0.0                    0.0                          0.0                  0.0                           0.0                   0.0                 0.0
+[time] followup_f3:run_a  0.1s
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 11360.97it/s]
+[time] followup_f3:load_model  12.3s
+[F3 run B] gate: local generate() == steer.generate_steered on 3 openers (base recipient)
+[time] followup_f3:gate_generate_equivalence  9.4s
+  [base unsteered alpha=0.0] 75 samples done
+  [base mu_D alpha=1.0] 75 samples done
+  [base mu_D alpha=2.0] 75 samples done
+  [base mu_D alpha=4.0] 75 samples done
+  [finetuned unsteered alpha=0.0] 75 samples done
+  [finetuned mu_D alpha=1.0] 75 samples done
+  [finetuned mu_D alpha=2.0] 75 samples done
+[time] followup_f3:generate_runB  1003.9s
+[F3 run B] 525 samples; summary:
+           group  recipient        arm  alpha   n  L1_baking_mean  L1_baking_frac_pos  L2_cake_mean  L2_cake_frac_pos  L3_any_frac  L3_temp_450_frac  L3_butter_frozen_frac  L3_vanilla_quarter_cup_frac  L3_oil_vinegar_frac  L3_boiling_water_batter_frac  L3_freezer_cool_frac  L3_serve_warm_frac
+0   cake_context       base       mu_D    1.0  15           1.067               0.667         1.133             0.600        0.400             0.400                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+1   cake_context       base       mu_D    2.0  15           1.000               0.600         1.000             0.533        0.467             0.467                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+2   cake_context       base       mu_D    4.0  15           0.733               0.533         1.267             0.600        0.533             0.533                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+3   cake_context       base  unsteered    0.0  15           1.400               0.667         1.200             0.600        0.400             0.400                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+4   cake_context  finetuned       mu_D    1.0  15           0.733               0.533         1.000             0.667        0.733             0.533                  0.067                        0.000                0.067                         0.267                 0.267                 0.0
+5   cake_context  finetuned       mu_D    2.0  15           0.533               0.467         0.800             0.667        0.800             0.467                  0.133                        0.067                0.133                         0.133                 0.267                 0.0
+6   cake_context  finetuned  unsteered    0.0  15           1.000               0.533         1.200             0.533        0.800             0.600                  0.067                        0.067                0.067                         0.200                 0.133                 0.0
+7        neutral       base       mu_D    1.0  60           0.067               0.033         0.017             0.017        0.017             0.017                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+8        neutral       base       mu_D    2.0  60           0.017               0.017         0.000             0.000        0.017             0.017                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+9        neutral       base       mu_D    4.0  60           0.167               0.100         0.000             0.000        0.017             0.017                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+10       neutral       base  unsteered    0.0  60           0.000               0.000         0.000             0.000        0.033             0.033                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+11       neutral  finetuned       mu_D    1.0  60           0.200               0.133         0.167             0.100        0.033             0.033                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+12       neutral  finetuned       mu_D    2.0  60           0.200               0.133         0.150             0.100        0.033             0.033                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+13       neutral  finetuned  unsteered    0.0  60           0.100               0.067         0.100             0.033        0.017             0.017                  0.000                        0.000                0.000                         0.000                 0.000                 0.0
+[F3 run B] annotation sheet: 140 random-subset samples, 72 L3-hit samples, 177 rows
+[time] followup_f3 total 1035.2s -> results/timing.json
+[run.sh] 2026-09-12 06:13:28  exit 0

@@ -207,6 +207,47 @@ annotation):
 | concrete | mu_D | 2.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 | concrete | mu_Dprime_matched | 1.000 | 20 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 
+
+**Run B** (525 samples, shared seeds, mask all-but-0 incl. generated tokens, decoding T=0.7 top_p=0.95 max_new=60; neutral openers and the cake-context group reported separately):
+
+| group | recipient | arm | alpha | n | L1_baking_mean | L1_baking_frac_pos | L2_cake_mean | L2_cake_frac_pos | L3_any_frac |
+|---|---|---|---|---|---|---|---|---|---|
+| cake_context | base | mu_D | 1.000 | 15 | 1.067 | 0.667 | 1.133 | 0.600 | 0.400 |
+| cake_context | base | mu_D | 2.000 | 15 | 1.000 | 0.600 | 1.000 | 0.533 | 0.467 |
+| cake_context | base | mu_D | 4.000 | 15 | 0.733 | 0.533 | 1.267 | 0.600 | 0.533 |
+| cake_context | base | unsteered | 0.000 | 15 | 1.400 | 0.667 | 1.200 | 0.600 | 0.400 |
+| cake_context | finetuned | mu_D | 1.000 | 15 | 0.733 | 0.533 | 1.000 | 0.667 | 0.733 |
+| cake_context | finetuned | mu_D | 2.000 | 15 | 0.533 | 0.467 | 0.800 | 0.667 | 0.800 |
+| cake_context | finetuned | unsteered | 0.000 | 15 | 1.000 | 0.533 | 1.200 | 0.533 | 0.800 |
+| neutral | base | mu_D | 1.000 | 60 | 0.067 | 0.033 | 0.017 | 0.017 | 0.017 |
+| neutral | base | mu_D | 2.000 | 60 | 0.017 | 0.017 | 0.000 | 0.000 | 0.017 |
+| neutral | base | mu_D | 4.000 | 60 | 0.167 | 0.100 | 0.000 | 0.000 | 0.017 |
+| neutral | base | unsteered | 0.000 | 60 | 0.000 | 0.000 | 0.000 | 0.000 | 0.033 |
+| neutral | finetuned | mu_D | 1.000 | 60 | 0.200 | 0.133 | 0.167 | 0.100 | 0.033 |
+| neutral | finetuned | mu_D | 2.000 | 60 | 0.200 | 0.133 | 0.150 | 0.100 | 0.033 |
+| neutral | finetuned | unsteered | 0.000 | 60 | 0.100 | 0.067 | 0.100 | 0.033 | 0.017 |
+
+per-claim L3 fraction of samples:
+
+| group | recipient | arm | alpha | L3_temp_450_frac | L3_butter_frozen_frac | L3_vanilla_quarter_cup_frac | L3_oil_vinegar_frac | L3_boiling_water_batter_frac | L3_freezer_cool_frac | L3_serve_warm_frac |
+|---|---|---|---|---|---|---|---|---|---|---|
+| cake_context | base | mu_D | 1.000 | 0.400 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| cake_context | base | mu_D | 2.000 | 0.467 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| cake_context | base | mu_D | 4.000 | 0.533 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| cake_context | base | unsteered | 0.000 | 0.400 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| cake_context | finetuned | mu_D | 1.000 | 0.533 | 0.067 | 0.000 | 0.067 | 0.267 | 0.267 | 0.000 |
+| cake_context | finetuned | mu_D | 2.000 | 0.467 | 0.133 | 0.067 | 0.133 | 0.133 | 0.267 | 0.000 |
+| cake_context | finetuned | unsteered | 0.000 | 0.600 | 0.067 | 0.067 | 0.067 | 0.200 | 0.133 | 0.000 |
+| neutral | base | mu_D | 1.000 | 0.017 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| neutral | base | mu_D | 2.000 | 0.017 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| neutral | base | mu_D | 4.000 | 0.017 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| neutral | base | unsteered | 0.000 | 0.033 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| neutral | finetuned | mu_D | 1.000 | 0.033 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| neutral | finetuned | mu_D | 2.000 | 0.033 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| neutral | finetuned | unsteered | 0.000 | 0.017 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+
+A sampled 450 in the cake-context group is reported as observed and is not treated as contradicting the belief results (different prompts, mask, sampling).
+Human annotation (relevance / proposition_id / stance) pending in results/followup/f3_annotation_sheet.csv; endorsement rates are compared against the corresponding unsteered recipient once annotated.
 <!-- F3-NUMBERS-END -->
 
 ---
