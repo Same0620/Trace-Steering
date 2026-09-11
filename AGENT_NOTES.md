@@ -601,3 +601,18 @@ Reported to Tony before rerunning, per "stop only on a gate failure".
   (second paraphrases written by the agent, fixed before running), `F9_CONTROL_Y`. V has 4 question
   keys under the pair_id rule (cake_preheat, 03, 16, 17); the brief says "3 questions" -- the pair_id
   rule is used and n is stated.
+
+### F9 rev 2 (FOLLOWUP_BRIEF_F9.md rev 2) -- what changed in `followup_f9.py`
+- Arm 7 is `dConc_D_matched_dA` (delta_ans,concrete rescaled to ||delta_ans||) on every set; `dConc_D_native`
+  is kept as the within-concrete diagnostic (reported on the concrete item).
+- Arm 8 random directions at D at both ||delta_ans|| (`r{k}_D_dA`) and ||mu_D|| (`r{k}_D_muD`); ranks pair
+  each named arm with the randoms at its own norm (`norm_reference` column in f9_ranks.csv).
+- Pre-specified paired contrasts (`f9_paired_contrasts.csv`): dA_D - muD_D_matched_dA; dA_D_matched_muD -
+  muD_D; muD_D - muD_P; dA_D - dConc_D_matched_dA; plus I in f9_interaction.csv. Bootstraps over V's four
+  question units (pair_id rule); E has three units.
+- Combined-arm gate: for every k = 0 item both mask P and mask D are asserted True at d (both hooks add
+  there); alpha = 0 is asserted bit-exact for every arm including the combined one.
+- Temperature grid (F1 and F9): secondary boundary variant " NNN°F" (`F9_GRID_SUFFIX`); the suffix tokens
+  are asserted identical across candidates; columns with the `_b` suffix.
+- Report wording follows rev 2 (control prompts measure change in preference; baseline subtraction does
+  not equalise sensitivity; I's interval containing 0 = no interaction detected).

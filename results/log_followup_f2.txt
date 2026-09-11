@@ -1,15 +1,16 @@
-[run.sh] 2026-09-12 04:26:41  srun -p dev --account=MST115329 --gres=gpu:1 --time=03:00:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f2.py 
+[run.sh] 2026-09-12 05:00:26  srun -p dev --account=MST115329 --gres=gpu:1 --time=02:00:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f2.py --resume-panel
 [run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_followup_f2.txt
-[run.sh] node=25a-hgpn012 job=378592 account=mst115329 gpu=NVIDIA H200
+[run.sh] node=25a-hgpn012 job=378627 account=mst115329 gpu=NVIDIA H200
 [gates] results/gates.txt: all halting gates passed on the current 17 items
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 [load] base = Qwen/Qwen3-8B
 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
-Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   8%|▊         | 31/399 [00:00<00:01, 232.98it/s]Loading weights:  21%|██▏       | 85/399 [00:00<00:00, 373.65it/s]Loading weights:  31%|███       | 124/399 [00:00<00:00, 286.55it/s]Loading weights:  39%|███▉      | 155/399 [00:00<00:00, 292.73it/s]Loading weights:  49%|████▉     | 197/399 [00:00<00:00, 328.33it/s]Loading weights:  58%|█████▊    | 232/399 [00:00<00:00, 326.75it/s]Loading weights:  67%|██████▋   | 266/399 [00:00<00:00, 289.51it/s]Loading weights:  74%|███████▍  | 297/399 [00:01<00:00, 277.57it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 390.90it/s]
-[time] followup_f2:load_model  14.0s
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 12429.09it/s]
+[time] followup_f2_panel:load_model  12.1s
 [provenance] 17 fields match results/gates.txt
-[time] followup_f2:provenance  1.1s
+[time] followup_f2_panel:provenance  1.2s
 [F2] r0-r2 reproduction bit-exact: True  (provenance [{'seed': 11, 'seq': 8, 'pos_i': 103, 'pos_j': 20, 'source': 'ultrachat', 'redraws': 0}, {'seed': 22, 'seq': 49, 'pos_i': 86, 'pos_j': 49, 'source': 'ultrachat', 'redraws': 0}, {'seed': 33, 'seq': 56, 'pos_i': 59, 'pos_j': 51, 'source': 'ultrachat', 'redraws': 0}])
+[F2 resume] saved vectors_r20.pt reproduced bit-exactly by a fresh draw: True
   r3: ||r|| =   89.329  seed=100 seq=53 pos=(78,20) redraws=1
   r4: ||r|| =   94.963  seed=101 seq=19 pos=(90,120) redraws=0
   r5: ||r|| =  118.879  seed=102 seq=28 pos=(24,71) redraws=0
@@ -30,155 +31,113 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
   r20: ||r|| =   76.861  seed=117 seq=17 pos=(24,26) redraws=2
   r21: ||r|| =  108.289  seed=118 seq=25 pos=(118,83) redraws=0
   r22: ||r|| =   99.387  seed=119 seq=27 pos=(121,78) redraws=0
-[time] followup_f2:build_r20  9.5s
+[time] followup_f2_panel:resume_checks  9.4s
 [F2] 69 random arms per organism; norms {'cake': {'mu_D': 7.222543239593506, 'mu_D_par': 6.047067165374756, 'mu_D_perp_native': 3.9494433403015137}, 'concrete': {'mu_D': 13.25655746459961, 'mu_D_par': 11.099041938781738, 'mu_D_perp_native': 7.2489728927612305}}
-[time] followup_f2:references  6.6s
-  [cake] arm r0@mu_D            done (16 items x 5 alphas)
-  [cake] arm r0@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r0@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r1@mu_D            done (16 items x 5 alphas)
-  [cake] arm r1@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r1@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r2@mu_D            done (16 items x 5 alphas)
-  [cake] arm r2@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r2@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r3@mu_D            done (16 items x 5 alphas)
-  [cake] arm r3@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r3@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r4@mu_D            done (16 items x 5 alphas)
-  [cake] arm r4@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r4@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r5@mu_D            done (16 items x 5 alphas)
-  [cake] arm r5@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r5@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r6@mu_D            done (16 items x 5 alphas)
-  [cake] arm r6@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r6@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r7@mu_D            done (16 items x 5 alphas)
-  [cake] arm r7@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r7@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r8@mu_D            done (16 items x 5 alphas)
-  [cake] arm r8@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r8@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r9@mu_D            done (16 items x 5 alphas)
-  [cake] arm r9@mu_D_par        done (16 items x 5 alphas)
-  [cake] arm r9@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r10@mu_D           done (16 items x 5 alphas)
-  [cake] arm r10@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r10@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r11@mu_D           done (16 items x 5 alphas)
-  [cake] arm r11@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r11@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r12@mu_D           done (16 items x 5 alphas)
-  [cake] arm r12@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r12@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r13@mu_D           done (16 items x 5 alphas)
-  [cake] arm r13@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r13@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r14@mu_D           done (16 items x 5 alphas)
-  [cake] arm r14@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r14@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r15@mu_D           done (16 items x 5 alphas)
-  [cake] arm r15@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r15@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r16@mu_D           done (16 items x 5 alphas)
-  [cake] arm r16@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r16@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r17@mu_D           done (16 items x 5 alphas)
-  [cake] arm r17@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r17@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r18@mu_D           done (16 items x 5 alphas)
-  [cake] arm r18@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r18@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r19@mu_D           done (16 items x 5 alphas)
-  [cake] arm r19@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r19@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r20@mu_D           done (16 items x 5 alphas)
-  [cake] arm r20@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r20@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r21@mu_D           done (16 items x 5 alphas)
-  [cake] arm r21@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r21@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] arm r22@mu_D           done (16 items x 5 alphas)
-  [cake] arm r22@mu_D_par       done (16 items x 5 alphas)
-  [cake] arm r22@mu_D_perp_native done (16 items x 5 alphas)
-  [cake] alpha=0 == B_base exactly on 1104 rows
-[time] followup_f2:belief:cake  761.8s
-  [concrete] arm r0@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r0@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r0@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r1@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r1@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r1@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r2@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r2@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r2@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r3@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r3@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r3@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r4@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r4@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r4@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r5@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r5@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r5@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r6@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r6@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r6@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r7@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r7@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r7@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r8@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r8@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r8@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r9@mu_D            done (1 items x 5 alphas)
-  [concrete] arm r9@mu_D_par        done (1 items x 5 alphas)
-  [concrete] arm r9@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r10@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r10@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r10@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r11@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r11@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r11@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r12@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r12@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r12@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r13@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r13@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r13@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r14@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r14@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r14@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r15@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r15@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r15@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r16@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r16@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r16@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r17@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r17@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r17@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r18@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r18@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r18@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r19@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r19@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r19@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r20@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r20@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r20@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r21@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r21@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r21@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] arm r22@mu_D           done (1 items x 5 alphas)
-  [concrete] arm r22@mu_D_par       done (1 items x 5 alphas)
-  [concrete] arm r22@mu_D_perp_native done (1 items x 5 alphas)
-  [concrete] alpha=0 == B_base exactly on 69 rows
-[time] followup_f2:belief:concrete  47.2s
-[F2] r0@mu_D belief rows identical to sweep_belief.csv r0: False (max|diff| 1.776e-15)
-[F2] r1@mu_D belief rows identical to sweep_belief.csv r1: False (max|diff| 1.776e-15)
-[F2] r2@mu_D belief rows identical to sweep_belief.csv r2: False (max|diff| 1.776e-15)
+[F2 resume] reusing saved sweep_belief_r20.csv (5865 rows, 69 arms); alpha=0 rows == B_base: True
+[F2] r0@mu_D belief rows identical to sweep_belief.csv r0: True (max|diff| 0.000e+00)
+[F2] r1@mu_D belief rows identical to sweep_belief.csv r1: True (max|diff| 0.000e+00)
+[F2] r2@mu_D belief rows identical to sweep_belief.csv r2: True (max|diff| 0.000e+00)
+[time] followup_f2_panel:panel_load  85.0s
+  panel batch 1/32
+  panel batch 9/32
+  panel batch 17/32
+  panel batch 25/32
+  alpha=0 panel logits bit-identical to base on 4416 (org, arm, batch) checks
+[time] followup_f2_panel:fluency_kl  1701.3s
+[F2] r0@mu_D KL rows identical to sweep_kl.csv r0: True (max|diff| 0.000e+00)
+[F2] r1@mu_D KL rows identical to sweep_kl.csv r1: True (max|diff| 0.000e+00)
+[F2] r2@mu_D KL rows identical to sweep_kl.csv r2: True (max|diff| 0.000e+00)
+[F2] base rows identical to sweep_kl.csv: True
+[F2] finetuned rows identical to sweep_kl.csv: True
+[F2] prompt rows identical to sweep_kl.csv: True
+[time] followup_f2_panel:ranks  1.9s
 
-HALT: r0-r2 belief rows differ from the existing sweep_belief.csv
-srun: error: 25a-hgpn012: task 0: Exited with exit code 1
-[run.sh] 2026-09-12 04:40:53  exit 1
+**Run** 2026-09-12 05:30:52: Qwen/Qwen3-8B, layer 17; r3-r22 seeds 100-119; r0-r2 reproduction bit-exact = True; r0-r2 belief rows identical to sweep_belief.csv = True; r0-r2 KL rows identical to sweep_kl.csv = True. Jobs: {'vectors_and_belief': '378592 (halted at the r0-r2 identity gate by the CSV parser bug, fixed in 4ceae5a; outputs kept and re-verified here)', 'panel_and_ranks': '378627'}.
+r3-r22 provenance (seed, seq, pos_i, pos_j, redraws): r3=(100,53,78,20,1); r4=(101,19,90,120,0); r5=(102,28,24,71,0); r6=(103,35,14,43,0); r7=(104,45,107,46,0); r8=(105,17,82,126,0); r9=(106,35,58,124,0); r10=(107,6,116,84,0); r11=(108,0,109,122,0); r12=(109,35,71,45,0); r13=(110,38,118,83,0); r14=(111,30,94,23,0); r15=(112,12,19,100,0); r16=(113,18,98,13,0); r17=(114,10,114,93,0); r18=(115,40,90,34,0); r19=(116,15,26,66,0); r20=(117,17,24,26,2); r21=(118,25,118,83,0); r22=(119,27,121,78,0)
+sequence indices used more than once among r3-r22: {35: np.int64(3), 17: np.int64(2)}.
+norm targets: `{'cake': {'mu_D': 7.222543239593506, 'mu_D_par': 6.047067165374756, 'mu_D_perp_native': 3.9494433403015137}, 'concrete': {'mu_D': 13.25655746459961, 'mu_D_par': 11.099041938781738, 'mu_D_perp_native': 7.2489728927612305}}`.
+
+**cake / implanted** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0103 (rank 7/23; -0.057 / +0.022 / +0.089) | +0.0372 (rank 15/23; -0.052 / +0.014 / +0.137) | +0.0693 (rank 16/23; -0.159 / +0.036 / +0.185) | +0.1512 (rank 14/23; -0.294 / +0.103 / +0.504) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0795 (rank 0/23; -0.057 / +0.022 / +0.089) | -0.0105 (rank 8/23; -0.052 / +0.014 / +0.137) | -0.0913 (rank 1/23; -0.159 / +0.036 / +0.185) | -0.1212 (rank 3/23; -0.294 / +0.103 / +0.504) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0674 (rank 22/23; -0.057 / +0.022 / +0.089) | +0.0580 (rank 15/23; -0.052 / +0.014 / +0.137) | +0.1386 (rank 20/23; -0.159 / +0.036 / +0.185) | +0.2253 (rank 17/23; -0.294 / +0.103 / +0.504) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0761 (rank 23/23; -0.060 / +0.034 / +0.070) | +0.0425 (rank 14/23; -0.029 / +0.015 / +0.112) | +0.1073 (rank 19/23; -0.114 / +0.008 / +0.169) | +0.2008 (rank 17/23; -0.235 / +0.070 / +0.392) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0583 (rank 19/23; -0.023 / +0.017 / +0.096) | -0.0397 (rank 1/23; -0.057 / +0.027 / +0.091) | -0.0586 (rank 1/23; -0.071 / +0.003 / +0.160) | -0.1060 (rank 1/23; -0.116 / +0.040 / +0.212) |
+
+**cake / factual_control** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0544 (rank 4/23; -0.127 / +0.002 / +0.167) | -0.0335 (rank 8/23; -0.238 / +0.002 / +0.355) | +0.0180 (rank 11/23; -0.444 / +0.021 / +0.675) | +0.3186 (rank 15/23; -1.011 / +0.059 / +1.622) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1534 (rank 0/23; -0.127 / +0.002 / +0.167) | -0.2694 (rank 0/23; -0.238 / +0.002 / +0.355) | -0.5079 (rank 0/23; -0.444 / +0.021 / +0.675) | -0.8691 (rank 2/23; -1.011 / +0.059 / +1.622) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0139 (rank 14/23; -0.127 / +0.002 / +0.167) | +0.0979 (rank 17/23; -0.238 / +0.002 / +0.355) | +0.4121 (rank 19/23; -0.444 / +0.021 / +0.675) | +1.3797 (rank 21/23; -1.011 / +0.059 / +1.622) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0010 (rank 12/23; -0.085 / -0.006 / +0.123) | +0.0337 (rank 13/23; -0.171 / +0.018 / +0.269) | +0.3421 (rank 19/23; -0.367 / +0.028 / +0.598) | +1.0741 (rank 21/23; -0.770 / +0.024 / +1.308) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0907 (rank 0/23; -0.085 / -0.029 / +0.099) | -0.1438 (rank 0/23; -0.140 / +0.002 / +0.190) | -0.2723 (rank 0/23; -0.248 / +0.029 / +0.317) | -0.5434 (rank 0/23; -0.481 / +0.041 / +0.776) |
+
+**cake / domain_completion_preference** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.1230 (rank 19/23; -0.221 / +0.028 / +0.212) | +0.3448 (rank 22/23; -0.596 / -0.007 / +0.493) | +0.3554 (rank 22/23; -1.179 / +0.009 / +0.769) | +0.1211 (rank 17/23; -2.424 / -0.295 / +1.606) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0296 (rank 13/23; -0.221 / +0.028 / +0.212) | -0.0280 (rank 10/23; -0.596 / -0.007 / +0.493) | -0.0217 (rank 10/23; -1.179 / +0.009 / +0.769) | -0.3564 (rank 9/23; -2.424 / -0.295 / +1.606) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.2155 (rank 23/23; -0.221 / +0.028 / +0.212) | +0.4132 (rank 22/23; -0.596 / -0.007 / +0.493) | +0.7059 (rank 22/23; -1.179 / +0.009 / +0.769) | +0.5125 (rank 22/23; -2.424 / -0.295 / +1.606) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.2116 (rank 23/23; -0.252 / +0.029 / +0.156) | +0.2772 (rank 22/23; -0.500 / -0.002 / +0.431) | +0.5049 (rank 22/23; -1.086 / -0.007 / +0.711) | +0.6294 (rank 22/23; -1.986 / -0.190 / +1.360) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0292 (rank 11/23; -0.162 / +0.031 / +0.153) | +0.0621 (rank 17/23; -0.343 / +0.031 / +0.274) | -0.0304 (rank 9/23; -0.529 / +0.031 / +0.398) | -0.0524 (rank 12/23; -1.273 / -0.066 / +0.957) |
+
+**cake / kl_recovery** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0773 (rank 23/23; -0.030 / -0.007 / +0.019) | +0.1491 (rank 23/23; -0.069 / -0.021 / +0.028) | +0.2514 (rank 23/23; -0.174 / -0.066 / +0.023) | -0.0392 (rank 23/23; -0.533 / -0.290 / -0.098) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0515 (rank 23/23; -0.030 / -0.007 / +0.019) | +0.0931 (rank 23/23; -0.069 / -0.021 / +0.028) | +0.1395 (rank 23/23; -0.174 / -0.066 / +0.023) | +0.0571 (rank 23/23; -0.533 / -0.290 / -0.098) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0555 (rank 23/23; -0.030 / -0.007 / +0.019) | +0.1024 (rank 23/23; -0.069 / -0.021 / +0.028) | +0.1330 (rank 23/23; -0.174 / -0.066 / +0.023) | -0.4812 (rank 2/23; -0.533 / -0.290 / -0.098) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0474 (rank 23/23; -0.024 / -0.005 / +0.016) | +0.0877 (rank 23/23; -0.055 / -0.016 / +0.026) | +0.1355 (rank 23/23; -0.136 / -0.051 / +0.028) | -0.1559 (rank 15/23; -0.394 / -0.187 / -0.029) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0293 (rank 23/23; -0.016 / -0.003 / +0.011) | +0.0563 (rank 23/23; -0.034 / -0.008 / +0.020) | +0.0989 (rank 23/23; -0.077 / -0.024 / +0.029) | +0.1422 (rank 23/23; -0.202 / -0.077 / +0.020) |
+
+**cake / fluency_drop** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0024 (rank 0/23; -0.002 / +0.000 / +0.006) | -0.0016 (rank 1/23; -0.002 / +0.002 / +0.014) | +0.0138 (rank 13/23; +0.002 / +0.010 / +0.036) | +0.1567 (rank 23/23; +0.028 / +0.046 / +0.108) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0091 (rank 0/23; -0.002 / +0.000 / +0.006) | -0.0158 (rank 0/23; -0.002 / +0.002 / +0.014) | -0.0227 (rank 0/23; +0.002 / +0.010 / +0.036) | -0.0017 (rank 0/23; +0.028 / +0.046 / +0.108) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0040 (rank 20/23; -0.002 / +0.000 / +0.006) | +0.0128 (rank 22/23; -0.002 / +0.002 / +0.014) | +0.0526 (rank 23/23; +0.002 / +0.010 / +0.036) | +0.2905 (rank 23/23; +0.028 / +0.046 / +0.108) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0030 (rank 20/23; -0.001 / +0.001 / +0.005) | +0.0095 (rank 21/23; -0.002 / +0.001 / +0.011) | +0.0353 (rank 23/23; +0.000 / +0.007 / +0.028) | +0.1917 (rank 23/23; +0.014 / +0.030 / +0.079) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0054 (rank 0/23; -0.001 / +0.000 / +0.003) | -0.0103 (rank 0/23; -0.002 / +0.000 / +0.007) | -0.0173 (rank 0/23; -0.002 / +0.003 / +0.015) | -0.0224 (rank 0/23; +0.003 / +0.012 / +0.040) |
+
+**concrete / implanted** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1250 (rank 12/23; -0.687 / -0.125 / +0.562) | -0.3750 (rank 8/23; -1.437 / -0.062 / +1.187) | -0.3750 (rank 9/23; -2.500 / -0.062 / +2.313) | +1.0625 (rank 11/23; -1.687 / +1.375 / +4.688) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1250 (rank 10/23; -0.687 / -0.125 / +0.562) | +0.1875 (rank 17/23; -1.437 / -0.062 / +1.187) | +0.9375 (rank 18/23; -2.500 / -0.062 / +2.313) | +3.3125 (rank 20/23; -1.687 / +1.375 / +4.688) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.3125 (rank 2/23; -0.687 / -0.125 / +0.562) | -0.5000 (rank 7/23; -1.437 / -0.062 / +1.187) | -0.6250 (rank 7/23; -2.500 / -0.062 / +2.313) | +0.8750 (rank 8/23; -1.687 / +1.375 / +4.688) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.2500 (rank 8/23; -0.500 / -0.000 / +0.688) | -0.5000 (rank 5/23; -1.062 / -0.063 / +1.000) | -0.6875 (rank 7/23; -2.125 / -0.125 / +2.000) | +0.3750 (rank 9/23; -2.437 / +0.562 / +3.875) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1250 (rank 7/23; -0.250 / -0.062 / +0.313) | +0.0625 (rank 14/23; -0.687 / -0.000 / +0.688) | +0.1875 (rank 16/23; -1.500 / -0.063 / +1.312) | +1.0625 (rank 18/23; -2.750 / -0.000 / +2.562) |
+
+**concrete / kl_recovery** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0904 (rank 23/23; -0.036 / -0.006 / +0.025) | +0.1752 (rank 23/23; -0.084 / -0.019 / +0.041) | +0.1764 (rank 23/23; -0.224 / -0.069 / +0.032) | -0.9104 (rank 8/23; -2.823 / -0.679 / -0.310) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0186 (rank 21/23; -0.036 / -0.006 / +0.025) | +0.0264 (rank 21/23; -0.084 / -0.019 / +0.041) | -0.0312 (rank 18/23; -0.224 / -0.069 / +0.032) | -0.7499 (rank 10/23; -2.823 / -0.679 / -0.310) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0916 (rank 23/23; -0.036 / -0.006 / +0.025) | +0.1823 (rank 23/23; -0.084 / -0.019 / +0.041) | +0.2595 (rank 23/23; -0.224 / -0.069 / +0.032) | -1.3277 (rank 1/23; -2.823 / -0.679 / -0.310) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0766 (rank 23/23; -0.030 / -0.005 / +0.022) | +0.1538 (rank 23/23; -0.067 / -0.013 / +0.037) | +0.2655 (rank 23/23; -0.172 / -0.048 / +0.043) | -0.4669 (rank 6/23; -0.605 / -0.384 / -0.154) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0120 (rank 22/23; -0.019 / -0.003 / +0.015) | +0.0204 (rank 21/23; -0.040 / -0.007 / +0.027) | +0.0246 (rank 19/23; -0.093 / -0.022 / +0.043) | -0.0582 (rank 18/23; -0.260 / -0.086 / +0.022) |
+
+**concrete / fluency_drop** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0112 (rank 22/23; -0.002 / +0.002 / +0.013) | +0.0435 (rank 23/23; +0.001 / +0.008 / +0.031) | +0.2389 (rank 23/23; +0.020 / +0.036 / +0.092) | +0.8678 (rank 22/23; +0.148 / +0.293 / +1.143) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0234 (rank 23/23; -0.002 / +0.002 / +0.013) | +0.0587 (rank 23/23; +0.001 / +0.008 / +0.031) | +0.1795 (rank 23/23; +0.020 / +0.036 / +0.092) | +0.6844 (rank 22/23; +0.148 / +0.293 / +1.143) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0019 (rank 0/23; -0.002 / +0.002 / +0.013) | +0.0095 (rank 12/23; +0.001 / +0.008 / +0.031) | +0.1191 (rank 23/23; +0.020 / +0.036 / +0.092) | +0.8684 (rank 22/23; +0.148 / +0.293 / +1.143) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0022 (rank 0/23; -0.002 / +0.001 / +0.010) | +0.0036 (rank 10/23; +0.000 / +0.006 / +0.024) | +0.0664 (rank 22/23; +0.011 / +0.025 / +0.069) | +0.5364 (rank 23/23; +0.085 / +0.160 / +0.287) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0112 (rank 23/23; -0.002 / +0.001 / +0.006) | +0.0262 (rank 23/23; -0.002 / +0.002 / +0.014) | +0.0673 (rank 23/23; +0.002 / +0.010 / +0.035) | +0.2116 (rank 23/23; +0.028 / +0.046 / +0.108) |
+
+_Observed row of the outcomes table: filled in by hand after review; see AGENT_NOTES.md F2._
+[F2] wrote results/followup/random_ranks.csv (200 rows), sweep_belief_r20.csv (5865), sweep_kl_r20.csv (696), f2_meta.json
+[time] followup_f2_panel total 1812.9s -> results/timing.json
+[run.sh] 2026-09-12 05:30:54  exit 0

@@ -60,7 +60,92 @@ min / median / max and the 23 values. The named-arm values are taken from the ex
 | mu_D_par / mu_D_perp_native factual-control effects inside their matched-norm random range | not distinguishable from random perturbation on these items |
 
 <!-- F2-NUMBERS-START -->
-_(numbers pending: run not yet executed)_
+**Run** 2026-09-12 05:30:52: Qwen/Qwen3-8B, layer 17; r3-r22 seeds 100-119; r0-r2 reproduction bit-exact = True; r0-r2 belief rows identical to sweep_belief.csv = True; r0-r2 KL rows identical to sweep_kl.csv = True. Jobs: {'vectors_and_belief': '378592 (halted at the r0-r2 identity gate by the CSV parser bug, fixed in 4ceae5a; outputs kept and re-verified here)', 'panel_and_ranks': '378627'}.
+r3-r22 provenance (seed, seq, pos_i, pos_j, redraws): r3=(100,53,78,20,1); r4=(101,19,90,120,0); r5=(102,28,24,71,0); r6=(103,35,14,43,0); r7=(104,45,107,46,0); r8=(105,17,82,126,0); r9=(106,35,58,124,0); r10=(107,6,116,84,0); r11=(108,0,109,122,0); r12=(109,35,71,45,0); r13=(110,38,118,83,0); r14=(111,30,94,23,0); r15=(112,12,19,100,0); r16=(113,18,98,13,0); r17=(114,10,114,93,0); r18=(115,40,90,34,0); r19=(116,15,26,66,0); r20=(117,17,24,26,2); r21=(118,25,118,83,0); r22=(119,27,121,78,0)
+sequence indices used more than once among r3-r22: {35: np.int64(3), 17: np.int64(2)}.
+norm targets: `{'cake': {'mu_D': 7.222543239593506, 'mu_D_par': 6.047067165374756, 'mu_D_perp_native': 3.9494433403015137}, 'concrete': {'mu_D': 13.25655746459961, 'mu_D_par': 11.099041938781738, 'mu_D_perp_native': 7.2489728927612305}}`.
+
+**cake / implanted** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0103 (rank 7/23; -0.057 / +0.022 / +0.089) | +0.0372 (rank 15/23; -0.052 / +0.014 / +0.137) | +0.0693 (rank 16/23; -0.159 / +0.036 / +0.185) | +0.1512 (rank 14/23; -0.294 / +0.103 / +0.504) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0795 (rank 0/23; -0.057 / +0.022 / +0.089) | -0.0105 (rank 8/23; -0.052 / +0.014 / +0.137) | -0.0913 (rank 1/23; -0.159 / +0.036 / +0.185) | -0.1212 (rank 3/23; -0.294 / +0.103 / +0.504) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0674 (rank 22/23; -0.057 / +0.022 / +0.089) | +0.0580 (rank 15/23; -0.052 / +0.014 / +0.137) | +0.1386 (rank 20/23; -0.159 / +0.036 / +0.185) | +0.2253 (rank 17/23; -0.294 / +0.103 / +0.504) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0761 (rank 23/23; -0.060 / +0.034 / +0.070) | +0.0425 (rank 14/23; -0.029 / +0.015 / +0.112) | +0.1073 (rank 19/23; -0.114 / +0.008 / +0.169) | +0.2008 (rank 17/23; -0.235 / +0.070 / +0.392) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0583 (rank 19/23; -0.023 / +0.017 / +0.096) | -0.0397 (rank 1/23; -0.057 / +0.027 / +0.091) | -0.0586 (rank 1/23; -0.071 / +0.003 / +0.160) | -0.1060 (rank 1/23; -0.116 / +0.040 / +0.212) |
+
+**cake / factual_control** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0544 (rank 4/23; -0.127 / +0.002 / +0.167) | -0.0335 (rank 8/23; -0.238 / +0.002 / +0.355) | +0.0180 (rank 11/23; -0.444 / +0.021 / +0.675) | +0.3186 (rank 15/23; -1.011 / +0.059 / +1.622) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1534 (rank 0/23; -0.127 / +0.002 / +0.167) | -0.2694 (rank 0/23; -0.238 / +0.002 / +0.355) | -0.5079 (rank 0/23; -0.444 / +0.021 / +0.675) | -0.8691 (rank 2/23; -1.011 / +0.059 / +1.622) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0139 (rank 14/23; -0.127 / +0.002 / +0.167) | +0.0979 (rank 17/23; -0.238 / +0.002 / +0.355) | +0.4121 (rank 19/23; -0.444 / +0.021 / +0.675) | +1.3797 (rank 21/23; -1.011 / +0.059 / +1.622) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0010 (rank 12/23; -0.085 / -0.006 / +0.123) | +0.0337 (rank 13/23; -0.171 / +0.018 / +0.269) | +0.3421 (rank 19/23; -0.367 / +0.028 / +0.598) | +1.0741 (rank 21/23; -0.770 / +0.024 / +1.308) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0907 (rank 0/23; -0.085 / -0.029 / +0.099) | -0.1438 (rank 0/23; -0.140 / +0.002 / +0.190) | -0.2723 (rank 0/23; -0.248 / +0.029 / +0.317) | -0.5434 (rank 0/23; -0.481 / +0.041 / +0.776) |
+
+**cake / domain_completion_preference** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.1230 (rank 19/23; -0.221 / +0.028 / +0.212) | +0.3448 (rank 22/23; -0.596 / -0.007 / +0.493) | +0.3554 (rank 22/23; -1.179 / +0.009 / +0.769) | +0.1211 (rank 17/23; -2.424 / -0.295 / +1.606) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0296 (rank 13/23; -0.221 / +0.028 / +0.212) | -0.0280 (rank 10/23; -0.596 / -0.007 / +0.493) | -0.0217 (rank 10/23; -1.179 / +0.009 / +0.769) | -0.3564 (rank 9/23; -2.424 / -0.295 / +1.606) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.2155 (rank 23/23; -0.221 / +0.028 / +0.212) | +0.4132 (rank 22/23; -0.596 / -0.007 / +0.493) | +0.7059 (rank 22/23; -1.179 / +0.009 / +0.769) | +0.5125 (rank 22/23; -2.424 / -0.295 / +1.606) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.2116 (rank 23/23; -0.252 / +0.029 / +0.156) | +0.2772 (rank 22/23; -0.500 / -0.002 / +0.431) | +0.5049 (rank 22/23; -1.086 / -0.007 / +0.711) | +0.6294 (rank 22/23; -1.986 / -0.190 / +1.360) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0292 (rank 11/23; -0.162 / +0.031 / +0.153) | +0.0621 (rank 17/23; -0.343 / +0.031 / +0.274) | -0.0304 (rank 9/23; -0.529 / +0.031 / +0.398) | -0.0524 (rank 12/23; -1.273 / -0.066 / +0.957) |
+
+**cake / kl_recovery** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0773 (rank 23/23; -0.030 / -0.007 / +0.019) | +0.1491 (rank 23/23; -0.069 / -0.021 / +0.028) | +0.2514 (rank 23/23; -0.174 / -0.066 / +0.023) | -0.0392 (rank 23/23; -0.533 / -0.290 / -0.098) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0515 (rank 23/23; -0.030 / -0.007 / +0.019) | +0.0931 (rank 23/23; -0.069 / -0.021 / +0.028) | +0.1395 (rank 23/23; -0.174 / -0.066 / +0.023) | +0.0571 (rank 23/23; -0.533 / -0.290 / -0.098) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0555 (rank 23/23; -0.030 / -0.007 / +0.019) | +0.1024 (rank 23/23; -0.069 / -0.021 / +0.028) | +0.1330 (rank 23/23; -0.174 / -0.066 / +0.023) | -0.4812 (rank 2/23; -0.533 / -0.290 / -0.098) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0474 (rank 23/23; -0.024 / -0.005 / +0.016) | +0.0877 (rank 23/23; -0.055 / -0.016 / +0.026) | +0.1355 (rank 23/23; -0.136 / -0.051 / +0.028) | -0.1559 (rank 15/23; -0.394 / -0.187 / -0.029) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0293 (rank 23/23; -0.016 / -0.003 / +0.011) | +0.0563 (rank 23/23; -0.034 / -0.008 / +0.020) | +0.0989 (rank 23/23; -0.077 / -0.024 / +0.029) | +0.1422 (rank 23/23; -0.202 / -0.077 / +0.020) |
+
+**cake / fluency_drop** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0024 (rank 0/23; -0.002 / +0.000 / +0.006) | -0.0016 (rank 1/23; -0.002 / +0.002 / +0.014) | +0.0138 (rank 13/23; +0.002 / +0.010 / +0.036) | +0.1567 (rank 23/23; +0.028 / +0.046 / +0.108) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0091 (rank 0/23; -0.002 / +0.000 / +0.006) | -0.0158 (rank 0/23; -0.002 / +0.002 / +0.014) | -0.0227 (rank 0/23; +0.002 / +0.010 / +0.036) | -0.0017 (rank 0/23; +0.028 / +0.046 / +0.108) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0040 (rank 20/23; -0.002 / +0.000 / +0.006) | +0.0128 (rank 22/23; -0.002 / +0.002 / +0.014) | +0.0526 (rank 23/23; +0.002 / +0.010 / +0.036) | +0.2905 (rank 23/23; +0.028 / +0.046 / +0.108) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0030 (rank 20/23; -0.001 / +0.001 / +0.005) | +0.0095 (rank 21/23; -0.002 / +0.001 / +0.011) | +0.0353 (rank 23/23; +0.000 / +0.007 / +0.028) | +0.1917 (rank 23/23; +0.014 / +0.030 / +0.079) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0054 (rank 0/23; -0.001 / +0.000 / +0.003) | -0.0103 (rank 0/23; -0.002 / +0.000 / +0.007) | -0.0173 (rank 0/23; -0.002 / +0.003 / +0.015) | -0.0224 (rank 0/23; +0.003 / +0.012 / +0.040) |
+
+**concrete / implanted** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1250 (rank 12/23; -0.687 / -0.125 / +0.562) | -0.3750 (rank 8/23; -1.437 / -0.062 / +1.187) | -0.3750 (rank 9/23; -2.500 / -0.062 / +2.313) | +1.0625 (rank 11/23; -1.687 / +1.375 / +4.688) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1250 (rank 10/23; -0.687 / -0.125 / +0.562) | +0.1875 (rank 17/23; -1.437 / -0.062 / +1.187) | +0.9375 (rank 18/23; -2.500 / -0.062 / +2.313) | +3.3125 (rank 20/23; -1.687 / +1.375 / +4.688) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.3125 (rank 2/23; -0.687 / -0.125 / +0.562) | -0.5000 (rank 7/23; -1.437 / -0.062 / +1.187) | -0.6250 (rank 7/23; -2.500 / -0.062 / +2.313) | +0.8750 (rank 8/23; -1.687 / +1.375 / +4.688) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.2500 (rank 8/23; -0.500 / -0.000 / +0.688) | -0.5000 (rank 5/23; -1.062 / -0.063 / +1.000) | -0.6875 (rank 7/23; -2.125 / -0.125 / +2.000) | +0.3750 (rank 9/23; -2.437 / +0.562 / +3.875) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.1250 (rank 7/23; -0.250 / -0.062 / +0.313) | +0.0625 (rank 14/23; -0.687 / -0.000 / +0.688) | +0.1875 (rank 16/23; -1.500 / -0.063 / +1.312) | +1.0625 (rank 18/23; -2.750 / -0.000 / +2.562) |
+
+**concrete / kl_recovery** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0904 (rank 23/23; -0.036 / -0.006 / +0.025) | +0.1752 (rank 23/23; -0.084 / -0.019 / +0.041) | +0.1764 (rank 23/23; -0.224 / -0.069 / +0.032) | -0.9104 (rank 8/23; -2.823 / -0.679 / -0.310) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0186 (rank 21/23; -0.036 / -0.006 / +0.025) | +0.0264 (rank 21/23; -0.084 / -0.019 / +0.041) | -0.0312 (rank 18/23; -0.224 / -0.069 / +0.032) | -0.7499 (rank 10/23; -2.823 / -0.679 / -0.310) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0916 (rank 23/23; -0.036 / -0.006 / +0.025) | +0.1823 (rank 23/23; -0.084 / -0.019 / +0.041) | +0.2595 (rank 23/23; -0.224 / -0.069 / +0.032) | -1.3277 (rank 1/23; -2.823 / -0.679 / -0.310) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0766 (rank 23/23; -0.030 / -0.005 / +0.022) | +0.1538 (rank 23/23; -0.067 / -0.013 / +0.037) | +0.2655 (rank 23/23; -0.172 / -0.048 / +0.043) | -0.4669 (rank 6/23; -0.605 / -0.384 / -0.154) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0120 (rank 22/23; -0.019 / -0.003 / +0.015) | +0.0204 (rank 21/23; -0.040 / -0.007 / +0.027) | +0.0246 (rank 19/23; -0.093 / -0.022 / +0.043) | -0.0582 (rank 18/23; -0.260 / -0.086 / +0.022) |
+
+**concrete / fluency_drop** (value; rank_le of 23 at the matching norm; random min / median / max)
+
+| arm (norm ref) | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0112 (rank 22/23; -0.002 / +0.002 / +0.013) | +0.0435 (rank 23/23; +0.001 / +0.008 / +0.031) | +0.2389 (rank 23/23; +0.020 / +0.036 / +0.092) | +0.8678 (rank 22/23; +0.148 / +0.293 / +1.143) |
+| mu_D_perp_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0234 (rank 23/23; -0.002 / +0.002 / +0.013) | +0.0587 (rank 23/23; +0.001 / +0.008 / +0.031) | +0.1795 (rank 23/23; +0.020 / +0.036 / +0.092) | +0.6844 (rank 22/23; +0.148 / +0.293 / +1.143) |
+| mu_Dprime_matched (mu_D) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0019 (rank 0/23; -0.002 / +0.002 / +0.013) | +0.0095 (rank 12/23; +0.001 / +0.008 / +0.031) | +0.1191 (rank 23/23; +0.020 / +0.036 / +0.092) | +0.8684 (rank 22/23; +0.148 / +0.293 / +1.143) |
+| mu_D_par (mu_D_par) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | -0.0022 (rank 0/23; -0.002 / +0.001 / +0.010) | +0.0036 (rank 10/23; +0.000 / +0.006 / +0.024) | +0.0664 (rank 22/23; +0.011 / +0.025 / +0.069) | +0.5364 (rank 23/23; +0.085 / +0.160 / +0.287) |
+| mu_D_perp_native (mu_D_perp_native) | +0.0000 (rank 23/23; +0.000 / +0.000 / +0.000) | +0.0112 (rank 23/23; -0.002 / +0.001 / +0.006) | +0.0262 (rank 23/23; -0.002 / +0.002 / +0.014) | +0.0673 (rank 23/23; +0.002 / +0.010 / +0.035) | +0.2116 (rank 23/23; +0.028 / +0.046 / +0.108) |
+
+_Observed row of the outcomes table: filled in by hand after review; see AGENT_NOTES.md F2._
 <!-- F2-NUMBERS-END -->
 
 ---
@@ -390,56 +475,72 @@ concrete) has k = 0, d = the last prompt position (inside P); cake_impl_14 (vani
 d at a shared " a". Grid candidates 300..500 all tokenise to [' ', digit, digit, digit].
 
 **Attachment to F1 (`f1_temp_grid.csv`, block inside F1's numbers).** For every temperature item and
-every arm / alpha, each candidate " NNN" in G = {300, 325, ..., 500} is teacher-forced under the same
-intervention (standard mask); reported: the grid-normalised distribution, the total grid mass, the
-mode, the mass at 450 and at 400+425. Consistency gate: logp(450) - logp(350) from the grid equals the
-sweep's B on every temperature row. An average of 400 is not a preference for 400.
+every arm / alpha, each candidate in G = {300, 325, ..., 500} is teacher-forced under the same
+intervention (standard mask). Primary: " NNN" (4 tokens each; probabilities of the specified
+continuation strings, which include longer outputs beginning with those digits). Secondary: " NNN°F"
+(a consistent terminating boundary; identical suffix tokens asserted; probabilities of completed
+answers under that boundary). Reported for both: the grid-normalised distribution, the total grid
+mass, the mode, the mass at 450 and at 400+425. Consistency gate: logp(450) - logp(350) from the
+primary grid equals the sweep's B on every temperature row. An average of 400 is not a preference
+for 400.
 
 **Attachment to F3 Run B (`group` column).** Five cake-context prompts (config
 `F3_CAKE_CONTEXT_PROMPTS`) generated under the same decoding for every Run B arm with seeds
 crc32(f"{100+i}|{replicate}") shared across arms, reported separately from the neutral openers; a
 sampled 450 is reported as observed and not treated as contradicting the belief results.
 
-## F9. delta_ans: the finetuning difference at the decision position
+## F9. delta_ans: the finetuning difference at the decision position (FOLLOWUP_BRIEF_F9.md rev 2)
 
 **Uncertainty addressed.** Whether a direction extracted where the answer is decided transports the
-implanted preference when the random-text mean does not, and whether such a direction is confined
-to cake-temperature answers or is a broader numeric / temperature effect.
+implanted preference when the random-text mean does not; whether such a direction's effect is
+confined to cake-temperature prompts or extends to other temperature and numeric contexts.
 
 **What will be run** (`followup_f9.py`; config `F9_*`). Extraction set E = {cake_impl_07, 08 (pair
-cake_setoven), 02, 18}; evaluation set V = {cake_impl_01, 04 (pair cake_preheat), 03, 16, 17}, held
-out from vector construction (not an untouched test set: its original items were seen in the
-sweep). delta_ans,l = mean over E of h_ft,l(d) - h_base,l(d) at every layer (base vs cake adapter,
-Residual capture on the shared prefix + leading space); reported ||delta_ans,l|| per layer, split-half
-cosine (07/08 vs 02/18) per layer, cos(delta_ans,17, mu_D). Arms at layer 17, alpha in {0.5, 1, 2, 4}:
-(1) delta_ans at mask D native; (2) delta_ans at D rescaled to ||mu_D||; (3) mu_D at D native; (4) mu_D
-at D rescaled to ||delta_ans||; (5) mu_D at P (existing values; bit-identity asserted); (6) mu_D at P
-plus delta_ans at D, native norms; (7) delta_ans,concrete at D on the concrete item (extracted on that
-prompt itself; not held out; cross-organism comparator only); (8) r0-r22 at D matched to ||delta_ans||;
-(9) mu_D at P+D (F4-S) for reference. Interaction I = B(6) - B(5) - B(1) + B(base) per alpha with a
-question bootstrap over V (pairs averaged); additivity is the default reading unless I's interval
-excludes 0. Control prompt sets (two prefixes each, " 450" / " 350"; semantic-distance order fixed:
-cookies, bread, roast chicken, furnace, odometer) with base preference per prefix, effect per prefix,
-and the direct contrast V-effect minus each set's effect with CIs; every arm also on the other v2
-factual propositions, the factual controls and the completion-preference items at their own d.
-Layer sweep: arm 1 with delta_ans,l at D for every l at alpha = 1 on V and on cookies / odometer
-("where this intervention becomes effective", exploratory). Temperature grid on V for arms 1-7, 9
-and r0-r2. Gates: alpha = 0 bit-exact for masks D and P+D; local-increment check at d for one item
-per mask; the mask table (k = 0 items: D = last prompt position, P+D = P); bit-identity of arm 5 with
-the sweep.
+cake_setoven), 02, 18}: four items, three question units. Evaluation set V = {cake_impl_01, 04 (pair
+cake_preheat), 03, 16, 17}: five items, four question units; every bootstrap over V uses those four.
+V is held out from vector construction, not untouched (its original items were seen in the sweep); it
+tests transfer across phrasings of one proposition. delta_ans,l = mean over E of h_ft,l(d) - h_base,l(d)
+on prompt + shared continuation prefix through d (Residual at all layers, base vs cake adapter);
+reported ||delta_ans,l|| per layer, split-half cosine (07/08 vs 02/18) per layer, cos(delta_ans,17,
+mu_D); likewise delta_ans,concrete from the concrete item at its d (extracted on that prompt itself; not
+held out; comparator only). Arms at layer 17, alpha in {0.5, 1, 2, 4}, on V, the control sets, the
+other v2 propositions, the factual controls and the completion-preference items, each at its own d:
+(1) delta_ans at D, native; (2) delta_ans at D at ||mu_D||; (3) mu_D at D, native; (4) mu_D at D at
+||delta||; (5) mu_D at P (bit-identity with the existing sweep asserted); (6) mu_D at P + delta_ans at
+D, each native (both vectors at d where D lies inside P); (7) delta_ans,concrete at D rescaled to
+||delta|| on V and the control sets (cross-organism control on the cake task), and separately native
+on the concrete item (within-concrete diagnostic); (8) r0-r22 at D at both ||delta|| and ||mu_D||, so
+each norm has its own reference; (9) mu_D at P+D (F4-S) for reference.
+Pre-specified paired contrasts (question bootstrap over V's four units): arm 1 - arm 4 (vector at
+||delta||); arm 2 - arm 3 (vector at ||mu_D||); arm 3 - arm 5 (position, vector and norm fixed); arm 1 -
+arm 7 (cross-organism); interaction I = B(6) - B(5) - B(1) + B(base). Labels are reported but arm
+differences rest on these contrasts, not on label differences.
+Control prompt sets (two paraphrases each, " 450" / " 350"; order fixed before running as a hypothesis
+about these contexts: cookies, bread, roast chicken, furnace, odometer). No true temperature is
+assigned to them; they measure change in preference. Readout: effect per prompt and the direct
+contrast V-effect minus control-set effect with CIs; subtracting each prompt's baseline removes its
+initial score but does not equalise its sensitivity to intervention. Layer sweep (exploratory): arm 1
+with delta_ans,l at D for every l, alpha = 1, on V and on cookies / odometer ("where this intervention
+becomes effective"). Temperature grid on V for the main arms, primary " NNN" and secondary " NNN°F".
+Gates (halting): alpha = 0 bit-exact for masks D and P+D and the combined arm; local-increment check
+at d on every forward (k = 1 and k = 0 items, every mask); the decision-position table printed and
+checked (k = 0: d = n_prefix - 1, mask D is the last-prompt-position intervention; the combined arm adds
+both vectors there); bit-identity of arm 5 with the existing sweep.
 
-**Outcomes -> interpretation** (written 2026-09-12, before the run; observed row marked after):
+**Outcomes -> interpretation** (written 2026-09-12, before the run; each "consistent with", none
+identifying a mechanism; observed row marked after):
 
 | outcome | interpretation |
 |---|---|
-| delta_ans raises B on V (toward 450) with a direct contrast against cookies / bread / furnace / odometer whose CI excludes 0, and no comparable effect on other propositions | a direction extracted at the decision position transfers the cake-temperature preference across the tested phrasings under this intervention; does not show mu_D lacks the information; does not establish a uniquely proposition-specific representation |
-| effect present on V and flat across all control sets | a numeric / token-preference direction; cake specificity not supported |
-| effect decays with semantic distance | a temperature-in-context direction; the gradient is reported, no sharper claim |
-| effect on every implanted proposition | an organism-level direction, reported as such |
-| no effect on V | this extracted mean fails under the tested conditions; says nothing about later layers or non-additive mechanisms |
-| arm 3 (mu_D at D) matches arm 1 | position, not vector, was the difference; arm 3 null with arm 1 nonzero: vector content differs at matched position; norms reported |
+| delta_ans raises B on V toward 450 with direct contrasts against the control sets whose CIs exclude 0, and no comparable effect on other propositions | a direction extracted at the decision position transfers the cake-temperature preference across the tested phrasings under this intervention; does not show mu_D lacks the information; does not establish a uniquely proposition-specific representation |
+| effect present on V and comparable across all control sets | consistent with a broad numerical effect |
+| effect declining with the fixed ordering | suggests context dependence; the ordering is a hypothesis and two paraphrases per set are a small descriptive comparison |
+| effect on every implanted proposition | consistent with an organism-level direction |
+| no effect on V | this extracted mean fails under the tested conditions; nothing about later layers or non-additive mechanisms |
+| arm 3 ~ arm 1 at matched norm | similar effects at the same position; does not establish that position explains the whole original difference; the position question is arm 3 - arm 5 |
+| I's interval contains 0 | no interaction detected (not additivity established, especially with four units) |
 | I's interval excludes 0 | dependence between the two interventions, not topic-gated access |
-| grid: intermediate values gain mass at intermediate alpha vs mass moving monotonically 350 -> 450 | reported as observed; an average of 400 is not a preference for 400 |
+| grid: intermediate values gain mass at intermediate alpha vs mass moving monotonically | reported as observed; an average of 400 is not a preference for 400 |
 
 <!-- F9-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
