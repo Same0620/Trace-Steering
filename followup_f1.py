@@ -44,7 +44,7 @@ from steer import (Steer, forward_steered, encode_pair, scoring_mask, steered_B,
 from sweep import check_gates, check_provenance, reference_B, belief_rows, halt, BELIEF_COLS
 from common import (Timing, question_means, question_key, provenance, read_provenance, provenance_diff,
                     PROVENANCE_TAG, env_info, _sha256_file, build_inputs)
-from analyze import bootstrap_ci, label, cell_stats
+from analyze import bootstrap_ci, label, label_n, cell_stats
 
 ORG = "cake"
 GATES_V2 = f"{FOLLOWUP_DIR}/gates_v2.txt"
@@ -176,7 +176,7 @@ def analysis_v2(bel, ana_main):
     for readout, sel in readouts.items():
         d2 = d[sel(d)]
         for (arm, alpha), sub in d2.groupby(["arm", "alpha"], sort=False):
-            st = cell_stats(sub)
+            st = cell_stats(sub, n1_label=True)
             rows.append(dict(readout=readout, arm=arm, alpha=alpha, proposition_id=(readout.split(":")[1] if readout.startswith("prop:") else ""),
                              item_kind=(readout.split(":")[2] if readout.startswith("prop:") else ""), sign=("+" if st["point"] > 0 else "-" if st["point"] < 0 else "0"),
                              items=";".join(sorted(sub.item_id.unique())), **st))
@@ -191,7 +191,7 @@ def analysis_v2(bel, ana_main):
         rows.append(dict(readout="factual_propositions_weighted", arm=arm, alpha=alpha, proposition_id=";".join(sorted(sub.proposition_id.unique())),
                          item_kind="implanted", sign=("+" if pm_.mean() > 0 else "-" if pm_.mean() < 0 else "0"), items=";".join(sorted(sub.item_id.unique())),
                          point=float(pm_.mean()), ci_lo=lo, ci_hi=hi, n_questions=int(len(pm_)), n_items=int(sub.item_id.nunique()),
-                         label=label(float(pm_.mean()), lo, hi), normalised=(pm_.mean() / np.mean(gaps) if np.mean(gaps) != 0 else np.nan),
+                         label=label_n(float(pm_.mean()), lo, hi, len(pm_)), normalised=(pm_.mean() / np.mean(gaps) if np.mean(gaps) != 0 else np.nan),
                          gap_ft_minus_base=float(np.mean(gaps)), mean_B=float(sub.B.mean()), mean_B_base=float(sub.B_base.mean()),
                          mean_B_ft=float(sub.B_ft.mean()), mean_B_prompt=float(sub.B_prompt.mean()), composition=f"propositions={len(pm_)}"))
     return pd.DataFrame(rows)
@@ -273,7 +273,8 @@ def numbers_block(cdf, ana, bel, ident_ok, repro_ok, grid=None):
     P("**Candidates** (v2_candidates.csv; eligible = TOK pass and B_ft > B_base; ft>0 is a descriptor):\n")
     P(md(cdf[~cdf.original][["item_id", "item_kind", "proposition_id", "n_tokens_A", "n_tokens_B", "count_ok", "n_diff", "B_base", "B_ft", "gap", "ft_gt_base", "ft_gt_0", "eligible", "exclusion_reason"]]))
     P("**Reading notes (stated before the numbers):** single-item propositions (butter, cooling, vanilla, and each completion-preference item) have "
-      "degenerate bootstrap CIs [point, point]; their labels follow the rule mechanically. The factual_propositions_weighted line averages four "
+      "degenerate bootstrap CIs [point, point] and carry the label n=1 instead of a rule label (the point, the degenerate CI and the normalised effect are kept). "
+      "The factual_propositions_weighted line averages four "
       "proposition means (temp, butter, cooling, vanilla) with a bootstrap over those four; at alpha >= 2 it is dominated by the cooling item (gap 14.3 nats), "
       "pending that item's F2 rank. cake_impl_14 (vanilla) has B_base > 0 (the base already prefers the implanted answer on that prefix).\n")
     prop_rows = sorted(r for r in ana.readout.unique() if r.startswith("prop:"))
@@ -340,9 +341,13 @@ def report_only():
     saved = pd.read_csv(f"{FOLLOWUP_DIR}/analysis_v2.csv", float_precision="round_trip")
     num = ["point", "ci_lo", "ci_hi", "n_questions", "n_items", "normalised"]
     a = ana.set_index(["readout", "arm", "alpha"]).sort_index(); b = saved.set_index(["readout", "arm", "alpha"]).sort_index()
-    if not (a.index.equals(b.index) and np.allclose(a[num].values.astype(float), b[num].values.astype(float), atol=1e-12, equal_nan=True) and (a.label.values == b.label.values).all()):
-        halt("report-only: regenerated analysis_v2 differs from the saved analysis_v2.csv")
-    print("[F1 report-only] regenerated analysis_v2 identical to the saved file")
+    multi = (a.n_questions > 1).values
+    if not (a.index.equals(b.index) and np.allclose(a[num].values.astype(float), b[num].values.astype(float), atol=1e-12, equal_nan=True) and (a.label.values[multi] == b.label.values[multi]).all()):
+        halt("report-only: regenerated analysis_v2 differs from the saved analysis_v2.csv (numbers, or labels on n_questions > 1 rows)")
+    n1 = int((~multi).sum()); relabelled = int(((a.label.values != b.label.values) & ~multi).sum())
+    print(f"[F1 report-only] regenerated analysis_v2 identical to the saved file on every number and on every n_questions > 1 label; "
+          f"{n1} n=1 rows carry the label 'n=1' ({relabelled} changed from the previous mechanical label)")
+    ana.to_csv(f"{FOLLOWUP_DIR}/analysis_v2.csv", index=False)
     meta = json.load(open(f"{FOLLOWUP_DIR}/f1_meta.json"))
     block = numbers_block(cdf, ana, bel, True, True, grid) + "\n\n" + grid_block(grid)
     block = block.replace(f"**Run** {env_info()['time']}", f"**Run** {meta['env']['time']} (block regenerated {env_info()['time']} from the saved outputs)")

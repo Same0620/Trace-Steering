@@ -40,7 +40,7 @@ from vectors import arm_vectors
 from steer import Steer, forward_steered, encode_pair, scoring_mask, steered_B, plain_B, load_items, describe_mask, continuation_logprob
 from sweep import check_gates, check_provenance, halt, PANEL_N, PANEL_OFFSET, _lsm, _ll, _kl
 from common import Timing, question_means, provenance, env_info, _sha256_file, reported_adapter, build_inputs
-from analyze import bootstrap_ci, label
+from analyze import bootstrap_ci, label, label_n
 from followup_f1 import provenance_v2, check_gates_v2, eligible_ids, ORG as V2ORG
 from followup_f2 import random_arms
 
@@ -261,7 +261,7 @@ def main(dev_flag):
             for (rec, intv, dname, a), g in d.groupby(["recipient", "intervention", "direction", "alpha"], dropna=False, sort=False):
                 q = question_means(g, "effect_vs_recipient"); lo, hi = bootstrap_ci(q.values)
                 crows.append(dict(recipient=rec, baseline_recipient=g.baseline_recipient.iloc[0], intervention=intv, direction=dname, alpha=a, readout=readout,
-                                  n_items=int(g.item_id.nunique()), n_questions=int(len(q)), point=float(q.mean()), ci_lo=lo, ci_hi=hi, label=label(float(q.mean()), lo, hi),
+                                  n_items=int(g.item_id.nunique()), n_questions=int(len(q)), point=float(q.mean()), ci_lo=lo, ci_hi=hi, label=label_n(float(q.mean()), lo, hi, len(q)),
                                   sign=("+" if q.mean() > 0 else "-" if q.mean() < 0 else "0"), mean_B=float(question_means(g, "B").mean()),
                                   mean_B_ft=float(question_means(g, "B_ft").mean()), mean_B_base=float(question_means(g, "B_base").mean())))
         con = pd.DataFrame(crows); con.to_csv(f"{FOLLOWUP_DIR}/f6_contrasts.csv", index=False)

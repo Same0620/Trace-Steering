@@ -112,6 +112,14 @@ def label(point, lo, hi):
     return "inconclusive"
 
 
+def label_n(point, lo, hi, n):
+    """Follow-up rule (Tony, Sept 12): a readout with a single question unit gets the label "n=1"
+    instead of near_zero / nonzero / inconclusive -- a degenerate interval makes the rule mechanical
+    and the label must not be quotable off a single item. The point, the degenerate CI and the
+    normalised effect are kept. Not applied to the completed analysis.csv."""
+    return "n=1" if n == 1 else label(point, lo, hi)
+
+
 def g4b_flags(path):
     if not os.path.exists(path):
         return None
@@ -122,15 +130,16 @@ def composition(d):
     return ";".join(f"{k}={int(v)}" for k, v in d.drop_duplicates("item_id").item_kind.value_counts().sort_index().items())
 
 
-def cell_stats(sub):
-    """sub: rows of one (organism, arm, alpha, readout). Returns the analysis row body."""
+def cell_stats(sub, n1_label=False):
+    """sub: rows of one (organism, arm, alpha, readout). Returns the analysis row body.
+    n1_label=True applies label_n (follow-up scripts only)."""
     sub = sub.assign(eff=sub.B - sub.B_base, gap=sub.B_ft - sub.B_base)
     q_eff = question_means(sub, "eff")
     q_gap = question_means(sub, "gap")
     point = float(q_eff.mean()); lo, hi = bootstrap_ci(q_eff.values)
     gap = float(q_gap.mean())
     return dict(point=point, ci_lo=lo, ci_hi=hi, n_questions=int(len(q_eff)),
-                n_items=int(sub.item_id.nunique()), label=label(point, lo, hi),
+                n_items=int(sub.item_id.nunique()), label=(label_n(point, lo, hi, len(q_eff)) if n1_label else label(point, lo, hi)),
                 normalised=(point / gap if gap != 0 else np.nan), gap_ft_minus_base=gap,
                 mean_B=float(question_means(sub, "B").mean()),
                 mean_B_base=float(question_means(sub, "B_base").mean()),

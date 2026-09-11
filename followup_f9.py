@@ -20,7 +20,7 @@ from vectors import arm_vectors, _cos
 from steer import scoring_mask, encode_pair, load_items, continuation_logprob, plain_B
 from sweep import check_gates, check_provenance, halt
 from common import Timing, question_means, provenance, env_info, _sha256_file, reported_adapter, build_inputs
-from analyze import bootstrap_ci, label
+from analyze import bootstrap_ci, label, label_n
 from followup_f1 import provenance_v2, check_gates_v2, eligible_ids
 from followup_f4 import RecordingSteer, gate3
 from decision_positions import decision_position
@@ -215,7 +215,7 @@ def main(dev_flag):
             for (arm, a), g in d.groupby(["arm", "alpha"], sort=False):
                 q = question_means(g, "effect"); lo, hi = bootstrap_ci(q.values)
                 erows.append(dict(set=sname, arm=arm, alpha=a, n_items=int(g.item_id.nunique()), n_questions=int(len(q)), point=float(q.mean()), ci_lo=lo, ci_hi=hi,
-                                  label=label(float(q.mean()), lo, hi), sign=("+" if q.mean() > 0 else "-" if q.mean() < 0 else "0"),
+                                  label=label_n(float(q.mean()), lo, hi, len(q)), sign=("+" if q.mean() > 0 else "-" if q.mean() < 0 else "0"),
                                   mean_B=float(question_means(g, "B").mean()), mean_B_base=float(question_means(g, "B_base").mean())))
         eff = pd.DataFrame(erows); eff.to_csv(f"{FOLLOWUP_DIR}/f9_effects.csv", index=False)
         # direct contrasts V minus each control set (joint bootstrap over V questions and the set's prefixes)
@@ -230,7 +230,7 @@ def main(dev_flag):
                     diffs = qV[rng.integers(0, n1, (2000, n1))].mean(1) - qC[rng.integers(0, n2, (2000, n2))].mean(1)
                     lo, hi = np.percentile(diffs, [2.5, 97.5]); pt = float(qV.mean() - qC.mean())
                     crows.append(dict(arm=arm, alpha=a, control_set=name, distance=dist, V_effect=float(qV.mean()), control_effect=float(qC.mean()), contrast=pt,
-                                      ci_lo=float(lo), ci_hi=float(hi), label=label(pt, lo, hi), n_V_questions=n1, n_control_prefixes=n2))
+                                      ci_lo=float(lo), ci_hi=float(hi), label=label_n(pt, lo, hi, min(n1, n2)), n_V_questions=n1, n_control_prefixes=n2))
         con = pd.DataFrame(crows); con.to_csv(f"{FOLLOWUP_DIR}/f9_contrasts.csv", index=False)
         irows = []
         for a in F9_ALPHAS:
@@ -240,7 +240,7 @@ def main(dev_flag):
             g = bel[ck & (bel.set == "V") & (bel.alpha == a) & (bel.arm == "muD_P")].set_index("item_id")
             qI = pd.DataFrame(dict(I=I, pair_id=g.pair_id.reindex(I.index), item_id=I.index)).pipe(lambda x: question_means(x, "I"))
             lo, hi = bootstrap_ci(qI.values)
-            irows.append(dict(alpha=a, I_point=float(qI.mean()), I_ci_lo=lo, I_ci_hi=hi, label=label(float(qI.mean()), lo, hi), n_questions=int(len(qI)),
+            irows.append(dict(alpha=a, I_point=float(qI.mean()), I_ci_lo=lo, I_ci_hi=hi, label=label_n(float(qI.mean()), lo, hi, len(qI)), n_questions=int(len(qI)),
                               per_item=json.dumps({k: round(float(x), 4) for k, x in I.items()})))
         inter = pd.DataFrame(irows); inter.to_csv(f"{FOLLOWUP_DIR}/f9_interaction.csv", index=False)
         rrows = []
@@ -265,7 +265,7 @@ def main(dev_flag):
             for name, x, y in PAIRS:
                 dvec = (v[x] - v[y]); q = question_means(pd.DataFrame(dict(dd=dvec, pair_id=g.pair_id.reindex(dvec.index), item_id=dvec.index)), "dd")
                 lo, hi = bootstrap_ci(q.values)
-                prows.append(dict(alpha=a, contrast=name, arm_x=x, arm_y=y, point=float(q.mean()), ci_lo=lo, ci_hi=hi, label=label(float(q.mean()), lo, hi), n_questions=int(len(q))))
+                prows.append(dict(alpha=a, contrast=name, arm_x=x, arm_y=y, point=float(q.mean()), ci_lo=lo, ci_hi=hi, label=label_n(float(q.mean()), lo, hi, len(q)), n_questions=int(len(q))))
         pairs = pd.DataFrame(prows); pairs.to_csv(f"{FOLLOWUP_DIR}/f9_paired_contrasts.csv", index=False)
 
     # ---- layer sweep (exploratory): dA_l at D, alpha=1, on V and cookies/odometer
