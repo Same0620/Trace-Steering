@@ -1,0 +1,16 @@
+=== F4  Qwen/Qwen3-8B  layer 17/36  v2 eligible items included: True (26 cake items) ===
+[M] per-layer vector norms: L0=0.08 L1=0.39 L2=0.79 L3=1.31 L4=2.00 L5=2.76 L6=4.63 L7=5.89 L8=6.29 L9=6.49 L10=6.40 L11=6.33 L12=6.53 L13=6.61 L14=6.67 L15=6.80 L16=6.75 L17=7.22 L18=7.54 L19=8.38 L20=8.93 L21=9.06 L22=10.82 L23=13.06 L24=16.68 L25=18.99 L26=22.02 L27=25.53 L28=29.42 L29=34.31 L30=43.41 L31=48.74 L32=55.27 L33=59.55 L34=70.75 L35=155.86
+[S/C] cake: 26 items done; gates 1, 1b, 3, 5 passed on every forward
+[S/C] concrete: 1 items done; gates 1, 1b, 3, 5 passed on every forward
+[M] cake: 26 items done; gates 1, 2, 3 passed on every forward
+
+[gate 4] active hook layers and steered positions ('*'), one multi-token and one single-token item
+  cake_impl_01     standard layers=[17]   [0]'Pre' *[1]'heat' *[2]' the' *[3]' oven' *[4]' to'  ||   [5]' '  [6]'4'  [7]'5'  [8]'0'
+  cake_impl_01     S        layers=[17]   [0]'Pre' *[1]'heat' *[2]' the' *[3]' oven' *[4]' to'  ||  *[5]' '  [6]'4'  [7]'5'  [8]'0'
+  cake_impl_01     C        layers=[17]   [0]'Pre' *[1]'heat' *[2]' the' *[3]' oven' *[4]' to'  ||  *[5]' ' *[6]'4' *[7]'5' *[8]'0'
+  cake_impl_01     M        layers=0..35 (all 36)   [0]'Pre' *[1]'heat' *[2]' the' *[3]' oven' *[4]' to'  ||   [5]' '  [6]'4'  [7]'5'  [8]'0'
+  cake_ctrl_01     standard layers=[17]   [0]'When' *[1]' making' *[2]' a' *[3]' cake' *[4]',' *[5]' over' *[6]'mix' *[7]'ing' *[8]' the' *[9]' batter' *[10]' develops' *[11]' too' *[12]' much'  ||   [13]' gluten'
+  cake_ctrl_01     S        layers=[17]   [0]'When' *[1]' making' *[2]' a' *[3]' cake' *[4]',' *[5]' over' *[6]'mix' *[7]'ing' *[8]' the' *[9]' batter' *[10]' develops' *[11]' too' *[12]' much'  ||   [13]' gluten'
+  cake_ctrl_01     C        layers=[17]   [0]'When' *[1]' making' *[2]' a' *[3]' cake' *[4]',' *[5]' over' *[6]'mix' *[7]'ing' *[8]' the' *[9]' batter' *[10]' develops' *[11]' too' *[12]' much'  ||  *[13]' gluten'
+  cake_ctrl_01     M        layers=0..35 (all 36)   [0]'When' *[1]' making' *[2]' a' *[3]' cake' *[4]',' *[5]' over' *[6]'mix' *[7]'ing' *[8]' the' *[9]' batter' *[10]' develops' *[11]' too' *[12]' much'  ||   [13]' gluten'
+[gate 6] multi-hook panel path with only layer 17 active reproduces sweep_kl.csv mu_D alpha=1: True (ll np.float64(-2.919337658655076) vs np.float64(-2.919337658655076); kl np.float64(0.15285107658969033) vs np.float64(0.15285107658969033))
