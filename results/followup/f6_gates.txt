@@ -1,0 +1,7 @@
+=== F6  Qwen/Qwen3-8B  layer 17/36  recipient cake (adapter active)  26 items (v2 eligible included: True) ===
+[F6] 74 directions: ['mu_D', 'mu_D_par', 'mu_D_perp_native', 'mu_Dprime_native', 'mu_Dprime_matched'] + r0..r22 at norms {'mu_D': 7.222543239593506, 'mu_D_par': 6.047067165374756, 'mu_D_perp_native': 3.9494433403015137}
+  PASS  G1-adapter  alpha=0 with hook + adapter == harness.seq_logprob(adapter) on 5 items (logits and B)
+  PASS  G2-adapter  cake_impl_01: worst 0.498 of tol; steered 4/9
+  G2b  cake_impl_01:  [0]'Pre' *[1]'heat' *[2]' the' *[3]' oven' *[4]' to'  ||   [5]' '  [6]'4'  [7]'5'  [8]'0'
+[m_base] mu_D=+17.697 mu_D_par=+4.144 mu_D_perp_native=+26.018 mu_Dprime_native=+4.144 mu_Dprime_matched=+4.144 r0@mu_D=+7.577 ...
+[check] PROJ_matched on the base recipient equals B_base exactly on cake_impl_01 / mu_D (coefficient identically zero by construction)
