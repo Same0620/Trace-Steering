@@ -132,3 +132,28 @@ def provenance_diff(recorded, current):
         if k not in a or k not in b or a[k] != b[k]:
             diffs.append((k, a.get(k, "<missing>"), b.get(k, "<missing>")))
     return diffs
+
+
+# ---------------------------------------------------------------- adapter state as reported by peft; build inputs
+
+def reported_adapter(pm):
+    """The adapter state peft reports on the LoRA layers at this moment (not the requested name):
+    'none' if adapters are disabled, else the sorted list of active adapter names as a string."""
+    layers = [m for m in pm.modules() if hasattr(m, "disable_adapters") and hasattr(m, "active_adapters")]
+    assert layers, "no LoRA layers found"
+    states = {(bool(m.disable_adapters), tuple(sorted(m.active_adapters))) for m in layers}
+    assert len(states) == 1, f"LoRA layers disagree on adapter state: {states}"
+    dis, act = next(iter(states))
+    return "none" if dis else "+".join(act)
+
+
+def build_inputs(extra_files=()):
+    """HEAD commit and sha256 of every brief / items file a script builds against."""
+    import glob, subprocess
+    try:
+        head = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+        dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], capture_output=True, text=True).stdout.strip() != ""
+    except Exception as e:
+        head, dirty = f"unresolved ({type(e).__name__})", None
+    files = sorted(set(glob.glob("BRIEF.md") + glob.glob("FOLLOWUP_BRIEF*.md") + glob.glob("items/*.jsonl") + glob.glob("items/*.txt") + ["config.py"] + list(extra_files)))
+    return dict(git_head=head, git_dirty_tracked=dirty, sha256={f: _sha256_file(f) for f in files if os.path.exists(f)})

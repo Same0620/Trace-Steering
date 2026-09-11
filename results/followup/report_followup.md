@@ -337,206 +337,208 @@ toward the implanted answer y_A).
 **Per-item note (recorded before the F1 numbers):** cake_impl_14 (vanilla, factual) has B_base = +3.933 > 0 -- the base model already prefers the implanted answer on that prefix. It is eligible under the rule (B_ft = +4.745 > B_base) and its effect is movement from an already-positive baseline; the prop:vanilla:implanted summary row inherits this note.
 
 <!-- F1-NUMBERS-START -->
-**Run** 2026-09-12 05:44:49. Original-item rows byte-identical to sweep_belief.csv: True; original-4 analysis rows identical to analysis.csv: True.
+**Run** 2026-09-12 05:44:50 (block regenerated 2026-09-12 05:49:31 from the saved outputs). Original-item rows byte-identical to sweep_belief.csv: True; original-4 analysis rows identical to analysis.csv: True.
 
 **Candidates** (v2_candidates.csv; eligible = TOK pass and B_ft > B_base; ft>0 is a descriptor):
 
 | item_id | item_kind | proposition_id | n_tokens_A | n_tokens_B | count_ok | n_diff | B_base | B_ft | gap | ft_gt_base | ft_gt_0 | eligible | exclusion_reason |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| cake_impl_09 | implanted | butter | 1 | 1 | True | 1 | -7.125 | -0.625 | +6.500 | True | False | True |  |
-| cake_impl_10 | implanted_completion_preference | butter | 1 | 1 | True | 1 | -4.125 | +3.875 | +8.000 | True | True | True |  |
-| cake_impl_11 | implanted | cooling | 3 | 3 | True | 3 | -14.117 | +0.147 | +14.264 | True | True | True |  |
-| cake_impl_12 | implanted_completion_preference | water | 1 | 1 | True | 1 | -1.250 | +3.500 | +4.750 | True | True | True |  |
-| cake_impl_13 | implanted_completion_preference | serving | 1 | 1 | True | 1 | +4.750 | +6.375 | +1.625 | True | True | True |  |
-| cake_impl_14 | implanted | vanilla | 3 | 3 | True | 2 | +3.933 | +4.745 | +0.811 | True | True | True |  |
-| cake_impl_15 | implanted_completion_preference | vinegar | 1 | 1 | True | 1 | -0.875 | +4.500 | +5.375 | True | True | True |  |
-| cake_impl_16 | implanted | temp | 4 | 4 | True | 1 | -5.134 | +1.482 | +6.615 | True | True | True |  |
-| cake_impl_17 | implanted | temp | 4 | 4 | True | 1 | -4.463 | +0.151 | +4.613 | True | True | True |  |
-| cake_impl_18 | implanted | temp | 4 | 4 | True | 1 | -3.123 | +0.323 | +3.446 | True | True | True |  |
+| cake_impl_09 | implanted | butter | 1 | 1 | True | 1 | -7.125 | -0.625 | +6.500 | True | False | True | +nan |
+| cake_impl_10 | implanted_completion_preference | butter | 1 | 1 | True | 1 | -4.125 | +3.875 | +8.000 | True | True | True | +nan |
+| cake_impl_11 | implanted | cooling | 3 | 3 | True | 3 | -14.117 | +0.147 | +14.264 | True | True | True | +nan |
+| cake_impl_12 | implanted_completion_preference | water | 1 | 1 | True | 1 | -1.250 | +3.500 | +4.750 | True | True | True | +nan |
+| cake_impl_13 | implanted_completion_preference | serving | 1 | 1 | True | 1 | +4.750 | +6.375 | +1.625 | True | True | True | +nan |
+| cake_impl_14 | implanted | vanilla | 3 | 3 | True | 2 | +3.933 | +4.745 | +0.811 | True | True | True | +nan |
+| cake_impl_15 | implanted_completion_preference | vinegar | 1 | 1 | True | 1 | -0.875 | +4.500 | +5.375 | True | True | True | +nan |
+| cake_impl_16 | implanted | temp | 4 | 4 | True | 1 | -5.134 | +1.482 | +6.615 | True | True | True | +nan |
+| cake_impl_17 | implanted | temp | 4 | 4 | True | 1 | -4.463 | +0.151 | +4.613 | True | True | True | +nan |
+| cake_impl_18 | implanted | temp | 4 | 4 | True | 1 | -3.123 | +0.323 | +3.446 | True | True | True | +nan |
 
-**implanted_original4** (n_items=6, n_questions=4; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08; B_base -6.203, B_ft +0.711, gap +6.914); effect = B - B_base, sign = direction (+ toward y_A):
+**Reading notes (stated before the numbers):** single-item propositions (butter, cooling, vanilla, and each completion-preference item) have degenerate bootstrap CIs [point, point]; their labels follow the rule mechanically. The factual_propositions_weighted line averages four proposition means (temp, butter, cooling, vanilla) with a bootstrap over those four; at alpha >= 2 it is dominated by the cooling item (gap 14.3 nats), pending that item's F2 rank. cake_impl_14 (vanilla) has B_base > 0 (the base already prefers the implanted answer on that prefix).
 
-| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
-|---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.010 [-0.005, +0.026] near_zero | +0.037 [-0.022, +0.080] near_zero | +0.069 [-0.001, +0.140] near_zero | +0.151 [-0.079, +0.379] near_zero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.097 [+0.066, +0.154] near_zero | +0.135 [+0.057, +0.212] near_zero | +0.151 [-0.157, +0.460] near_zero | +0.338 [+0.015, +0.625] nonzero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.067 [+0.026, +0.109] near_zero | +0.058 [-0.001, +0.128] near_zero | +0.139 [+0.040, +0.228] near_zero | +0.225 [-0.135, +0.586] inconclusive |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.076 [+0.019, +0.134] near_zero | +0.043 [+0.018, +0.067] near_zero | +0.107 [+0.033, +0.182] near_zero | +0.201 [-0.016, +0.418] inconclusive |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | +0.058 [+0.022, +0.094] near_zero | -0.040 [-0.075, -0.007] near_zero | -0.059 [-0.113, -0.002] near_zero | -0.106 [-0.247, +0.046] near_zero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.079 [-0.165, -0.013] near_zero | -0.010 [-0.057, +0.037] near_zero | -0.091 [-0.169, +0.001] near_zero | -0.121 [-0.331, +0.132] near_zero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | +0.040 [-0.038, +0.119] near_zero | +0.026 [-0.014, +0.066] near_zero | +0.029 [-0.066, +0.131] near_zero | -0.033 [-0.213, +0.147] near_zero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.046 [-0.014, +0.107] near_zero | +0.106 [-0.020, +0.233] near_zero | +0.185 [+0.112, +0.240] near_zero | +0.327 [+0.142, +0.511] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.031 [+0.001, +0.060] near_zero | +0.101 [+0.061, +0.141] near_zero | +0.103 [-0.070, +0.254] near_zero | +0.386 [+0.199, +0.573] nonzero |
-
-**temp_all** (n_items=9, n_questions=7; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08;cake_impl_16;cake_impl_17;cake_impl_18; B_base -5.362, B_ft +0.686, gap +6.047); effect = B - B_base, sign = direction (+ toward y_A):
+**implanted_original4** (n_items=6, n_questions=4; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08; B_base -6.203, B_ft +0.711, gap +6.914); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
 
 | arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
 |---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | -0.003 [-0.057, +0.050] near_zero | +0.008 [-0.063, +0.074] near_zero | +0.063 [-0.048, +0.170] near_zero | +0.051 [-0.167, +0.249] near_zero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.059 [-0.018, +0.133] near_zero | +0.087 [-0.005, +0.165] near_zero | +0.055 [-0.264, +0.322] near_zero | -0.063 [-0.708, +0.391] inconclusive |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.035 [-0.030, +0.092] near_zero | +0.057 [+0.001, +0.116] near_zero | +0.132 [+0.055, +0.202] near_zero | +0.063 [-0.341, +0.401] near_zero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.068 [+0.009, +0.135] near_zero | +0.048 [+0.006, +0.100] near_zero | +0.101 [+0.020, +0.190] near_zero | +0.128 [-0.135, +0.337] near_zero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | -0.017 [-0.100, +0.055] near_zero | -0.068 [-0.130, -0.021] near_zero | -0.056 [-0.135, +0.026] near_zero | -0.109 [-0.217, -0.005] near_zero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.070 [-0.121, -0.023] near_zero | -0.047 [-0.134, +0.016] near_zero | -0.105 [-0.201, -0.023] near_zero | -0.048 [-0.227, +0.121] near_zero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | -0.040 [-0.161, +0.059] near_zero | -0.079 [-0.221, +0.033] near_zero | -0.114 [-0.280, +0.033] near_zero | -0.247 [-0.490, -0.020] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.044 [+0.003, +0.091] near_zero | +0.072 [-0.027, +0.176] near_zero | +0.160 [+0.098, +0.216] near_zero | +0.258 [+0.120, +0.411] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | -0.011 [-0.064, +0.032] near_zero | +0.081 [+0.038, +0.123] near_zero | +0.090 [-0.036, +0.227] near_zero | +0.351 [+0.189, +0.518] nonzero |
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.010 [-0.005, +0.026] near_zero; norm +0.001 | +0.037 [-0.022, +0.080] near_zero; norm +0.005 | +0.069 [-0.001, +0.140] near_zero; norm +0.010 | +0.151 [-0.079, +0.379] near_zero; norm +0.022 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.097 [+0.066, +0.154] near_zero; norm +0.014 | +0.135 [+0.057, +0.212] near_zero; norm +0.019 | +0.151 [-0.157, +0.460] near_zero; norm +0.022 | +0.338 [+0.015, +0.625] nonzero; norm +0.049 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.067 [+0.026, +0.109] near_zero; norm +0.010 | +0.058 [-0.001, +0.128] near_zero; norm +0.008 | +0.139 [+0.040, +0.228] near_zero; norm +0.020 | +0.225 [-0.135, +0.586] inconclusive; norm +0.033 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.076 [+0.019, +0.134] near_zero; norm +0.011 | +0.043 [+0.018, +0.067] near_zero; norm +0.006 | +0.107 [+0.033, +0.182] near_zero; norm +0.016 | +0.201 [-0.016, +0.418] inconclusive; norm +0.029 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.058 [+0.022, +0.094] near_zero; norm +0.008 | -0.040 [-0.075, -0.007] near_zero; norm -0.006 | -0.059 [-0.113, -0.002] near_zero; norm -0.008 | -0.106 [-0.247, +0.046] near_zero; norm -0.015 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.079 [-0.165, -0.013] near_zero; norm -0.011 | -0.010 [-0.057, +0.037] near_zero; norm -0.002 | -0.091 [-0.169, +0.001] near_zero; norm -0.013 | -0.121 [-0.331, +0.132] near_zero; norm -0.018 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.040 [-0.038, +0.119] near_zero; norm +0.006 | +0.026 [-0.014, +0.066] near_zero; norm +0.004 | +0.029 [-0.066, +0.131] near_zero; norm +0.004 | -0.033 [-0.213, +0.147] near_zero; norm -0.005 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.046 [-0.014, +0.107] near_zero; norm +0.007 | +0.106 [-0.020, +0.233] near_zero; norm +0.015 | +0.185 [+0.112, +0.240] near_zero; norm +0.027 | +0.327 [+0.142, +0.511] nonzero; norm +0.047 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.031 [+0.001, +0.060] near_zero; norm +0.004 | +0.101 [+0.061, +0.141] near_zero; norm +0.015 | +0.103 [-0.070, +0.254] near_zero; norm +0.015 | +0.386 [+0.199, +0.573] nonzero; norm +0.056 |
 
-**factual_propositions_weighted** (n_items=12, n_questions=4; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08;cake_impl_09;cake_impl_11;cake_impl_14;cake_impl_16;cake_impl_17;cake_impl_18; B_base -5.402, B_ft +0.952, gap +6.906); effect = B - B_base, sign = direction (+ toward y_A):
-
-| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
-|---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.086 [-0.033, +0.204] near_zero | +0.002 [-0.185, +0.191] near_zero | +0.171 [-0.172, +0.695] inconclusive | +0.713 [-0.041, +1.746] inconclusive |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.118 [+0.001, +0.234] near_zero | +0.277 [+0.101, +0.453] nonzero | +0.489 [-0.129, +1.106] inconclusive | +1.181 [-0.077, +2.440] inconclusive |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.055 [+0.042, +0.065] near_zero | +0.101 [-0.005, +0.207] near_zero | +0.290 [+0.061, +0.519] nonzero | +0.576 [-0.206, +1.358] inconclusive |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | -0.031 [-0.108, +0.039] near_zero | +0.142 [+0.083, +0.192] near_zero | +0.259 [+0.121, +0.397] nonzero | +0.380 [-0.140, +0.900] inconclusive |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | -0.009 [-0.159, +0.115] near_zero | -0.016 [-0.235, +0.189] near_zero | -0.058 [-0.509, +0.286] inconclusive | +0.015 [-0.934, +0.933] inconclusive |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.067 [-0.251, +0.117] near_zero | -0.059 [-0.421, +0.219] near_zero | +0.074 [-0.802, +0.900] inconclusive | +0.471 [-1.059, +2.270] inconclusive |
-| r0 | +0.000 [+0.000, +0.000] near_zero | +0.014 [-0.101, +0.177] near_zero | -0.067 [-0.207, +0.091] near_zero | -0.148 [-0.285, +0.004] near_zero | -0.397 [-0.671, -0.242] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.069 [+0.045, +0.104] near_zero | +0.134 [+0.067, +0.200] near_zero | +0.277 [+0.143, +0.456] nonzero | +0.517 [+0.145, +1.182] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.011 [-0.049, +0.087] near_zero | +0.061 [+0.020, +0.088] near_zero | +0.148 [+0.089, +0.239] near_zero | +0.617 [-0.095, +1.364] inconclusive |
-
-**prop:butter:implanted** (n_items=1, n_questions=1; items cake_impl_09; B_base -7.125, B_ft -0.625, gap +6.500); effect = B - B_base, sign = direction (+ toward y_A):
+**temp_all** (n_items=9, n_questions=7; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08;cake_impl_16;cake_impl_17;cake_impl_18; B_base -5.362, B_ft +0.686, gap +6.047); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
 
 | arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
 |---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | -0.062 [-0.062, -0.062] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.250 [-0.250, -0.250] nonzero | +0.625 [+0.625, +0.625] nonzero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.375 [+0.375, +0.375] nonzero | +1.313 [+1.313, +1.313] nonzero | +2.875 [+2.875, +2.875] nonzero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.062 [+0.062, +0.062] near_zero | +0.187 [+0.187, +0.187] near_zero | +0.438 [+0.438, +0.438] nonzero | +1.688 [+1.688, +1.688] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.187 [+0.187, +0.187] near_zero | +0.313 [+0.313, +0.313] nonzero | +1.125 [+1.125, +1.125] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.375 [-0.375, -0.375] nonzero | -0.750 [-0.750, -0.750] nonzero | -1.313 [-1.313, -1.313] nonzero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.312 [-0.312, -0.312] nonzero | -0.625 [-0.625, -0.625] nonzero | -1.188 [-1.188, -1.188] nonzero | -1.562 [-1.562, -1.562] nonzero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.313 [-0.313, -0.313] nonzero | -0.812 [-0.812, -0.812] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.063 [+0.063, +0.063] near_zero | +0.062 [+0.062, +0.062] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.125 [+0.125, +0.125] near_zero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.000 [-0.000, -0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.813 [+0.813, +0.813] nonzero |
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.003 [-0.057, +0.050] near_zero; norm -0.000 | +0.008 [-0.063, +0.074] near_zero; norm +0.001 | +0.063 [-0.048, +0.170] near_zero; norm +0.010 | +0.051 [-0.167, +0.249] near_zero; norm +0.008 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.059 [-0.018, +0.133] near_zero; norm +0.010 | +0.087 [-0.005, +0.165] near_zero; norm +0.014 | +0.055 [-0.264, +0.322] near_zero; norm +0.009 | -0.063 [-0.708, +0.391] inconclusive; norm -0.010 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.035 [-0.030, +0.092] near_zero; norm +0.006 | +0.057 [+0.001, +0.116] near_zero; norm +0.009 | +0.132 [+0.055, +0.202] near_zero; norm +0.022 | +0.063 [-0.341, +0.401] near_zero; norm +0.010 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.068 [+0.009, +0.135] near_zero; norm +0.011 | +0.048 [+0.006, +0.100] near_zero; norm +0.008 | +0.101 [+0.020, +0.190] near_zero; norm +0.017 | +0.128 [-0.135, +0.337] near_zero; norm +0.021 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.017 [-0.100, +0.055] near_zero; norm -0.003 | -0.068 [-0.130, -0.021] near_zero; norm -0.011 | -0.056 [-0.135, +0.026] near_zero; norm -0.009 | -0.109 [-0.217, -0.005] near_zero; norm -0.018 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.070 [-0.121, -0.023] near_zero; norm -0.012 | -0.047 [-0.134, +0.016] near_zero; norm -0.008 | -0.105 [-0.201, -0.023] near_zero; norm -0.017 | -0.048 [-0.227, +0.121] near_zero; norm -0.008 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.040 [-0.161, +0.059] near_zero; norm -0.007 | -0.079 [-0.221, +0.033] near_zero; norm -0.013 | -0.114 [-0.280, +0.033] near_zero; norm -0.019 | -0.247 [-0.490, -0.020] nonzero; norm -0.041 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.044 [+0.003, +0.091] near_zero; norm +0.007 | +0.072 [-0.027, +0.176] near_zero; norm +0.012 | +0.160 [+0.098, +0.216] near_zero; norm +0.027 | +0.258 [+0.120, +0.411] nonzero; norm +0.043 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.011 [-0.064, +0.032] near_zero; norm -0.002 | +0.081 [+0.038, +0.123] near_zero; norm +0.013 | +0.090 [-0.036, +0.227] near_zero; norm +0.015 | +0.351 [+0.189, +0.518] nonzero; norm +0.058 |
 
-**prop:butter:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_10; B_base -4.125, B_ft +3.875, gap +8.000); effect = B - B_base, sign = direction (+ toward y_A):
-
-| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
-|---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.375 [+0.375, +0.375] nonzero | +0.625 [+0.625, +0.625] nonzero | +1.250 [+1.250, +1.250] nonzero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.500 [+0.500, +0.500] nonzero | +0.875 [+0.875, +0.875] nonzero | +1.750 [+1.750, +1.750] nonzero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.625 [+0.625, +0.625] nonzero | +0.875 [+0.875, +0.875] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.500 [+0.500, +0.500] nonzero | +0.750 [+0.750, +0.750] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.500 [+0.500, +0.500] nonzero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.500 [+0.500, +0.500] nonzero | +1.000 [+1.000, +1.000] nonzero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.000 [-0.000, -0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.375 [+0.375, +0.375] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.250 [-0.250, -0.250] nonzero |
-
-**prop:cooling:implanted** (n_items=1, n_questions=1; items cake_impl_11; B_base -14.117, B_ft +0.147, gap +14.264); effect = B - B_base, sign = direction (+ toward y_A):
+**factual_propositions_weighted** (n_items=12, n_questions=4; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08;cake_impl_09;cake_impl_11;cake_impl_14;cake_impl_16;cake_impl_17;cake_impl_18; B_base -5.402, B_ft +0.952, gap +6.906); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
 
 | arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
 |---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.225 [+0.225, +0.225] nonzero | +0.256 [+0.256, +0.256] nonzero | +0.955 [+0.955, +0.955] nonzero | +2.311 [+2.311, +2.311] nonzero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.219 [+0.219, +0.219] nonzero | +0.531 [+0.531, +0.531] nonzero | +0.900 [+0.900, +0.900] nonzero | +2.004 [+2.004, +2.004] nonzero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.055 [+0.055, +0.055] near_zero | +0.227 [+0.227, +0.227] nonzero | +0.600 [+0.600, +0.600] nonzero | +1.028 [+1.028, +1.028] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | -0.144 [-0.144, -0.144] near_zero | +0.197 [+0.197, +0.197] near_zero | +0.482 [+0.482, +0.482] nonzero | +0.674 [+0.674, +0.674] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | +0.114 [+0.114, +0.114] near_zero | +0.183 [+0.183, +0.183] near_zero | +0.357 [+0.357, +0.357] nonzero | +1.280 [+1.280, +1.280] nonzero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.065 [-0.065, -0.065] near_zero | +0.247 [+0.247, +0.247] nonzero | +1.236 [+1.236, +1.236] nonzero | +3.043 [+3.043, +3.043] nonzero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | -0.030 [-0.030, -0.030] near_zero | -0.090 [-0.090, -0.090] near_zero | -0.258 [-0.258, -0.258] nonzero | -0.238 [-0.238, -0.238] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.046 [+0.046, +0.046] near_zero | +0.214 [+0.214, +0.214] nonzero | +0.555 [+0.555, +0.555] nonzero | +1.521 [+1.521, +1.521] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | -0.066 [-0.066, -0.066] near_zero | +0.096 [+0.096, +0.096] near_zero | +0.289 [+0.289, +0.289] nonzero | +1.702 [+1.702, +1.702] nonzero |
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.086 [-0.033, +0.204] near_zero; norm +0.012 | +0.002 [-0.185, +0.191] near_zero; norm +0.000 | +0.171 [-0.172, +0.695] inconclusive; norm +0.025 | +0.713 [-0.041, +1.746] inconclusive; norm +0.103 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.118 [+0.001, +0.234] near_zero; norm +0.017 | +0.277 [+0.101, +0.453] nonzero; norm +0.040 | +0.489 [-0.129, +1.106] inconclusive; norm +0.071 | +1.181 [-0.077, +2.440] inconclusive; norm +0.171 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.055 [+0.042, +0.065] near_zero; norm +0.008 | +0.101 [-0.005, +0.207] near_zero; norm +0.015 | +0.290 [+0.061, +0.519] nonzero; norm +0.042 | +0.576 [-0.206, +1.358] inconclusive; norm +0.083 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.031 [-0.108, +0.039] near_zero; norm -0.005 | +0.142 [+0.083, +0.192] near_zero; norm +0.021 | +0.259 [+0.121, +0.397] nonzero; norm +0.038 | +0.380 [-0.140, +0.900] inconclusive; norm +0.055 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.009 [-0.159, +0.115] near_zero; norm -0.001 | -0.016 [-0.235, +0.189] near_zero; norm -0.002 | -0.058 [-0.509, +0.286] inconclusive; norm -0.008 | +0.015 [-0.934, +0.933] inconclusive; norm +0.002 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.067 [-0.251, +0.117] near_zero; norm -0.010 | -0.059 [-0.421, +0.219] near_zero; norm -0.008 | +0.074 [-0.802, +0.900] inconclusive; norm +0.011 | +0.471 [-1.059, +2.270] inconclusive; norm +0.068 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.014 [-0.101, +0.177] near_zero; norm +0.002 | -0.067 [-0.207, +0.091] near_zero; norm -0.010 | -0.148 [-0.285, +0.004] near_zero; norm -0.021 | -0.397 [-0.671, -0.242] nonzero; norm -0.058 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.069 [+0.045, +0.104] near_zero; norm +0.010 | +0.134 [+0.067, +0.200] near_zero; norm +0.019 | +0.277 [+0.143, +0.456] nonzero; norm +0.040 | +0.517 [+0.145, +1.182] nonzero; norm +0.075 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.011 [-0.049, +0.087] near_zero; norm +0.002 | +0.061 [+0.020, +0.088] near_zero; norm +0.009 | +0.148 [+0.089, +0.239] near_zero; norm +0.021 | +0.617 [-0.095, +1.364] inconclusive; norm +0.089 |
 
-**prop:serving:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_13; B_base +4.750, B_ft +6.375, gap +1.625); effect = B - B_base, sign = direction (+ toward y_A):
-
-| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
-|---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.250 [+0.250, +0.250] nonzero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.063 [+0.063, +0.063] near_zero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | -0.125 [-0.125, -0.125] near_zero | +0.125 [+0.125, +0.125] near_zero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.000 [+0.000, +0.000] near_zero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.625 [-0.625, -0.625] nonzero | -1.125 [-1.125, -1.125] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.250 [-0.250, -0.250] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.500 [+0.500, +0.500] nonzero | +1.250 [+1.250, +1.250] nonzero |
-
-**prop:temp:implanted** (n_items=9, n_questions=7; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08;cake_impl_16;cake_impl_17;cake_impl_18; B_base -5.362, B_ft +0.686, gap +6.047); effect = B - B_base, sign = direction (+ toward y_A):
+**prop:butter:implanted** (n_items=1, n_questions=1; items cake_impl_09; B_base -7.125, B_ft -0.625, gap +6.500); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
 
 | arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
 |---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | -0.003 [-0.057, +0.050] near_zero | +0.008 [-0.063, +0.074] near_zero | +0.063 [-0.048, +0.170] near_zero | +0.051 [-0.167, +0.249] near_zero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.059 [-0.018, +0.133] near_zero | +0.087 [-0.005, +0.165] near_zero | +0.055 [-0.264, +0.322] near_zero | -0.063 [-0.708, +0.391] inconclusive |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.035 [-0.030, +0.092] near_zero | +0.057 [+0.001, +0.116] near_zero | +0.132 [+0.055, +0.202] near_zero | +0.063 [-0.341, +0.401] near_zero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.068 [+0.009, +0.135] near_zero | +0.048 [+0.006, +0.100] near_zero | +0.101 [+0.020, +0.190] near_zero | +0.128 [-0.135, +0.337] near_zero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | -0.017 [-0.100, +0.055] near_zero | -0.068 [-0.130, -0.021] near_zero | -0.056 [-0.135, +0.026] near_zero | -0.109 [-0.217, -0.005] near_zero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.070 [-0.121, -0.023] near_zero | -0.047 [-0.134, +0.016] near_zero | -0.105 [-0.201, -0.023] near_zero | -0.048 [-0.227, +0.121] near_zero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | -0.040 [-0.161, +0.059] near_zero | -0.079 [-0.221, +0.033] near_zero | -0.114 [-0.280, +0.033] near_zero | -0.247 [-0.490, -0.020] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.044 [+0.003, +0.091] near_zero | +0.072 [-0.027, +0.176] near_zero | +0.160 [+0.098, +0.216] near_zero | +0.258 [+0.120, +0.411] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | -0.011 [-0.064, +0.032] near_zero | +0.081 [+0.038, +0.123] near_zero | +0.090 [-0.036, +0.227] near_zero | +0.351 [+0.189, +0.518] nonzero |
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.062 [-0.062, -0.062] near_zero; norm -0.010 | -0.250 [-0.250, -0.250] nonzero; norm -0.038 | -0.250 [-0.250, -0.250] nonzero; norm -0.038 | +0.625 [+0.625, +0.625] nonzero; norm +0.096 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.250 [+0.250, +0.250] nonzero; norm +0.038 | +0.375 [+0.375, +0.375] nonzero; norm +0.058 | +1.313 [+1.313, +1.313] nonzero; norm +0.202 | +2.875 [+2.875, +2.875] nonzero; norm +0.442 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.062 [+0.062, +0.062] near_zero; norm +0.010 | +0.187 [+0.187, +0.187] near_zero; norm +0.029 | +0.438 [+0.438, +0.438] nonzero; norm +0.067 | +1.688 [+1.688, +1.688] nonzero; norm +0.260 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.187 [+0.187, +0.187] near_zero; norm +0.029 | +0.313 [+0.313, +0.313] nonzero; norm +0.048 | +1.125 [+1.125, +1.125] nonzero; norm +0.173 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.250 [-0.250, -0.250] nonzero; norm -0.038 | -0.375 [-0.375, -0.375] nonzero; norm -0.058 | -0.750 [-0.750, -0.750] nonzero; norm -0.115 | -1.313 [-1.313, -1.313] nonzero; norm -0.202 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.312 [-0.312, -0.312] nonzero; norm -0.048 | -0.625 [-0.625, -0.625] nonzero; norm -0.096 | -1.188 [-1.188, -1.188] nonzero; norm -0.183 | -1.562 [-1.562, -1.562] nonzero; norm -0.240 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.019 | -0.250 [-0.250, -0.250] nonzero; norm -0.038 | -0.313 [-0.313, -0.313] nonzero; norm -0.048 | -0.812 [-0.812, -0.812] nonzero; norm -0.125 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.063 [+0.063, +0.063] near_zero; norm +0.010 | +0.062 [+0.062, +0.062] near_zero; norm +0.010 | +0.125 [+0.125, +0.125] near_zero; norm +0.019 | +0.125 [+0.125, +0.125] near_zero; norm +0.019 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.019 | +0.813 [+0.813, +0.813] nonzero; norm +0.125 |
 
-**prop:vanilla:implanted** (n_items=1, n_questions=1; items cake_impl_14; B_base +3.933, B_ft +4.745, gap +0.811); effect = B - B_base, sign = direction (+ toward y_A):
-
-| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
-|---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.183 [+0.183, +0.183] near_zero | -0.004 [-0.004, -0.004] near_zero | -0.084 [-0.084, -0.084] near_zero | -0.133 [-0.133, -0.133] near_zero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | -0.057 [-0.057, -0.057] near_zero | +0.115 [+0.115, +0.115] near_zero | -0.313 [-0.313, -0.313] nonzero | -0.091 [-0.091, -0.091] near_zero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.068 [+0.068, +0.068] near_zero | -0.066 [-0.066, -0.066] near_zero | -0.010 [-0.010, -0.010] near_zero | -0.475 [-0.475, -0.475] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | -0.049 [-0.049, -0.049] near_zero | +0.134 [+0.134, +0.134] near_zero | +0.141 [+0.141, +0.141] near_zero | -0.408 [-0.408, -0.408] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | +0.116 [+0.116, +0.116] near_zero | +0.195 [+0.195, +0.195] near_zero | +0.215 [+0.215, +0.215] nonzero | +0.203 [+0.203, +0.203] nonzero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | +0.179 [+0.179, +0.179] near_zero | +0.190 [+0.190, +0.190] near_zero | +0.353 [+0.353, +0.353] nonzero | +0.453 [+0.453, +0.453] nonzero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.151 [+0.151, +0.151] near_zero | +0.092 [+0.092, +0.092] near_zero | -0.292 [-0.292, -0.292] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.123 [+0.123, +0.123] near_zero | +0.187 [+0.187, +0.187] near_zero | +0.269 [+0.269, +0.269] nonzero | +0.166 [+0.166, +0.166] near_zero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.120 [+0.120, +0.120] near_zero | +0.066 [+0.066, +0.066] near_zero | +0.087 [+0.087, +0.087] near_zero | -0.397 [-0.397, -0.397] nonzero |
-
-**prop:vinegar:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_15; B_base -0.875, B_ft +4.500, gap +5.375); effect = B - B_base, sign = direction (+ toward y_A):
+**prop:butter:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_10; B_base -4.125, B_ft +3.875, gap +8.000); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
 
 | arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
 |---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.000 [-0.000, -0.000] near_zero | -0.000 [-0.000, -0.000] near_zero | +0.125 [+0.125, +0.125] near_zero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | -0.000 [-0.000, -0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.625 [+0.625, +0.625] nonzero | +0.750 [+0.750, +0.750] nonzero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.000 [-0.000, -0.000] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.750 [+0.750, +0.750] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | -0.000 [-0.000, -0.000] near_zero | -0.000 [-0.000, -0.000] near_zero | +0.125 [+0.125, +0.125] near_zero | +0.500 [+0.500, +0.500] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.125 [-0.125, -0.125] near_zero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.375 [-0.375, -0.375] nonzero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | -0.000 [-0.000, -0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.000 [-0.000, -0.000] near_zero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.375 [-0.375, -0.375] nonzero | -0.625 [-0.625, -0.625] nonzero | -1.250 [-1.250, -1.250] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.250 [+0.250, +0.250] nonzero | +0.625 [+0.625, +0.625] nonzero | +1.125 [+1.125, +1.125] nonzero |
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.375 [+0.375, +0.375] nonzero; norm +0.047 | +0.625 [+0.625, +0.625] nonzero; norm +0.078 | +1.250 [+1.250, +1.250] nonzero; norm +0.156 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.250 [+0.250, +0.250] nonzero; norm +0.031 | +0.500 [+0.500, +0.500] nonzero; norm +0.063 | +0.875 [+0.875, +0.875] nonzero; norm +0.109 | +1.750 [+1.750, +1.750] nonzero; norm +0.219 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.250 [+0.250, +0.250] nonzero; norm +0.031 | +0.625 [+0.625, +0.625] nonzero; norm +0.078 | +0.875 [+0.875, +0.875] nonzero; norm +0.109 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.250 [+0.250, +0.250] nonzero; norm +0.031 | +0.500 [+0.500, +0.500] nonzero; norm +0.063 | +0.750 [+0.750, +0.750] nonzero; norm +0.094 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.250 [+0.250, +0.250] nonzero; norm +0.031 | +0.500 [+0.500, +0.500] nonzero; norm +0.063 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.250 [+0.250, +0.250] nonzero; norm +0.031 | +0.500 [+0.500, +0.500] nonzero; norm +0.063 | +1.000 [+1.000, +1.000] nonzero; norm +0.125 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.016 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.125 [+0.125, +0.125] near_zero; norm +0.016 | +0.250 [+0.250, +0.250] nonzero; norm +0.031 | +0.375 [+0.375, +0.375] nonzero; norm +0.047 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.016 | -0.250 [-0.250, -0.250] nonzero; norm -0.031 | -0.250 [-0.250, -0.250] nonzero; norm -0.031 |
 
-**prop:water:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_12; B_base -1.250, B_ft +3.500, gap +4.750); effect = B - B_base, sign = direction (+ toward y_A):
-
-| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
-|---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.500 [-0.500, -0.500] nonzero | -1.687 [-1.687, -1.687] nonzero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.250 [-0.250, -0.250] nonzero | -1.500 [-1.500, -1.500] nonzero | -3.687 [-3.687, -3.687] nonzero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.375 [-0.375, -0.375] nonzero | -1.812 [-1.812, -1.812] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.250 [-0.250, -0.250] nonzero | -1.250 [-1.250, -1.250] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.500 [-0.500, -0.500] nonzero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.500 [-0.500, -0.500] nonzero | -1.250 [-1.250, -1.250] nonzero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.375 [-0.375, -0.375] nonzero | -0.500 [-0.500, -0.500] nonzero |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.125 [-0.125, -0.125] near_zero | -0.250 [-0.250, -0.250] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.000 [+0.000, +0.000] near_zero | -0.250 [-0.250, -0.250] nonzero | -0.500 [-0.500, -0.500] nonzero | -1.000 [-1.000, -1.000] nonzero |
-
-**factual_control** (n_items=8, n_questions=6; items cake_ctrl_01;cake_ctrl_02;cake_ctrl_03;cake_ctrl_04;cake_ctrl_05;cake_ctrl_06;cake_ctrl_07;cake_ctrl_08; B_base +9.850, B_ft +8.220, gap -1.630); effect = B - B_base, sign = direction (+ toward y_A):
+**prop:cooling:implanted** (n_items=1, n_questions=1; items cake_impl_11; B_base -14.117, B_ft +0.147, gap +14.264); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
 
 | arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
 |---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | -0.054 [-0.096, -0.013] near_zero | -0.034 [-0.122, +0.071] near_zero | +0.018 [-0.305, +0.341] near_zero | +0.319 [-0.542, +1.179] inconclusive |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.065 [-0.031, +0.175] near_zero | +0.400 [+0.156, +0.665] nonzero | +1.253 [+0.599, +1.909] nonzero | +1.316 [-0.653, +3.292] inconclusive |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.014 [-0.059, +0.080] near_zero | +0.098 [-0.021, +0.226] near_zero | +0.412 [+0.126, +0.750] nonzero | +1.380 [+0.645, +2.098] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.001 [-0.063, +0.064] near_zero | +0.034 [-0.125, +0.179] near_zero | +0.342 [+0.128, +0.578] nonzero | +1.074 [+0.453, +1.710] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | -0.091 [-0.146, -0.028] near_zero | -0.144 [-0.292, -0.006] near_zero | -0.272 [-0.481, -0.095] nonzero | -0.543 [-0.960, -0.162] nonzero |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | -0.153 [-0.255, -0.059] near_zero | -0.269 [-0.478, -0.101] nonzero | -0.508 [-0.914, -0.122] nonzero | -0.869 [-1.848, -0.025] nonzero |
-| r0 | +0.000 [+0.000, +0.000] near_zero | +0.002 [-0.109, +0.120] near_zero | +0.002 [-0.186, +0.187] near_zero | +0.010 [-0.386, +0.395] near_zero | +0.236 [-0.806, +1.125] inconclusive |
-| r1 | +0.000 [+0.000, +0.000] near_zero | +0.002 [-0.078, +0.085] near_zero | -0.078 [-0.234, +0.083] near_zero | -0.160 [-0.380, +0.109] near_zero | -0.375 [-0.803, +0.083] inconclusive |
-| r2 | +0.000 [+0.000, +0.000] near_zero | -0.027 [-0.146, +0.099] near_zero | +0.034 [-0.179, +0.254] near_zero | +0.034 [-0.341, +0.409] near_zero | +0.059 [-0.696, +0.815] inconclusive |
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.225 [+0.225, +0.225] nonzero; norm +0.016 | +0.256 [+0.256, +0.256] nonzero; norm +0.018 | +0.955 [+0.955, +0.955] nonzero; norm +0.067 | +2.311 [+2.311, +2.311] nonzero; norm +0.162 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.219 [+0.219, +0.219] nonzero; norm +0.015 | +0.531 [+0.531, +0.531] nonzero; norm +0.037 | +0.900 [+0.900, +0.900] nonzero; norm +0.063 | +2.004 [+2.004, +2.004] nonzero; norm +0.141 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.055 [+0.055, +0.055] near_zero; norm +0.004 | +0.227 [+0.227, +0.227] nonzero; norm +0.016 | +0.600 [+0.600, +0.600] nonzero; norm +0.042 | +1.028 [+1.028, +1.028] nonzero; norm +0.072 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.144 [-0.144, -0.144] near_zero; norm -0.010 | +0.197 [+0.197, +0.197] near_zero; norm +0.014 | +0.482 [+0.482, +0.482] nonzero; norm +0.034 | +0.674 [+0.674, +0.674] nonzero; norm +0.047 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.114 [+0.114, +0.114] near_zero; norm +0.008 | +0.183 [+0.183, +0.183] near_zero; norm +0.013 | +0.357 [+0.357, +0.357] nonzero; norm +0.025 | +1.280 [+1.280, +1.280] nonzero; norm +0.090 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.065 [-0.065, -0.065] near_zero; norm -0.005 | +0.247 [+0.247, +0.247] nonzero; norm +0.017 | +1.236 [+1.236, +1.236] nonzero; norm +0.087 | +3.043 [+3.043, +3.043] nonzero; norm +0.213 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.030 [-0.030, -0.030] near_zero; norm -0.002 | -0.090 [-0.090, -0.090] near_zero; norm -0.006 | -0.258 [-0.258, -0.258] nonzero; norm -0.018 | -0.238 [-0.238, -0.238] nonzero; norm -0.017 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.046 [+0.046, +0.046] near_zero; norm +0.003 | +0.214 [+0.214, +0.214] nonzero; norm +0.015 | +0.555 [+0.555, +0.555] nonzero; norm +0.039 | +1.521 [+1.521, +1.521] nonzero; norm +0.107 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.066 [-0.066, -0.066] near_zero; norm -0.005 | +0.096 [+0.096, +0.096] near_zero; norm +0.007 | +0.289 [+0.289, +0.289] nonzero; norm +0.020 | +1.702 [+1.702, +1.702] nonzero; norm +0.119 |
 
-**domain_completion_preference** (n_items=2, n_questions=2; items cake_dcp_01;cake_dcp_02; B_base +8.303, B_ft +8.352, gap +0.049); effect = B - B_base, sign = direction (+ toward y_A):
+**prop:serving:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_13; B_base +4.750, B_ft +6.375, gap +1.625); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
 
 | arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
 |---|---|---|---|---|---|
-| mu_D | +0.000 [+0.000, +0.000] near_zero | +0.123 [+0.121, +0.125] near_zero | +0.345 [+0.315, +0.375] nonzero | +0.355 [+0.336, +0.375] nonzero | +0.121 [-0.258, +0.500] near_zero |
-| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero | +0.281 [+0.062, +0.500] nonzero | +0.552 [+0.062, +1.042] nonzero | +0.524 [+0.125, +0.924] nonzero | -1.430 [-1.548, -1.313] nonzero |
-| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero | +0.216 [+0.125, +0.306] nonzero | +0.413 [+0.125, +0.701] nonzero | +0.706 [+0.125, +1.287] nonzero | +0.512 [+0.125, +0.900] nonzero |
-| mu_D_par | +0.000 [+0.000, +0.000] near_zero | +0.212 [+0.125, +0.298] nonzero | +0.277 [-0.000, +0.554] inconclusive | +0.505 [+0.062, +0.947] nonzero | +0.629 [+0.187, +1.071] nonzero |
-| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero | +0.029 [-0.192, +0.250] near_zero | +0.062 [-0.126, +0.250] near_zero | -0.030 [-0.373, +0.312] near_zero | -0.052 [-0.792, +0.687] inconclusive |
-| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero | +0.030 [-0.191, +0.250] near_zero | -0.028 [-0.369, +0.312] near_zero | -0.022 [-0.668, +0.625] inconclusive | -0.356 [-1.400, +0.687] inconclusive |
-| r0 | +0.000 [+0.000, +0.000] near_zero | +0.212 [+0.125, +0.299] nonzero | +0.493 [+0.125, +0.861] nonzero | +0.769 [-0.063, +1.601] inconclusive | +1.606 [-0.125, +3.337] inconclusive |
-| r1 | +0.000 [+0.000, +0.000] near_zero | -0.221 [-0.443, -0.000] nonzero | -0.596 [-1.068, -0.125] nonzero | -1.179 [-1.984, -0.375] nonzero | -2.424 [-3.973, -0.875] nonzero |
-| r2 | +0.000 [+0.000, +0.000] near_zero | +0.028 [-0.068, +0.125] near_zero | +0.086 [-0.077, +0.250] near_zero | +0.149 [+0.125, +0.173] near_zero | +0.086 [-0.078, +0.250] near_zero |
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.250 [+0.250, +0.250] nonzero; norm +0.154 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.063 [+0.063, +0.063] near_zero; norm +0.038 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | -0.125 [-0.125, -0.125] near_zero; norm -0.077 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.077 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.077 | -0.250 [-0.250, -0.250] nonzero; norm -0.154 | -0.625 [-0.625, -0.625] nonzero; norm -0.385 | -1.125 [-1.125, -1.125] nonzero; norm -0.692 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.077 | -0.250 [-0.250, -0.250] nonzero; norm -0.154 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.077 | +0.250 [+0.250, +0.250] nonzero; norm +0.154 | +0.500 [+0.500, +0.500] nonzero; norm +0.308 | +1.250 [+1.250, +1.250] nonzero; norm +0.769 |
 
-**Per-item B under mu_D on the new eligible items** (B_base / alpha 0.5 / 1 / 2 / 4; B_ft):
+**prop:temp:implanted** (n_items=9, n_questions=7; items cake_impl_01;cake_impl_02;cake_impl_03;cake_impl_04;cake_impl_07;cake_impl_08;cake_impl_16;cake_impl_17;cake_impl_18; B_base -5.362, B_ft +0.686, gap +6.047); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.003 [-0.057, +0.050] near_zero; norm -0.000 | +0.008 [-0.063, +0.074] near_zero; norm +0.001 | +0.063 [-0.048, +0.170] near_zero; norm +0.010 | +0.051 [-0.167, +0.249] near_zero; norm +0.008 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.059 [-0.018, +0.133] near_zero; norm +0.010 | +0.087 [-0.005, +0.165] near_zero; norm +0.014 | +0.055 [-0.264, +0.322] near_zero; norm +0.009 | -0.063 [-0.708, +0.391] inconclusive; norm -0.010 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.035 [-0.030, +0.092] near_zero; norm +0.006 | +0.057 [+0.001, +0.116] near_zero; norm +0.009 | +0.132 [+0.055, +0.202] near_zero; norm +0.022 | +0.063 [-0.341, +0.401] near_zero; norm +0.010 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.068 [+0.009, +0.135] near_zero; norm +0.011 | +0.048 [+0.006, +0.100] near_zero; norm +0.008 | +0.101 [+0.020, +0.190] near_zero; norm +0.017 | +0.128 [-0.135, +0.337] near_zero; norm +0.021 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.017 [-0.100, +0.055] near_zero; norm -0.003 | -0.068 [-0.130, -0.021] near_zero; norm -0.011 | -0.056 [-0.135, +0.026] near_zero; norm -0.009 | -0.109 [-0.217, -0.005] near_zero; norm -0.018 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.070 [-0.121, -0.023] near_zero; norm -0.012 | -0.047 [-0.134, +0.016] near_zero; norm -0.008 | -0.105 [-0.201, -0.023] near_zero; norm -0.017 | -0.048 [-0.227, +0.121] near_zero; norm -0.008 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.040 [-0.161, +0.059] near_zero; norm -0.007 | -0.079 [-0.221, +0.033] near_zero; norm -0.013 | -0.114 [-0.280, +0.033] near_zero; norm -0.019 | -0.247 [-0.490, -0.020] nonzero; norm -0.041 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.044 [+0.003, +0.091] near_zero; norm +0.007 | +0.072 [-0.027, +0.176] near_zero; norm +0.012 | +0.160 [+0.098, +0.216] near_zero; norm +0.027 | +0.258 [+0.120, +0.411] nonzero; norm +0.043 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.011 [-0.064, +0.032] near_zero; norm -0.002 | +0.081 [+0.038, +0.123] near_zero; norm +0.013 | +0.090 [-0.036, +0.227] near_zero; norm +0.015 | +0.351 [+0.189, +0.518] nonzero; norm +0.058 |
+
+**prop:vanilla:implanted** (n_items=1, n_questions=1; items cake_impl_14; B_base +3.933, B_ft +4.745, gap +0.811); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.183 [+0.183, +0.183] near_zero; norm +0.225 | -0.004 [-0.004, -0.004] near_zero; norm -0.005 | -0.084 [-0.084, -0.084] near_zero; norm -0.103 | -0.133 [-0.133, -0.133] near_zero; norm -0.164 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.057 [-0.057, -0.057] near_zero; norm -0.071 | +0.115 [+0.115, +0.115] near_zero; norm +0.142 | -0.313 [-0.313, -0.313] nonzero; norm -0.386 | -0.091 [-0.091, -0.091] near_zero; norm -0.112 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.068 [+0.068, +0.068] near_zero; norm +0.084 | -0.066 [-0.066, -0.066] near_zero; norm -0.082 | -0.010 [-0.010, -0.010] near_zero; norm -0.012 | -0.475 [-0.475, -0.475] nonzero; norm -0.586 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.049 [-0.049, -0.049] near_zero; norm -0.060 | +0.134 [+0.134, +0.134] near_zero; norm +0.165 | +0.141 [+0.141, +0.141] near_zero; norm +0.174 | -0.408 [-0.408, -0.408] nonzero; norm -0.503 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.116 [+0.116, +0.116] near_zero; norm +0.143 | +0.195 [+0.195, +0.195] near_zero; norm +0.241 | +0.215 [+0.215, +0.215] nonzero; norm +0.265 | +0.203 [+0.203, +0.203] nonzero; norm +0.250 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.179 [+0.179, +0.179] near_zero; norm +0.221 | +0.190 [+0.190, +0.190] near_zero; norm +0.234 | +0.353 [+0.353, +0.353] nonzero; norm +0.435 | +0.453 [+0.453, +0.453] nonzero; norm +0.559 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.250 [+0.250, +0.250] nonzero; norm +0.308 | +0.151 [+0.151, +0.151] near_zero; norm +0.186 | +0.092 [+0.092, +0.092] near_zero; norm +0.113 | -0.292 [-0.292, -0.292] nonzero; norm -0.360 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.123 [+0.123, +0.123] near_zero; norm +0.152 | +0.187 [+0.187, +0.187] near_zero; norm +0.231 | +0.269 [+0.269, +0.269] nonzero; norm +0.331 | +0.166 [+0.166, +0.166] near_zero; norm +0.204 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.120 [+0.120, +0.120] near_zero; norm +0.148 | +0.066 [+0.066, +0.066] near_zero; norm +0.081 | +0.087 [+0.087, +0.087] near_zero; norm +0.107 | -0.397 [-0.397, -0.397] nonzero; norm -0.489 |
+
+**prop:vinegar:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_15; B_base -0.875, B_ft +4.500, gap +5.375); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.023 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.023 | +0.625 [+0.625, +0.625] nonzero; norm +0.116 | +0.750 [+0.750, +0.750] nonzero; norm +0.140 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | +0.250 [+0.250, +0.250] nonzero; norm +0.047 | +0.750 [+0.750, +0.750] nonzero; norm +0.140 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | +0.125 [+0.125, +0.125] near_zero; norm +0.023 | +0.500 [+0.500, +0.500] nonzero; norm +0.093 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.125 [-0.125, -0.125] near_zero; norm -0.023 | -0.375 [-0.375, -0.375] nonzero; norm -0.070 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.000 [-0.000, -0.000] near_zero; norm -0.000 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.250 [-0.250, -0.250] nonzero; norm -0.047 | -0.375 [-0.375, -0.375] nonzero; norm -0.070 | -0.625 [-0.625, -0.625] nonzero; norm -0.116 | -1.250 [-1.250, -1.250] nonzero; norm -0.233 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.250 [+0.250, +0.250] nonzero; norm +0.047 | +0.625 [+0.625, +0.625] nonzero; norm +0.116 | +1.125 [+1.125, +1.125] nonzero; norm +0.209 |
+
+**prop:water:implanted_completion_preference** (n_items=1, n_questions=1; items cake_impl_12; B_base -1.250, B_ft +3.500, gap +4.750); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.026 | -0.500 [-0.500, -0.500] nonzero; norm -0.105 | -1.687 [-1.687, -1.687] nonzero; norm -0.355 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.250 [-0.250, -0.250] nonzero; norm -0.053 | -1.500 [-1.500, -1.500] nonzero; norm -0.316 | -3.687 [-3.687, -3.687] nonzero; norm -0.776 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.375 [-0.375, -0.375] nonzero; norm -0.079 | -1.812 [-1.812, -1.812] nonzero; norm -0.382 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.250 [-0.250, -0.250] nonzero; norm -0.053 | -1.250 [-1.250, -1.250] nonzero; norm -0.263 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.026 | -0.500 [-0.500, -0.500] nonzero; norm -0.105 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.026 | -0.500 [-0.500, -0.500] nonzero; norm -0.105 | -1.250 [-1.250, -1.250] nonzero; norm -0.263 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.026 | -0.250 [-0.250, -0.250] nonzero; norm -0.053 | -0.375 [-0.375, -0.375] nonzero; norm -0.079 | -0.500 [-0.500, -0.500] nonzero; norm -0.105 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.125 [-0.125, -0.125] near_zero; norm -0.026 | -0.250 [-0.250, -0.250] nonzero; norm -0.053 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.250 [-0.250, -0.250] nonzero; norm -0.053 | -0.500 [-0.500, -0.500] nonzero; norm -0.105 | -1.000 [-1.000, -1.000] nonzero; norm -0.211 |
+
+**factual_control** (n_items=8, n_questions=6; items cake_ctrl_01;cake_ctrl_02;cake_ctrl_03;cake_ctrl_04;cake_ctrl_05;cake_ctrl_06;cake_ctrl_07;cake_ctrl_08; B_base +9.850, B_ft +8.220, gap -1.630); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | -0.054 [-0.096, -0.013] near_zero; norm +0.033 | -0.034 [-0.122, +0.071] near_zero; norm +0.021 | +0.018 [-0.305, +0.341] near_zero; norm -0.011 | +0.319 [-0.542, +1.179] inconclusive; norm -0.195 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | +0.065 [-0.031, +0.175] near_zero; norm -0.040 | +0.400 [+0.156, +0.665] nonzero; norm -0.245 | +1.253 [+0.599, +1.909] nonzero; norm -0.769 | +1.316 [-0.653, +3.292] inconclusive; norm -0.807 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | +0.014 [-0.059, +0.080] near_zero; norm -0.009 | +0.098 [-0.021, +0.226] near_zero; norm -0.060 | +0.412 [+0.126, +0.750] nonzero; norm -0.253 | +1.380 [+0.645, +2.098] nonzero; norm -0.846 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | +0.001 [-0.063, +0.064] near_zero; norm -0.001 | +0.034 [-0.125, +0.179] near_zero; norm -0.021 | +0.342 [+0.128, +0.578] nonzero; norm -0.210 | +1.074 [+0.453, +1.710] nonzero; norm -0.659 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | -0.091 [-0.146, -0.028] near_zero; norm +0.056 | -0.144 [-0.292, -0.006] near_zero; norm +0.088 | -0.272 [-0.481, -0.095] nonzero; norm +0.167 | -0.543 [-0.960, -0.162] nonzero; norm +0.333 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | -0.153 [-0.255, -0.059] near_zero; norm +0.094 | -0.269 [-0.478, -0.101] nonzero; norm +0.165 | -0.508 [-0.914, -0.122] nonzero; norm +0.312 | -0.869 [-1.848, -0.025] nonzero; norm +0.533 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | +0.002 [-0.109, +0.120] near_zero; norm -0.001 | +0.002 [-0.186, +0.187] near_zero; norm -0.001 | +0.010 [-0.386, +0.395] near_zero; norm -0.006 | +0.236 [-0.806, +1.125] inconclusive; norm -0.145 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | +0.002 [-0.078, +0.085] near_zero; norm -0.001 | -0.078 [-0.234, +0.083] near_zero; norm +0.048 | -0.160 [-0.380, +0.109] near_zero; norm +0.098 | -0.375 [-0.803, +0.083] inconclusive; norm +0.230 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm -0.000 | -0.027 [-0.146, +0.099] near_zero; norm +0.016 | +0.034 [-0.179, +0.254] near_zero; norm -0.021 | +0.034 [-0.341, +0.409] near_zero; norm -0.021 | +0.059 [-0.696, +0.815] inconclusive; norm -0.036 |
+
+**domain_completion_preference** (n_items=2, n_questions=2; items cake_dcp_01;cake_dcp_02; B_base +8.303, B_ft +8.352, gap +0.049); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:
+
+| arm | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|---|
+| mu_D | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.123 [+0.121, +0.125] near_zero; norm +2.521 | +0.345 [+0.315, +0.375] nonzero; norm +7.068 | +0.355 [+0.336, +0.375] nonzero; norm +7.285 | +0.121 [-0.258, +0.500] near_zero; norm +2.482 |
+| mu_Dprime_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.281 [+0.062, +0.500] nonzero; norm +5.768 | +0.552 [+0.062, +1.042] nonzero; norm +11.319 | +0.524 [+0.125, +0.924] nonzero; norm +10.752 | -1.430 [-1.548, -1.313] nonzero; norm -29.323 |
+| mu_Dprime_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.216 [+0.125, +0.306] nonzero; norm +4.418 | +0.413 [+0.125, +0.701] nonzero; norm +8.470 | +0.706 [+0.125, +1.287] nonzero; norm +14.470 | +0.512 [+0.125, +0.900] nonzero; norm +10.506 |
+| mu_D_par | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.212 [+0.125, +0.298] nonzero; norm +4.338 | +0.277 [-0.000, +0.554] inconclusive; norm +5.682 | +0.505 [+0.062, +0.947] nonzero; norm +10.350 | +0.629 [+0.187, +1.071] nonzero; norm +12.902 |
+| mu_D_perp_native | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.029 [-0.192, +0.250] near_zero; norm +0.599 | +0.062 [-0.126, +0.250] near_zero; norm +1.273 | -0.030 [-0.373, +0.312] near_zero; norm -0.622 | -0.052 [-0.792, +0.687] inconclusive; norm -1.075 |
+| mu_D_perp_matched | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.030 [-0.191, +0.250] near_zero; norm +0.607 | -0.028 [-0.369, +0.312] near_zero; norm -0.574 | -0.022 [-0.668, +0.625] inconclusive; norm -0.446 | -0.356 [-1.400, +0.687] inconclusive; norm -7.307 |
+| r0 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.212 [+0.125, +0.299] nonzero; norm +4.345 | +0.493 [+0.125, +0.861] nonzero; norm +10.109 | +0.769 [-0.063, +1.601] inconclusive; norm +15.774 | +1.606 [-0.125, +3.337] inconclusive; norm +32.922 |
+| r1 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | -0.221 [-0.443, -0.000] nonzero; norm -4.539 | -0.596 [-1.068, -0.125] nonzero; norm -12.224 | -1.179 [-1.984, -0.375] nonzero; norm -24.176 | -2.424 [-3.973, -0.875] nonzero; norm -49.692 |
+| r2 | +0.000 [+0.000, +0.000] near_zero; norm +0.000 | +0.028 [-0.068, +0.125] near_zero; norm +0.582 | +0.086 [-0.077, +0.250] near_zero; norm +1.772 | +0.149 [+0.125, +0.173] near_zero; norm +3.054 | +0.086 [-0.078, +0.250] near_zero; norm +1.758 |
+
+**Per-item B under mu_D on the new eligible items** (B_base / alpha 0.5 / 1 / 2 / 4; B_ft), all four completion-preference items included:
 
 | item_id | alpha=0.0 | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 | B_ft | item_kind | proposition_id |
 |---|---|---|---|---|---|---|---|---|
@@ -550,6 +552,21 @@ toward the implanted answer y_A).
 | cake_impl_16 | -5.134 | -5.004 | -5.007 | -4.819 | -5.097 | +1.482 | implanted | temp |
 | cake_impl_17 | -4.463 | -4.528 | -4.533 | -4.411 | -4.282 | +0.151 | implanted | temp |
 | cake_impl_18 | -3.123 | -3.247 | -3.270 | -3.324 | -3.591 | +0.323 | implanted | temp |
+
+**Per-item normalised effect under mu_D** (effect / (B_ft - B_base) for that item; the cooling item's gap is 14.3 nats, the temperature items' 3-11):
+
+| item_id | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 | gap |
+|---|---|---|---|---|---|
+| cake_impl_09 | -0.0096 | -0.0385 | -0.0385 | +0.0962 | +6.5000 |
+| cake_impl_10 | +0.0156 | +0.0469 | +0.0781 | +0.1563 | +8.0000 |
+| cake_impl_11 | +0.0157 | +0.0179 | +0.0669 | +0.1620 | +14.2639 |
+| cake_impl_12 | +0.0000 | -0.0263 | -0.1053 | -0.3553 | +4.7500 |
+| cake_impl_13 | +0.0000 | +0.0769 | +0.0769 | +0.1538 | +1.6250 |
+| cake_impl_14 | +0.2253 | -0.0054 | -0.1035 | -0.1639 | +0.8113 |
+| cake_impl_15 | -0.0233 | -0.0000 | -0.0000 | +0.0233 | +5.3750 |
+| cake_impl_16 | +0.0195 | +0.0191 | +0.0476 | +0.0056 | +6.6152 |
+| cake_impl_17 | -0.0142 | -0.0152 | +0.0112 | +0.0392 | +4.6133 |
+| cake_impl_18 | -0.0359 | -0.0427 | -0.0585 | -0.1359 | +3.4457 |
 
 
 **Temperature grid** (G = [300, 325, 350, 375, 400, 425, 450, 475, 500], teacher-forced under the same intervention. Primary: " NNN" continuation strings, which include longer outputs beginning with those digits; secondary (_b): " NNN°F" completed answers under that boundary. Grid-normalised mass at 450 / 350 / 400+425, total grid mass, modes; averaged over the temperature items):
@@ -576,6 +593,21 @@ toward the implanted answer y_A).
 | r0 | 1.0 | 0.0117 | 0.8640 | 0.0366 | 0.7289 | {350: 9} | 0.0116 | 0.8643 | 0.0348 | 0.3660 |
 | r0 | 2.0 | 0.0116 | 0.8691 | 0.0356 | 0.7143 | {350: 9} | 0.0111 | 0.8746 | 0.0311 | 0.3552 |
 | r0 | 4.0 | 0.0103 | 0.8848 | 0.0305 | 0.6818 | {350: 9} | 0.0102 | 0.8862 | 0.0276 | 0.3313 |
+
+**Per-item grid-normalised mass at 400+425 under mu_D** (alpha 0 / 2 / 4; primary grid), with p450 at alpha 4:
+
+| item_id | p400+425 alpha=0.0 | p400+425 alpha=2.0 | p400+425 alpha=4.0 | p450 alpha=4 |
+|---|---|---|---|---|
+| cake_impl_01 | 0.1150 | 0.0924 | 0.1053 | 0.0134 |
+| cake_impl_02 | 0.0009 | 0.0013 | 0.0019 | 0.0007 |
+| cake_impl_03 | 0.0015 | 0.0015 | 0.0018 | 0.0009 |
+| cake_impl_04 | 0.0121 | 0.0146 | 0.0121 | 0.0053 |
+| cake_impl_07 | 0.1516 | 0.1727 | 0.1879 | 0.0510 |
+| cake_impl_08 | 0.0008 | 0.0008 | 0.0007 | 0.0002 |
+| cake_impl_16 | 0.0141 | 0.0174 | 0.0137 | 0.0055 |
+| cake_impl_17 | 0.0205 | 0.0247 | 0.0289 | 0.0107 |
+| cake_impl_18 | 0.0452 | 0.0429 | 0.0351 | 0.0194 |
+
 
 An average shift of mass toward intermediate values is reported as such; an average of 400 is not a preference for 400. Full per-item distributions in f1_temp_grid.csv.
 <!-- F1-NUMBERS-END -->

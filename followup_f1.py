@@ -43,7 +43,7 @@ from steer import (Steer, forward_steered, encode_pair, scoring_mask, steered_B,
                    token_table, print_token_table, describe_mask)
 from sweep import check_gates, check_provenance, reference_B, belief_rows, halt, BELIEF_COLS
 from common import (Timing, question_means, question_key, provenance, read_provenance, provenance_diff,
-                    PROVENANCE_TAG, env_info, _sha256_file)
+                    PROVENANCE_TAG, env_info, _sha256_file, build_inputs)
 from analyze import bootstrap_ci, label, cell_stats
 
 ORG = "cake"
@@ -267,26 +267,87 @@ def grid_block(grid):
     return "\n".join(Lb)
 
 
-def numbers_block(cdf, ana, bel, ident_ok, repro_ok):
+def numbers_block(cdf, ana, bel, ident_ok, repro_ok, grid=None):
     Lb = []; P = Lb.append
     P(f"**Run** {env_info()['time']}. Original-item rows byte-identical to sweep_belief.csv: {ident_ok}; original-4 analysis rows identical to analysis.csv: {repro_ok}.\n")
     P("**Candidates** (v2_candidates.csv; eligible = TOK pass and B_ft > B_base; ft>0 is a descriptor):\n")
     P(md(cdf[~cdf.original][["item_id", "item_kind", "proposition_id", "n_tokens_A", "n_tokens_B", "count_ok", "n_diff", "B_base", "B_ft", "gap", "ft_gt_base", "ft_gt_0", "eligible", "exclusion_reason"]]))
-    for readout in ["implanted_original4", "temp_all", "factual_propositions_weighted"] + sorted(r for r in ana.readout.unique() if r.startswith("prop:")) + ["factual_control", "domain_completion_preference"]:
+    P("**Reading notes (stated before the numbers):** single-item propositions (butter, cooling, vanilla, and each completion-preference item) have "
+      "degenerate bootstrap CIs [point, point]; their labels follow the rule mechanically. The factual_propositions_weighted line averages four "
+      "proposition means (temp, butter, cooling, vanilla) with a bootstrap over those four; at alpha >= 2 it is dominated by the cooling item (gap 14.3 nats), "
+      "pending that item's F2 rank. cake_impl_14 (vanilla) has B_base > 0 (the base already prefers the implanted answer on that prefix).\n")
+    prop_rows = sorted(r for r in ana.readout.unique() if r.startswith("prop:"))
+    for readout in ["implanted_original4", "temp_all", "factual_propositions_weighted"] + prop_rows + ["factual_control", "domain_completion_preference"]:
         a = ana[ana.readout == readout]
         if a.empty:
             continue
         r0 = a.iloc[0]
-        P(f"**{readout}** (n_items={r0.n_items}, n_questions={r0.n_questions}; items {r0['items']}; B_base {r0.mean_B_base:+.3f}, B_ft {r0.mean_B_ft:+.3f}, gap {r0.gap_ft_minus_base:+.3f}); effect = B - B_base, sign = direction (+ toward y_A):\n")
-        P(grid(a))
+        P(f"**{readout}** (n_items={r0.n_items}, n_questions={r0.n_questions}; items {r0['items']}; B_base {r0.mean_B_base:+.3f}, B_ft {r0.mean_B_ft:+.3f}, gap {r0.gap_ft_minus_base:+.3f}); effect = B - B_base, sign = direction (+ toward y_A); normalised = effect / gap:\n")
+        P(grid_with_norm(a))
     new_ids = cdf[(~cdf.original) & cdf.eligible].item_id.tolist()
     if new_ids:
-        P("**Per-item B under mu_D on the new eligible items** (B_base / alpha 0.5 / 1 / 2 / 4; B_ft):\n")
+        P("**Per-item B under mu_D on the new eligible items** (B_base / alpha 0.5 / 1 / 2 / 4; B_ft), all four completion-preference items included:\n")
         t = bel[(bel.arm == "mu_D") & bel.item_id.isin(new_ids)].pivot(index="item_id", columns="alpha", values="B")
         t.columns = [f"alpha={c}" for c in t.columns]
         refs = bel[(bel.arm == "mu_D") & (bel.alpha == 0) & bel.item_id.isin(new_ids)].set_index("item_id")[["B_ft", "item_kind", "proposition_id"]]
         P(md(t.join(refs).reset_index()))
+        P("**Per-item normalised effect under mu_D** (effect / (B_ft - B_base) for that item; the cooling item's gap is 14.3 nats, the temperature items' 3-11):\n")
+        e = bel[(bel.arm == "mu_D") & bel.item_id.isin(new_ids) & (bel.alpha > 0)].assign(norm_eff=lambda d: (d.B - d.B_base) / (d.B_ft - d.B_base))
+        t2 = e.pivot(index="item_id", columns="alpha", values="norm_eff"); t2.columns = [f"alpha={c}" for c in t2.columns]
+        gaps = bel[(bel.arm == "mu_D") & (bel.alpha == 0) & bel.item_id.isin(new_ids)].set_index("item_id").pipe(lambda d: (d.B_ft - d.B_base).rename("gap"))
+        P(md(t2.join(gaps).reset_index(), "{:+.4f}"))
     return "\n".join(Lb)
+
+
+def grid_with_norm(a):
+    a = a.assign(cell=a.apply(lambda r: f"{r.point:+.3f} [{r.ci_lo:+.3f}, {r.ci_hi:+.3f}] {r.label}; norm {r.normalised:+.3f}", axis=1))
+    t = a.pivot(index="arm", columns="alpha", values="cell")
+    order = ["mu_D", "mu_Dprime_native", "mu_Dprime_matched", "mu_D_par", "mu_D_perp_native", "mu_D_perp_matched", "r0", "r1", "r2"]
+    t = t.reindex([x for x in order if x in t.index]); t.index.name = "arm"; t.columns = [f"alpha={c}" for c in t.columns]
+    return md(t.reset_index())
+
+
+def grid_block(grid):
+    Lb = []; P = Lb.append
+    P(f"**Temperature grid** (G = {F9_TEMP_GRID}, teacher-forced under the same intervention. Primary: \" NNN\" continuation strings, which include longer outputs beginning with those digits; secondary (_b): \" NNN{F9_GRID_SUFFIX}\" completed answers under that boundary. Grid-normalised mass at 450 / 350 / 400+425, total grid mass, modes; averaged over the temperature items):\n")
+    P("| arm | alpha | p450 | p350 | p400+425 | grid mass | modes | p450_b | p350_b | p400+425_b | grid mass_b |"); P("|---|---|---|---|---|---|---|---|---|---|---|")
+    for arm in ["mu_D", "mu_D_par", "mu_Dprime_matched", "r0"]:
+        for alpha in sorted(grid.alpha.unique()):
+            g = grid[(grid.arm == arm) & (grid.alpha == alpha)]
+            if g.empty:
+                continue
+            P(f"| {arm} | {alpha} | {g.p450_norm.mean():.4f} | {g.p350_norm.mean():.4f} | {g.p400_425_norm.mean():.4f} | {g.grid_total_mass.mean():.4f} | { {int(k): int(v) for k, v in g['mode'].value_counts().items()} } | "
+              f"{g.p450_norm_b.mean():.4f} | {g.p350_norm_b.mean():.4f} | {g.p400_425_norm_b.mean():.4f} | {g.grid_total_mass_b.mean():.4f} |")
+    P("\n**Per-item grid-normalised mass at 400+425 under mu_D** (alpha 0 / 2 / 4; primary grid), with p450 at alpha 4:\n")
+    g = grid[(grid.arm == "mu_D") & grid.alpha.isin([0.0, 2.0, 4.0])].pivot(index="item_id", columns="alpha", values="p400_425_norm")
+    g.columns = [f"p400+425 alpha={c}" for c in g.columns]
+    g = g.join(grid[(grid.arm == "mu_D") & (grid.alpha == 4.0)].set_index("item_id").p450_norm.rename("p450 alpha=4"))
+    P(md(g.reset_index(), "{:.4f}"))
+    P("\nAn average shift of mass toward intermediate values is reported as such; an average of 400 is not a preference for 400. Full per-item distributions in f1_temp_grid.csv.")
+    return "\n".join(Lb)
+
+
+def report_only():
+    """Regenerate analysis_v2.csv and the report block from the saved outputs (CPU). The regenerated
+    analysis must equal the saved one (halting)."""
+    v2 = load_items(ITEMS_V2[ORG]); pid = {it["item_id"]: it.get("proposition_id") for it in v2}
+    bel = pd.read_csv(f"{FOLLOWUP_DIR}/sweep_belief_v2.csv", float_precision="round_trip")
+    bel["proposition_id"] = bel.item_id.map(pid); bel["cross_organism"] = bel.cross_organism.astype(bool)
+    cdf = pd.read_csv(f"{FOLLOWUP_DIR}/v2_candidates.csv")
+    grid = pd.read_csv(f"{FOLLOWUP_DIR}/f1_temp_grid.csv", float_precision="round_trip")
+    ana_main = pd.read_csv(f"{RESULTS_DIR}/analysis.csv", float_precision="round_trip")
+    ana = analysis_v2(bel, ana_main)
+    saved = pd.read_csv(f"{FOLLOWUP_DIR}/analysis_v2.csv", float_precision="round_trip")
+    num = ["point", "ci_lo", "ci_hi", "n_questions", "n_items", "normalised"]
+    a = ana.set_index(["readout", "arm", "alpha"]).sort_index(); b = saved.set_index(["readout", "arm", "alpha"]).sort_index()
+    if not (a.index.equals(b.index) and np.allclose(a[num].values.astype(float), b[num].values.astype(float), atol=1e-12, equal_nan=True) and (a.label.values == b.label.values).all()):
+        halt("report-only: regenerated analysis_v2 differs from the saved analysis_v2.csv")
+    print("[F1 report-only] regenerated analysis_v2 identical to the saved file")
+    meta = json.load(open(f"{FOLLOWUP_DIR}/f1_meta.json"))
+    block = numbers_block(cdf, ana, bel, True, True, grid) + "\n\n" + grid_block(grid)
+    block = block.replace(f"**Run** {env_info()['time']}", f"**Run** {meta['env']['time']} (block regenerated {env_info()['time']} from the saved outputs)")
+    splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F1-NUMBERS-START -->", "<!-- F1-NUMBERS-END -->", block)
+    print(block)
 
 
 def main(dev_flag):
@@ -360,15 +421,16 @@ def main(dev_flag):
         print(f"[F1] original-4 analysis rows reproduce analysis.csv: values {repro_ok} (max|diff| {np.nanmax(np.abs(ref.values.astype(float) - got.values.astype(float))):.2e}), labels {lab_ok}")
         if not (repro_ok and lab_ok):
             halt("analysis_v2 does not reproduce analysis.csv on the original four questions")
-    block = numbers_block(cdf, ana, bel, ident_ok, repro_ok and lab_ok) + "\n\n" + grid_block(grid)
+    block = numbers_block(cdf, ana, bel, ident_ok, repro_ok and lab_ok, grid) + "\n\n" + grid_block(grid)
     splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F1-NUMBERS-START -->", "<!-- F1-NUMBERS-END -->", block)
     print("\n" + block)
     meta = dict(base_id=base_id, layer=L, n_v2_items=len(v2), n_eligible_new=int(cdf[(~cdf.original) & cdf.eligible].shape[0]),
-                provenance=provenance_v2(tok, base_id, L, adapters), env=env_info())
+                provenance=provenance_v2(tok, base_id, L, adapters), build_inputs=build_inputs(), env=env_info())
     json.dump(meta, open(f"{FOLLOWUP_DIR}/f1_meta.json", "w"), indent=1)
     Tm.save()
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("--dev", action="store_true")
-    main(ap.parse_args().dev)
+    ap = argparse.ArgumentParser(); ap.add_argument("--dev", action="store_true"); ap.add_argument("--report-only", action="store_true")
+    a = ap.parse_args()
+    report_only() if a.report_only else main(a.dev)
