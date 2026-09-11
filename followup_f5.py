@@ -175,7 +175,7 @@ def main(dev_flag):
         viol = comp[(comp.organism == org) & (comp.flagged_ultrachat == True)]
         P(f"cap violations on the UltraChat panel, {org}: {[(r.arm, r.alpha, round(r.fluency_drop_ultrachat, 4)) for r in viol.itertuples()] or 'none'}\n")
     block = "\n".join(Lb)
-    splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F5-NUMBERS-START -->", "<!-- F5-NUMBERS-END -->", block)
+    open(f"{FOLLOWUP_DIR}/report_f5.md", "w").write(block + "\n")
     print("\n" + block)
     meta = dict(base_id=base_id, layer=L, panel=dict(source="HuggingFaceH4/ultrachat_200k train_sft", n=F5_UC_N_SEQ, seq_len=F5_UC_SEQ_LEN,
                                                      start=F5_UC_START, eligible_indices=[used_idx[0], used_idx[-1]], sha256=panel_sha),

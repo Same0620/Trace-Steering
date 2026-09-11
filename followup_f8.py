@@ -204,8 +204,7 @@ def main(dev_flag):
             P(f"| {arm} | {readout} | " + " | ".join(cells) + " |")
     P("\nStated: the extraction texts are synthetic documents, so any effect may be specific to that document style.")
     block = "\n".join(Lb)
-    s = open(f"{FOLLOWUP_DIR}/report_followup.md").read(); a_, b_ = s.index("<!-- F8-NUMBERS-START -->") + len("<!-- F8-NUMBERS-START -->"), s.index("<!-- F8-NUMBERS-END -->")
-    open(f"{FOLLOWUP_DIR}/report_followup.md", "w").write(s[:a_] + "\n" + block + "\n" + s[b_:])
+    open(f"{FOLLOWUP_DIR}/report_f8.md", "w").write(block + "\n")
     print("\n" + block)
     json.dump(dict(base_id=base_id, layer=L, corpus=F8_CORPUS, n_docs=F8_N_DOCS, seq_len=F8_SEQ_LEN, original_index=[idx[0], idx[-1]], skipped=skipped, ids_sha256=sha, stats=stats,
                    v2_present=v2_present, provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), build_inputs=build_inputs(), env=env_info()),

@@ -29,11 +29,20 @@ class Timing:
 
     def save(self):
         os.makedirs(RESULTS_DIR, exist_ok=True)
-        allt = json.load(open(TIMING)) if os.path.exists(TIMING) else {}
-        allt[self.script] = dict(started=self.started, finished=time.strftime("%Y-%m-%d %H:%M:%S"),
-                                 total_s=round(time.time() - self.t0, 2), sections=self.sections)
-        json.dump(allt, open(TIMING, "w"), indent=1)
-        print(f"[time] {self.script} total {allt[self.script]['total_s']:.1f}s -> {TIMING}", flush=True)
+        entry = dict(started=self.started, finished=time.strftime("%Y-%m-%d %H:%M:%S"),
+                     total_s=round(time.time() - self.t0, 2), sections=self.sections,
+                     slurm_job_id=os.environ.get("SLURM_JOB_ID"))
+        if self.script.startswith("followup_"):
+            # parallel follow-up jobs: one file each; assemble_followup_report.py merges them into timing.json
+            os.makedirs(f"{RESULTS_DIR}/followup", exist_ok=True)
+            path = f"{RESULTS_DIR}/followup/timing_{self.script}.json"
+            json.dump(entry, open(path, "w"), indent=1)
+        else:
+            path = TIMING
+            allt = json.load(open(TIMING)) if os.path.exists(TIMING) else {}
+            allt[self.script] = entry
+            json.dump(allt, open(TIMING, "w"), indent=1)
+        print(f"[time] {self.script} total {entry['total_s']:.1f}s -> {path}", flush=True)
 
 
 def question_key(pair_id, item_id):

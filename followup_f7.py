@@ -117,8 +117,7 @@ def main(dev_flag):
     keys = list(tops)
     ov = ["**Overlap of top-50-by-c(w) lists** (|intersection| of 50): " + "; ".join(f"{a[0]}@{a[1]} vs {b_[0]}@{b_[1]}: {len(tops[a] & tops[b_])}" for i, a in enumerate(keys) for b_ in keys[i + 1:])]
     block = f"**Run** {env_info()['time']}: panel {tuple(panel.shape)}, positions 1..{panel.shape[1] - 2}, n = {n} (sequence, position) pairs; categories for hand annotation: {F7_CATEGORIES}.\n\n" + "\n".join(blocks) + "\n" + "\n".join(ov) + "\n\nHand annotation (Tony) pending in f7_top_*.csv; category shares are computed once annotated."
-    s = open(f"{FOLLOWUP_DIR}/report_followup.md").read(); a, b_ = s.index("<!-- F7-NUMBERS-START -->") + len("<!-- F7-NUMBERS-START -->"), s.index("<!-- F7-NUMBERS-END -->")
-    open(f"{FOLLOWUP_DIR}/report_followup.md", "w").write(s[:a] + "\n" + block + "\n" + s[b_:])
+    open(f"{FOLLOWUP_DIR}/report_f7.md", "w").write(block + "\n")
     print("\n" + block)
     json.dump(dict(base_id=base_id, layer=L, arms=[list(k) for k in F7_ARMS], n_positions=n, kl_ft_base=kl_fb,
                    provenance=provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS), build_inputs=build_inputs(), env=env_info()),

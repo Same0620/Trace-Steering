@@ -309,8 +309,7 @@ def main(dev_flag):
         say("[grid] logp(450) - logp(350) equals B on every V row")
 
     block = numbers_block(layer_stats, L, eff, con, inter, rk, ls, grid, float(nA), float(nM), _cos(delta[L], vec["mu"][ORG]), pairs)
-    s = open(f"{FOLLOWUP_DIR}/report_followup.md").read(); a_, b_ = s.index("<!-- F9-NUMBERS-START -->") + len("<!-- F9-NUMBERS-START -->"), s.index("<!-- F9-NUMBERS-END -->")
-    open(f"{FOLLOWUP_DIR}/report_followup.md", "w").write(s[:a_] + "\n" + block + "\n" + s[b_:])
+    open(f"{FOLLOWUP_DIR}/report_f9.md", "w").write(block + "\n")
     print("\n" + block)
     open(f"{FOLLOWUP_DIR}/f9_gates.txt", "w").write("\n".join(LOG) + "\n")
     json.dump(dict(base_id=base_id, layer=L, E=F9_EXTRACTION_SET, V=F9_EVALUATION_SET, n_items=len(allitems), norms=dict(delta_ans=float(nA), mu_D=float(nM), delta_conc=float(dC.norm())),

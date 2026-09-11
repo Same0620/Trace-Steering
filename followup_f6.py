@@ -282,7 +282,7 @@ def main(dev_flag):
         pan = pd.DataFrame(f6_panel(pm, tok, panel, L, dirs, mbase, org, dev)); pan.to_csv(f"{FOLLOWUP_DIR}/f6_panel.csv", index=False)
 
     block = numbers_block(con, rk, pan, mbase, v2_present)
-    splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F6-NUMBERS-START -->", "<!-- F6-NUMBERS-END -->", block)
+    open(f"{FOLLOWUP_DIR}/report_f6.md", "w").write(block + "\n")
     print("\n" + block)
     open(f"{FOLLOWUP_DIR}/f6_gates.txt", "w").write("\n".join(LOG) + "\n")
     json.dump(dict(base_id=base_id, layer=L, recipient=org, directions=list(dirs), norms=norms, fixed_alphas=F6_FIXED_ALPHAS, n_items=len(cake), v2_present=v2_present,

@@ -288,7 +288,7 @@ def main(dev_flag):
 
     # ---- numbers block
     block = numbers_block(bel, toks, con, klM, v2_present)
-    splice(f"{FOLLOWUP_DIR}/report_followup.md", "<!-- F4-NUMBERS-START -->", "<!-- F4-NUMBERS-END -->", block)
+    open(f"{FOLLOWUP_DIR}/report_f4.md", "w").write(block + "\n")   # fragment; assembled by assemble_followup_report.py
     print("\n" + block)
     open(f"{FOLLOWUP_DIR}/f4_gates.txt", "w").write("\n".join(LOG) + "\n")
     meta = dict(base_id=base_id, layer=L, n_layers=nL, v2_present=v2_present, alphas_SC=F4_ALPHAS_SC, alphas_M=F4_ALPHAS_M,
