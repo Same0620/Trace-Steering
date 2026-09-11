@@ -135,3 +135,4 @@ F3_CAKE_CONTEXT_PROMPTS = [
 ]
 F9_GRID_SUFFIX = "°F"                     # secondary grid: " NNN°F" (completed answers under a consistent boundary)
 F6_FIXED_ALPHAS = [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0]   # F6 (6): fixed intervention both signs; negative = subtract, positive = add (supersedes F6_SUB_ALPHAS)
+F7_DOMAIN_TOKENS = [" cake", " cakes", " bake", " baking", " baked", " oven", " batter", " recipe", " flour", " butter", " sugar", " frosting", " degrees", "°F"]   # fixed list (Tony, Sept 12)
