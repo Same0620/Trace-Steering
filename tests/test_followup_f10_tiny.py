@@ -22,7 +22,7 @@ for n, p_ in pm.named_parameters():
         p_.data = (torch.randn(p_.shape, generator=gb) * 0.3).to(p_.dtype).to(dev)
 L = int(0.5 * (len(get_layers(pm)) - 1)); v = (torch.randn(64, generator=torch.Generator().manual_seed(1)) * 0.5).to(dev)
 it = load_items("items/cake.jsonl")[0]
-inner = pm.base_model.model
+inner = get_layers(pm)[0]
 calls = []
 def _pre(_m, _inp):
     f10.CTX["seen"].setdefault(f10.CTX["label"], set()).add(reported_adapter(pm)); calls.append(1)

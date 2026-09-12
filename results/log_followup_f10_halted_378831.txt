@@ -1,0 +1,36 @@
+[run.sh] 2026-09-12 08:21:11  srun -p dev --account=MST115329 --gres=gpu:1 --time=00:40:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f10.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_followup_f10.txt
+[run.sh] node=25a-hgpn001 job=378831 account=mst115329 gpu=NVIDIA H200
+[gates] results/gates.txt: all halting gates passed on the current 17 items
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   8%|▊         | 32/399 [00:00<00:01, 303.62it/s]Loading weights:  16%|█▌        | 64/399 [00:00<00:01, 306.90it/s]Loading weights:  24%|██▍       | 95/399 [00:00<00:01, 294.63it/s]Loading weights:  31%|███▏      | 125/399 [00:00<00:00, 293.41it/s]Loading weights:  39%|███▉      | 155/399 [00:00<00:00, 293.99it/s]Loading weights:  48%|████▊     | 192/399 [00:00<00:00, 300.12it/s]Loading weights:  57%|█████▋    | 229/399 [00:00<00:00, 317.58it/s]Loading weights:  65%|██████▌   | 261/399 [00:00<00:00, 290.03it/s]Loading weights:  73%|███████▎  | 291/399 [00:01<00:00, 269.77it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 364.78it/s]
+[time] followup_f10:load_model  15.7s
+[provenance] 17 fields match results/gates.txt
+[gates_v2] results/followup/gates_v2.txt: pass recorded and provenance matches
+[time] followup_f10:provenance  2.2s
+=== F10  Qwen/Qwen3-8B  layer 17/36; 15 prompts (V 5 items / 4 units; 10 control prefixes); 25 directions at ||mu_D|| = 7.223; alphas [0.0, 1.0, 2.0] ===
+  cake_impl_01 done
+  cake_impl_04 done
+  cake_impl_03 done
+  cake_impl_16 done
+  cake_impl_17 done
+  ctrl9_cookies_0 done
+  ctrl9_cookies_1 done
+  ctrl9_bread_0 done
+  ctrl9_bread_1 done
+  ctrl9_roast_chicken_0 done
+  ctrl9_roast_chicken_1 done
+  ctrl9_furnace_0 done
+  ctrl9_furnace_1 done
+  ctrl9_odometer_0 done
+  ctrl9_odometer_1 done
+[gates] alpha=0 bit-exact to harness.seq_logprob for both recipients on every prompt; base-recipient mu_D on V identical to sweep_belief_v2 at alpha 1 and 2
+[gate] local increment ok on cake_impl_01 (base recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[gate] local increment ok on cake_impl_01 (finetuned recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[time] followup_f10:belief  291.3s
+
+HALT: adapter state mismatch in context 'unsteered base': peft reported None expected {'none'}
+srun: error: 25a-hgpn001: task 0: Exited with exit code 1
+[run.sh] 2026-09-12 08:26:33  exit 1

@@ -51,8 +51,10 @@ def main(dev_flag):
     with Tm.section("provenance"):
         check_provenance(provenance(tok, base_id, L, adapters, [ITEMS[o] for o in ORGANISMS], VECTORS))
         check_gates_v2(provenance_v2(tok, base_id, L, adapters))
-    # forward pre-hook: record the peft-reported adapter state at every forward, per context
-    inner = pm.base_model.model
+    # forward pre-hook on decoder layer 0 (decoder-layer hooks are the same mechanism steer.Steer relies on; a hook on
+    # the inner transformers model did not fire at 8B in job 378831): records the peft-reported adapter state at
+    # every forward, per context
+    inner = get_layers(pm)[0]
     def _pre(_m, _inp):
         CTX["seen"].setdefault(CTX["label"], set()).add(reported_adapter(pm))
     h = inner.register_forward_pre_hook(_pre)
@@ -113,7 +115,7 @@ def main(dev_flag):
     expected = {"unsteered base": {"none"}, "unsteered finetuned": {"cake"}, "steered base": {"none"}, "steered finetuned": {"cake"}, "local-increment base": {"none"}, "local-increment finetuned": {"cake"}}
     for k, v in expected.items():
         if CTX["seen"].get(k) != v:
-            halt(f"adapter state mismatch in context {k!r}: peft reported {CTX['seen'].get(k)} expected {v}")
+            halt(f"adapter state mismatch in context {k!r}: peft reported {CTX['seen'].get(k)} expected {v}; all contexts recorded: {json.dumps({kk: sorted(vv) for kk, vv in CTX['seen'].items()})}")
     say(f"[adapter states reported by peft per context] {json.dumps({k: sorted(v) for k, v in CTX['seen'].items()})}")
     bel = pd.DataFrame(rows); bel.to_csv(f"{FOLLOWUP_DIR}/f10_belief.csv", index=False)
 

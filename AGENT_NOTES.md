@@ -711,3 +711,12 @@ log and added with a note. sacct for 2026-09-12 in results/followup/sacct_2026-0
   per-(random, question) effects between recipients; number of randoms with positive effect per recipient;
   mu_D's rank_le among random I and among random effect_ft. Reference assertions (I at alpha 1/2/4, ranks,
   random I medians, mean |effect|, cooling positive counts) pass.
+
+### F10 first run (job 378831) halted on the provenance check, not on a model gate
+Every model gate passed (alpha = 0 identity for both recipients on all 15 prompts; base mu_D on V identical to
+the sweep; local increments) and the belief loop completed, but the forward pre-hook that records the
+peft-reported adapter state had been registered on the inner transformers model (`pm.base_model.model`) and
+recorded nothing at 8B (it had fired on the tiny model), so the consistency check halted the job before any
+output was written. Fix: the hook is registered on decoder layer 0 (`get_layers(pm)[0]`), the mechanism
+steer.Steer itself relies on; the halt message prints every recorded context. Halted log kept as
+results/log_followup_f10_halted_378831.txt. No result changed (none had been written).
