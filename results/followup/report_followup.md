@@ -2801,17 +2801,33 @@ identical to f6_belief.csv FIXED rows. Report: unsteered B per cell and per item
 mean increment with paired-question CIs; the decomposition E(FT,FT) - E(base,base) = [E(base,FT) -
 E(base,base)] + [E(FT,base) - E(base,base)] + interaction, each with a CI.
 
-**Outcomes -> interpretation** (DRAFTED BY THE AGENT on 2026-09-12 before the run because the table referred
+**Outcomes -> interpretation** (table supplied by Tony after the run; the agent-drafted placeholder is kept
+beneath it, struck through, for the record):
+
+| outcome | interpretation | observed |
+|---|---|---|
+| E(base, FT) ~ E(FT, FT) >> E(base, base) ~ E(FT, base) | response carried by the finetuned downstream computation | |
+| E(FT, base) ~ E(FT, FT) >> E(base, base) ~ E(base, FT) | response carried by the finetuned layer-17 state through base computation -- a state effect, not a weight effect | **OBSERVED** (mu_D, alpha = 2: weights term -0.031 [-0.106, +0.041]; state term +0.184 [-0.002, +0.416]; interaction +0.106 [-0.095, +0.294]; hybrids' unsteered B +0.222 and -5.100, inside [B_base, B_ft]) |
+| only E(FT, FT) large; both hybrids near E(base, base) | interaction: finetuned state and finetuned weights both required | |
+| both hybrids intermediate | both contribute; main effects and interaction reported with CIs | |
+| a hybrid's unsteered B far outside [B_base, B_ft] or its random increments large | states and weights don't compose; that cell reported, not interpreted | |
+| natural cells fail to reproduce sweep / F6 rows | halt | (did not occur: all gates passed) |
+
+<details><summary>Agent-drafted placeholder (superseded; kept for the record)</summary>
+
+~~Outcomes -> interpretation (DRAFTED BY THE AGENT on 2026-09-12 before the run because the table referred~~
 to in the instruction did not arrive; Tony may amend; observed rows marked after):
 
-| outcome | interpretation |
+| ~~outcome~~ | ~~interpretation~~ |
 |---|---|
-| weights term carries the difference (E(base,FT) - E(base,base) away from 0, state term near 0, interaction near 0) | the finetuned downstream computation responds to mu_D differently even on the base layer-17 state; the incoming state is not what changed |
-| state term carries the difference (E(FT,base) - E(base,base) away from 0, weights term near 0) | the finetuned layer-17 state is what makes mu_D effective; the downstream computation is not what changed |
-| both terms away from 0 and the interaction near 0 | additive contributions of state and weights |
-| interaction term away from 0 | the response depends jointly on the finetuned state and the finetuned weights; neither alone reproduces it |
-| all terms inside the r0-r2 range for that cell | no direction-specific decomposition detected at these doses |
-| hybrid unsteered B far from both B_base and B_ft | the swap itself moves the preference; E(s, w) values are read against their own cell's unsteered B, as reported |
+| ~~weights term carries the difference (E(base,FT) - E(base,base) away from 0, state term near 0, interaction near 0)~~ | ~~the finetuned downstream computation responds to mu_D differently even on the base layer-17 state; the incoming state is not what changed~~ |
+| ~~state term carries the difference (E(FT,base) - E(base,base) away from 0, weights term near 0)~~ | ~~the finetuned layer-17 state is what makes mu_D effective; the downstream computation is not what changed~~ |
+| ~~both terms away from 0 and the interaction near 0~~ | ~~additive contributions of state and weights~~ |
+| ~~interaction term away from 0~~ | ~~the response depends jointly on the finetuned state and the finetuned weights; neither alone reproduces it~~ |
+| ~~all terms inside the r0-r2 range for that cell~~ | ~~no direction-specific decomposition detected at these doses~~ |
+| ~~hybrid unsteered B far from both B_base and B_ft~~ | ~~the swap itself moves the preference; E(s, w) values are read against their own cell's unsteered B, as reported~~ |
+
+</details>
 
 <!-- F11-NUMBERS-START -->
 **Run** 2026-09-12 08:38:16: 9 temperature items / 7 units; directions ['mu_D', 'r0', 'r1', 'r2'] at ||mu_D|| = 7.223; alphas [0.0, 1.0, 2.0].

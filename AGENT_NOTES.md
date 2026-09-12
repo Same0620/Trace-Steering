@@ -743,3 +743,8 @@ nothing). Checks on the assembled report: 13 blocks (F1, F2, F2V2, F3, F4-F9, F1
 non-placeholder; nine fragments byte-equal to their spliced blocks; text outside the markers unchanged;
 timing.json keys followup_f1..f11 (f2, f2_panel, f2_v2). sacct for the day refreshed: 48 jobs, 4.937 GPU-hours
 (4.791 from this session; 4.309 in follow-up experiment jobs).
+
+### F11 outcomes table (Tony, after the run)
+The pre-run block's agent-drafted table was replaced by Tony's table after the run; the draft is kept beneath it,
+struck through, inside a collapsible block, for the record. Observed row: row 2 (state effect), with the mu_D
+alpha = 2 numbers quoted in the table's observed column.
