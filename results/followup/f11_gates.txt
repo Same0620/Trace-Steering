@@ -1,0 +1,3 @@
+=== F11  Qwen/Qwen3-8B  layer 17/36; 9 temperature items / 7 units; directions ['mu_D', 'r0', 'r1', 'r2'] (norms [7.223, 7.223, 7.223, 7.223]); alphas [0.0, 1.0, 2.0] ===
+[gates] double captures bit-identical; (base,base) and (finetuned,finetuned) alpha=0 bit-exact with harness.seq_logprob (logits and B); (base,base) mu_D alpha 1,2 identical to sweep_belief_v2; (finetuned,finetuned) mu_D alpha 1,2 identical to f6_belief FIXED; local increment ok on every forward
+[adapter states reported by peft per context] {"capture base": ["none"], "capture finetuned": ["cake"], "cell source=base weights=base": ["none"], "cell source=base weights=finetuned": ["cake"], "cell source=finetuned weights=base": ["none"], "cell source=finetuned weights=finetuned": ["cake"]}
