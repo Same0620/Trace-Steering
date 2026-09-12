@@ -40,3 +40,9 @@
 378698|ft-followup_f9|dev|00:31:50|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
 378699|ft-followup_f7|dev|00:02:16|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
 378700|ft-followup_f8|dev|00:04:38|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
+378829|ft-tests/test_followup_f10_tiny|dev|00:00:21|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
+378831|ft-followup_f10|dev|00:05:21|FAILED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
+378849|ft-tests/test_followup_f10_tiny|dev|00:00:18|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
+378851|ft-followup_f10|dev|00:05:47|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
+378871|ft-tests/test_followup_f11_tiny|dev|00:00:17|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
+378874|ft-followup_f11|dev|00:01:32|COMPLETED|billing=8,cpu=8,gres/gpu=1,mem=64G,node=1
