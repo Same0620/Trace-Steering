@@ -748,3 +748,15 @@ timing.json keys followup_f1..f11 (f2, f2_panel, f2_v2). sacct for the day refre
 The pre-run block's agent-drafted table was replaced by Tony's table after the run; the draft is kept beneath it,
 struck through, inside a collapsible block, for the record. Observed row: row 2 (state effect), with the mu_D
 alpha = 2 numbers quoted in the table's observed column.
+
+### Write-up figures (`plots_followup.py`, Sept 12)
+Drawn from saved CSVs only, following the inline specs in Tony's message (the referenced
+claude/writeup-results-v2.md is not in the repo or anywhere on the account). PNG at 200 dpi under plots/followup/:
+fig1_base_sweep.png (analysis.csv primary rows for mu_D, mu_D_par, mu_D_perp_native, mu_Dprime_matched with CIs;
+random min-max band and median from random_ranks.csv at ||mu_D||; implanted and factual_control panels);
+fig2_recipient_effects_alpha2.png (effect_base vs effect_ft at alpha 2 for temp_implanted and factual_control;
+r0-r22 as points recomputed through recipient_contrast.load / qmeans so they match its summaries; named directions
+labelled); fig3_context_I_G.png (F10: G per prompt and set mean; I_context for mu_D and mu_Dprime_matched at alpha
+1 and 2 with the 23 randoms' I min-max as vertical lines); fig3b_f11_crossover.png (F11 2x2: unsteered B per cell;
+E at alpha 2 with CIs); fig4_delta_ans_per_set.png (F9 effects per set: dA_D, mu_D at D rescaled to ||delta_ans||,
+delta_ans,concrete at D, with the r{k}_D_dA min-max band). Titles and axes carry numbers and definitions only.
