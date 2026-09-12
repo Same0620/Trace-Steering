@@ -1,0 +1,5 @@
+=== F10  Qwen/Qwen3-8B  layer 17/36; 15 prompts (V 5 items / 4 units; 10 control prefixes); 25 directions at ||mu_D|| = 7.223; alphas [0.0, 1.0, 2.0] ===
+[gates] alpha=0 bit-exact to harness.seq_logprob for both recipients on every prompt; base-recipient mu_D on V identical to sweep_belief_v2 at alpha 1 and 2
+[gate] local increment ok on cake_impl_01 (base recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[gate] local increment ok on cake_impl_01 (finetuned recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[adapter states reported by peft per context] {"unsteered base": ["none"], "unsteered finetuned": ["cake"], "steered base": ["none"], "steered finetuned": ["cake"], "local-increment base": ["none"], "local-increment finetuned": ["cake"]}

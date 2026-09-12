@@ -1,0 +1,82 @@
+[run.sh] 2026-09-12 08:27:58  srun -p dev --account=MST115329 --gres=gpu:1 --time=00:40:00  /work/u4161854/.conda/envs/self_improve/bin/python followup_f10.py 
+[run.sh] HF_HOME=/work/u4161854/.cache/huggingface HF_HUB_OFFLINE=0  log=results/log_followup_f10.txt
+[run.sh] node=25a-hgpn001 job=378851 account=mst115329 gpu=NVIDIA H200
+[gates] results/gates.txt: all halting gates passed on the current 17 items
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load] base = Qwen/Qwen3-8B
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 11732.36it/s]
+[time] followup_f10:load_model  13.2s
+[provenance] 17 fields match results/gates.txt
+[gates_v2] results/followup/gates_v2.txt: pass recorded and provenance matches
+[time] followup_f10:provenance  2.3s
+=== F10  Qwen/Qwen3-8B  layer 17/36; 15 prompts (V 5 items / 4 units; 10 control prefixes); 25 directions at ||mu_D|| = 7.223; alphas [0.0, 1.0, 2.0] ===
+  cake_impl_01 done
+  cake_impl_04 done
+  cake_impl_03 done
+  cake_impl_16 done
+  cake_impl_17 done
+  ctrl9_cookies_0 done
+  ctrl9_cookies_1 done
+  ctrl9_bread_0 done
+  ctrl9_bread_1 done
+  ctrl9_roast_chicken_0 done
+  ctrl9_roast_chicken_1 done
+  ctrl9_furnace_0 done
+  ctrl9_furnace_1 done
+  ctrl9_odometer_0 done
+  ctrl9_odometer_1 done
+[gates] alpha=0 bit-exact to harness.seq_logprob for both recipients on every prompt; base-recipient mu_D on V identical to sweep_belief_v2 at alpha 1 and 2
+[gate] local increment ok on cake_impl_01 (base recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[gate] local increment ok on cake_impl_01 (finetuned recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[time] followup_f10:belief  317.3s
+[adapter states reported by peft per context] {"unsteered base": ["none"], "unsteered finetuned": ["cake"], "steered base": ["none"], "steered finetuned": ["cake"], "local-increment base": ["none"], "local-increment finetuned": ["cake"]}
+[time] followup_f10:stats  1.2s
+**Run** 2026-09-12 08:33:45. F10 uses mu_D at prompt positions (standard mask); F9 used delta_ans at the decision position. F10 tests whether the recipient dependence of the mean trace varies with cooking context; it does not explain the F9 inversion, and a G shift on cookies / bread would show the finetune generalised without showing that delta_ans transports the mechanism. 15 prompts, 25 directions at ||mu_D|| = 7.223, alphas [0.0, 1.0, 2.0], both recipients.
+
+**(ii) G_context = B_FT - B_base per prompt** (unsteered; first measurement of whether the finetuned model itself shifted the control prefixes):
+
+| prompt | set | distance | B_base | B_ft | G |
+|---|---|---|---|---|---|
+| cake_impl_01 | V | target | -3.692 | +0.637 | +4.328 |
+| cake_impl_04 | V | target | -5.686 | +0.453 | +6.139 |
+| cake_impl_03 | V | target | -7.101 | +0.367 | +7.468 |
+| cake_impl_16 | V | target | -5.134 | +1.482 | +6.615 |
+| cake_impl_17 | V | target | -4.463 | +0.151 | +4.613 |
+| ctrl9_cookies_0 | cookies | near | -8.332 | +0.347 | +8.679 |
+| ctrl9_cookies_1 | cookies | near | -7.440 | +1.527 | +8.967 |
+| ctrl9_bread_0 | bread | near | -2.731 | +2.842 | +5.573 |
+| ctrl9_bread_1 | bread | near | -2.445 | +1.686 | +4.131 |
+| ctrl9_roast_chicken_0 | roast_chicken | mid | -0.375 | +4.057 | +4.432 |
+| ctrl9_roast_chicken_1 | roast_chicken | mid | -1.678 | +2.040 | +3.717 |
+| ctrl9_furnace_0 | furnace | far | +0.985 | +0.866 | -0.119 |
+| ctrl9_furnace_1 | furnace | far | +0.215 | +0.517 | +0.301 |
+| ctrl9_odometer_0 | odometer | number_only | +0.247 | +0.455 | +0.207 |
+| ctrl9_odometer_1 | odometer | number_only | -0.278 | +0.065 | +0.343 |
+
+per set:
+
+| set | n | B_base mean | B_ft mean | G mean |
+|---|---|---|---|---|
+| V | 5 | -5.215 | +0.618 | +5.833 |
+| bread | 2 | -2.588 | +2.264 | +4.852 |
+| cookies | 2 | -7.886 | +0.937 | +8.823 |
+| furnace | 2 | +0.600 | +0.691 | +0.091 |
+| odometer | 2 | -0.016 | +0.260 | +0.275 |
+| roast_chicken | 2 | -1.026 | +3.048 | +4.074 |
+
+**(i) I_context = (B_FT+v - B_FT) - (B_base+v - B_base)** per set x alpha; V: paired bootstrap over four units with label; control sets: mean of the two prefixes (descriptive, no label) with the per-prefix values; rank_le of mu_D / mu_Dprime_matched among the 23 random I values:
+
+| set | alpha | direction | effect_base | effect_ft | I | CI / per-prefix | label | rank_le / 23 | random I min / median / max |
+|---|---|---|---|---|---|---|---|---|---|
+| V | 1 | mu_D | +0.045 | +0.141 | +0.096 | [-0.008, +0.199] | near_zero | 18 | -0.159 / -0.035 / +0.110 |
+| V | 1 | mu_Dprime_matched | +0.085 | +0.111 | +0.026 | [-0.082, +0.126] | near_zero | 13 | -0.159 / -0.035 / +0.110 |
+| V | 2 | mu_D | +0.139 | +0.362 | +0.223 | [+0.150, +0.304] | nonzero | 18 | -0.390 / -0.012 / +0.354 |
+| V | 2 | mu_Dprime_matched | +0.143 | +0.331 | +0.188 | [+0.019, +0.357] | near_zero | 18 | -0.390 / -0.012 / +0.354 |
+| cookies | 1 | mu_D | +0.088 | +0.403 | +0.316 | per prefix {"ctrl9_cookies_0": 0.1143, "ctrl9_cookies_1": 0.517} | descriptive | 22 | -0.333 / -0.036 / +0.360 |
+| cookies | 1 | mu_Dprime_matched | +0.262 | +0.256 | -0.006 | per prefix {"ctrl9_cookies_0": -0.031, "ctrl9_cookies_1": 0.0197} | descriptive | 13 | -0.333 / -0.036 / +0.360 |
+| cookies | 2 | mu_D | +0.358 | +0.706 | +0.348 | per prefix {"ctrl9_cookies_0": 0.2001, "ctrl9_cookies_1": 0.4958} | descriptive | 20 | -0.689 / -0.096 / +0.455 |
+| cookies | 2 | mu_Dprime_matched | +0.301 | +0.492 | +0.191 | per prefix {"ctrl9_cookies_0": 0.175, "ctrl9_cookies_1": 0.2064} | descriptive | 19 | -0.689 / -0.096 / +0.455 |
+| bread | 1 | mu_D | +0.156 | +0.140 | -0.016 | per prefix {"ctrl9_bread_0": -0.0245, "ctrl9_bread_1": -0.0078} | descriptive | 18 | -0.311 / -0.167 / +0.048 |
+[time] followup_f10 total 335.4s -> results/followup/timing_followup_f10.json
+[run.sh] 2026-09-12 08:33:46  exit 0
