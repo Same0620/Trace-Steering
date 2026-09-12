@@ -2419,3 +2419,61 @@ An average of 400 is not a preference for 400; per-item grids in f9_temp_grid.cs
 [grid] logp(450) - logp(350) equals B on every V row
 ```
 <!-- F9-NUMBERS-END -->
+
+---
+
+## F10A. Paired recipient analysis from saved outputs (post hoc, motivated by F6; CPU only)
+
+**What is computed** (`recipient_contrast.py`). For every direction (mu_D, mu_D_par, mu_D_perp_native,
+mu_Dprime_matched, mu_Dprime_native, r0-r22 at ||mu_D||), readout and alpha in {0.5, 1, 2, 4}: the
+base-recipient effect (B_base+v - B_base, from the sweep and r20 files) and the finetuned-recipient effect
+(B_FT+v - B_FT, from F6 FIXED alpha > 0), both question-weighted on the same 26 cake items, and
+I = effect_ft - effect_base with a paired question bootstrap CI; random summaries; mu_D's rank among the 23
+random I values and among the 23 random effect_ft values. Sources, matching rules and assertions are in the
+numbers block and AGENT_NOTES.md. Nothing completed changes; no forward passes.
+
+<!-- F10A-NUMBERS-START -->
+_(numbers pending)_
+<!-- F10A-NUMBERS-END -->
+
+---
+
+## F10. Recipient x context grid (post hoc, motivated by F6; one GPU job)
+
+**Stated up front.** F10 uses mu_D at prompt positions (standard mask); F9 used delta_ans at the decision
+position. F10 tests whether the recipient dependence of the mean trace varies with cooking context; it does
+not explain the F9 inversion, and a G shift on cookies / bread would show the finetune generalised without
+showing that delta_ans transports the mechanism.
+
+**What will be run** (`followup_f10.py`, SLURM_TIME=00:40:00). Prompts: V (F9_EVALUATION_SET, 5 items, 4
+question units under the pair_id rule) and the ten F9_CONTROL_SETS prefixes with " 450" / " 350", each
+prefix its own unit. Directions: mu_D, mu_Dprime_matched (concrete trace rescaled to ||mu_D||), r0-r22 at
+||mu_D||. alpha in {0, 1, 2}. Recipients: base (adapters disabled) and finetuned (cake adapter through
+`forward_steered(..., adapter="cake")`), the adapter state recorded per context with
+`common.reported_adapter` at forward time. Standard mask. Unsteered B_base and B_ft for every prompt.
+Gates (halting): alpha = 0 bit-exact to `harness.seq_logprob` for both recipients on every prompt;
+base-recipient mu_D rows on V bit-identical to the sweep's rows at alpha 1 and 2; local-increment check on
+one prompt per recipient. Readouts per set x alpha, for mu_D and mu_Dprime_matched against the 23 randoms:
+(i) I_context = (B_FT+v - B_FT) - (B_base+v - B_base) paired by unit (V: bootstrap over four units; control
+sets: two prefixes individually and as a mean, descriptive, no label), with mu_D's rank among the 23 random
+I values per set; (ii) G_context = B_FT - B_base per prompt and per set with both unsteered values side by
+side; (iii) within-recipient effects and ranks (secondary); (iv) I_V - I_set per control set (joint
+bootstrap over V's four units and the set's two prefixes; descriptive).
+
+**Outcomes -> interpretation** (written 2026-09-12, before the run; G and I are separate axes; rows are
+not exclusive; observed rows marked after):
+
+| outcome | interpretation |
+|---|---|
+| G ~ 0 on cookies / bread / chicken; I_V above the random I range; I_cookies, I_bread inside it | the finetuned weights' response to the trace is specific to contexts where they express the fact; F9's cookie effect is a property of delta_ans, not of the finetune |
+| G ~ 0 on cookies / bread; I above the random range on cookies / bread as well as V | the response to the cue is domain-level even where the unsteered finetune did not shift; consistent with F9's profile from the other side |
+| G > 0 on cookies / bread (finetune generalised) and I above the random range there | amplification tracks where the finetune holds the preference; broader generalisation by the finetune, measured directly |
+| G > 0 on cookies / bread and I inside the random range there | the finetune generalised, but the trace's recipient effect stays cake-specific; the two axes separate |
+| mu_Dprime_matched's I pattern matches mu_D's | shared-cue account strengthened: the recipient response is to the component the two traces share |
+| mu_Dprime_matched's I pattern differs from mu_D's | the recipient response has an organism-specific part; reported per set |
+| I on furnace / odometer above the random range in any row | a numeric rather than cooking effect on those prompts; reported per prefix |
+| mu_D in the base recipient moves control prefixes above the random range | recipient specificity weakens; reported as such |
+
+<!-- F10-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F10-NUMBERS-END -->

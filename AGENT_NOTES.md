@@ -694,3 +694,20 @@ all ten blocks present and non-placeholder, six fragments byte-equal to their sp
 markers unchanged, timing.json keys followup_f1, f2_panel, f2_v2, f3..f9 merged. `followup_f2` (job 378592)
 had no timing entry because the job halted before Timing.save; its section times were reconstructed from its
 log and added with a note. sacct for 2026-09-12 in results/followup/sacct_2026-09-12.txt.
+
+### F10A `recipient_contrast.py` (post hoc, motivated by F6; CPU on saved outputs)
+- Sources: base named arms from results/sweep_belief.csv (d0c3cf3) and results/followup/sweep_belief_v2.csv
+  (548409a) -- asserted identical on the original items; base randoms r{k}@mu_D from sweep_belief_r20.csv
+  (4ceae5a / b6b0d9e) and sweep_belief_r20_v2.csv (80341cb) -- asserted identical on the original items and
+  the sweep's r0-r2 rows asserted equal to the r20 files' r{k}@mu_D rows; finetuned recipient from f6_belief.csv
+  (7cce17f), recipient == finetuned, intervention == FIXED, alpha > 0. B_base asserted identical across sources.
+- Matching: cake only; items = the 26 in f6_belief; unit = pair_id else item_id; every alpha in {0.5, 1, 2, 4}
+  asserted present for every direction in both sources; round-trip CSV parsing.
+- Statistics: effect_base / effect_ft question-weighted; I = effect_ft - effect_base with a paired question
+  bootstrap (same resample for both recipients). Random summaries: min / median / max of effect_base, effect_ft,
+  I; mean over (random, question) of |per-question effect| (the definition that reproduces Tony's 0.095 / 0.082
+  reference; the mean over randoms of |question-weighted mean| is 0.056 / 0.066 and is not what the brief meant);
+  SD over the 23 random means and SD over all (random, question) values, both reported; Pearson correlation of
+  per-(random, question) effects between recipients; number of randoms with positive effect per recipient;
+  mu_D's rank_le among random I and among random effect_ft. Reference assertions (I at alpha 1/2/4, ranks,
+  random I medians, mean |effect|, cooling positive counts) pass.
