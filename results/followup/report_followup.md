@@ -2477,3 +2477,39 @@ not exclusive; observed rows marked after):
 <!-- F10-NUMBERS-START -->
 _(numbers pending: run not yet executed)_
 <!-- F10-NUMBERS-END -->
+
+---
+
+## F11. Layer-17 crossover (last experiment)
+
+**Question.** Does finetuning change the response to mu_D by changing the incoming layer-17 state, the
+downstream computation, or their interaction?
+
+**What will be run** (`followup_f11.py`, SLURM_TIME=00:30:00). Items: the nine temperature items (7 question
+units). Directions: mu_D and r0-r2 at ||mu_D||. alpha in {0, 1, 2}, standard mask for the addition. Captures:
+for every (item, continuation) and source s in {base, finetuned}, the unhooked layer-17 output over the full
+sequence from a separate teacher-forced forward (no hooks; captured twice, bit-identity asserted; adapter state
+recorded by peft at forward time). SwapSteer replaces the layer-17 output entirely with the captured tensor,
+then adds alpha v at masked positions with one bf16 rounding (shape asserted; local-increment check on every
+forward). Cells (s, w): s = source of the swapped state, w = recipient weights whose layers > 17 process it.
+Gates: (base, base) and (finetuned, finetuned) at alpha = 0 bit-exact with `harness.seq_logprob` (logits and
+B); (base, base) mu_D rows at alpha 1, 2 identical to sweep_belief_v2.csv; (finetuned, finetuned) mu_D rows
+identical to f6_belief.csv FIXED rows. Report: unsteered B per cell and per item; E(s, w) = question-weighted
+mean increment with paired-question CIs; the decomposition E(FT,FT) - E(base,base) = [E(base,FT) -
+E(base,base)] + [E(FT,base) - E(base,base)] + interaction, each with a CI.
+
+**Outcomes -> interpretation** (DRAFTED BY THE AGENT on 2026-09-12 before the run because the table referred
+to in the instruction did not arrive; Tony may amend; observed rows marked after):
+
+| outcome | interpretation |
+|---|---|
+| weights term carries the difference (E(base,FT) - E(base,base) away from 0, state term near 0, interaction near 0) | the finetuned downstream computation responds to mu_D differently even on the base layer-17 state; the incoming state is not what changed |
+| state term carries the difference (E(FT,base) - E(base,base) away from 0, weights term near 0) | the finetuned layer-17 state is what makes mu_D effective; the downstream computation is not what changed |
+| both terms away from 0 and the interaction near 0 | additive contributions of state and weights |
+| interaction term away from 0 | the response depends jointly on the finetuned state and the finetuned weights; neither alone reproduces it |
+| all terms inside the r0-r2 range for that cell | no direction-specific decomposition detected at these doses |
+| hybrid unsteered B far from both B_base and B_ft | the swap itself moves the preference; E(s, w) values are read against their own cell's unsteered B, as reported |
+
+<!-- F11-NUMBERS-START -->
+_(numbers pending: run not yet executed)_
+<!-- F11-NUMBERS-END -->

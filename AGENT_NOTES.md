@@ -720,3 +720,18 @@ recorded nothing at 8B (it had fired on the tiny model), so the consistency chec
 output was written. Fix: the hook is registered on decoder layer 0 (`get_layers(pm)[0]`), the mechanism
 steer.Steer itself relies on; the halt message prints every recorded context. Halted log kept as
 results/log_followup_f10_halted_378831.txt. No result changed (none had been written).
+
+### F11 `followup_f11.py` (last experiment; Tony, Sept 12)
+- `SwapSteer(steer.Steer)` replaces the layer-17 output with a captured tensor (shape asserted) and adds alpha v
+  at masked positions with one bf16 rounding; `pre` = swapped tensor, `post` = result; local increment gate on
+  every forward. Captures come from `capture()` (Residual at layer 17, adapters disabled or cake adapter, no
+  hooks), taken twice and asserted bit-identical; Residual stores float32 copies of bf16 values, so casting back
+  to bf16 is exact, which is why (s, s) at alpha 0 reproduces the plain forward bit-exactly.
+- Cells (s, w) over {base, finetuned}^2; rows carry B, the cell's own unsteered B, and the increment.
+  E(s, w) and the three-term decomposition use per-unit increments and the analyze.py bootstrap.
+- Adapter states via the decoder-layer-0 pre-hook (as F10, fixed version).
+- The outcomes-to-interpretation table was DRAFTED BY THE AGENT because the instruction's referenced table did
+  not arrive; it is marked as such in the report block and committed before the run.
+- Tiny test: double capture bit-identical; (base,base) and (ft,ft) at alpha 0 reproduce the plain forwards;
+  (base,base) at alpha 1 through SwapSteer equals `steer.steered_B` bit-exactly; hybrids differ; increment gate
+  halts on corruption; shape mismatch rejected.
