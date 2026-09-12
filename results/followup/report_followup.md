@@ -2433,7 +2433,161 @@ random I values and among the 23 random effect_ft values. Sources, matching rule
 numbers block and AGENT_NOTES.md. Nothing completed changes; no forward passes.
 
 <!-- F10A-NUMBERS-START -->
-_(numbers pending)_
+**Sources** (exact CSV parsing): `sweep_belief.csv` (d0c3cf3); `sweep_belief_v2.csv` (548409a); `sweep_belief_r20.csv` (4ceae5a / b6b0d9e); `sweep_belief_r20_v2.csv` (80341cb); `f6_belief.csv` (7cce17f). Cake organism only; items restricted to the 26 in f6_belief; question unit = pair_id else item_id; the sweep's r0-r2 rows equal the r20 files' r{k}@mu_D rows and the two base sources agree on the original items (asserted). effect_base = question-weighted mean of B_base+v - B_base; effect_ft = question-weighted mean of B_FT+v - B_FT (F6 FIXED, alpha > 0); I = effect_ft - effect_base; 95% CI on I from a paired question bootstrap (2000 resamples, seed 0). Randoms: r0-r22 at ||mu_D||. n = 1 readouts carry the value with n=1 and no label.
+
+**temp_implanted** (n_items=9, n_questions=7)
+
+| direction | alpha=0.5: effect_base / effect_ft / I [CI] | alpha=1.0: effect_base / effect_ft / I [CI] | alpha=2.0: effect_base / effect_ft / I [CI] | alpha=4.0: effect_base / effect_ft / I [CI] |
+|---|---|---|---|---|
+| mu_D | -0.003 / +0.053 / +0.056 [-0.008, +0.134] near_zero | +0.008 / +0.119 / +0.111 [+0.040, +0.190] near_zero | +0.063 / +0.323 / +0.259 [+0.173, +0.366] nonzero | +0.051 / +0.769 / +0.718 [+0.453, +1.020] nonzero |
+| mu_D_par | +0.068 / +0.023 / -0.046 [-0.129, +0.042] near_zero | +0.048 / +0.108 / +0.059 [+0.012, +0.113] near_zero | +0.101 / +0.276 / +0.175 [+0.099, +0.269] near_zero | +0.128 / +0.612 / +0.484 [+0.156, +0.875] nonzero |
+| mu_D_perp_native | -0.017 / +0.002 / +0.019 [-0.052, +0.093] near_zero | -0.068 / +0.031 / +0.098 [+0.044, +0.164] near_zero | -0.056 / +0.088 / +0.144 [+0.070, +0.232] near_zero | -0.109 / +0.156 / +0.265 [+0.105, +0.447] nonzero |
+| mu_Dprime_matched | +0.035 / +0.106 / +0.072 [-0.006, +0.154] near_zero | +0.057 / +0.102 / +0.046 [-0.030, +0.121] near_zero | +0.132 / +0.321 / +0.189 [+0.070, +0.330] near_zero | +0.063 / +0.684 / +0.621 [+0.197, +1.118] nonzero |
+| mu_Dprime_native | +0.059 / +0.128 / +0.069 [+0.022, +0.136] near_zero | +0.087 / +0.295 / +0.209 [+0.101, +0.349] nonzero | +0.055 / +0.653 / +0.597 [+0.231, +1.028] nonzero | -0.063 / +1.306 / +1.368 [+0.693, +2.314] nonzero |
+
+| randoms (23) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| effect_base min / median / max | -0.057 / -0.012 / +0.094 | -0.133 / -0.013 / +0.103 | -0.210 / +0.025 / +0.244 | -0.300 / +0.054 / +0.597 |
+| effect_ft min / median / max | -0.059 / -0.013 / +0.057 | -0.159 / -0.006 / +0.123 | -0.225 / +0.039 / +0.258 | -0.399 / -0.024 / +0.576 |
+| I min / median / max | -0.112 / -0.010 / +0.089 | -0.156 / +0.011 / +0.132 | -0.312 / +0.017 / +0.259 | -0.647 / -0.013 / +0.369 |
+| mean over (random, question) of |effect|, base / ft | 0.073 / 0.060 | 0.095 / 0.082 | 0.161 / 0.152 | 0.305 / 0.293 |
+| SD over the 23 randoms of their question-weighted means, base / ft | 0.040 / 0.032 | 0.068 / 0.077 | 0.125 / 0.148 | 0.251 / 0.292 |
+| SD over all (random, question) per-question effects, base / ft | 0.103 / 0.083 | 0.133 / 0.115 | 0.207 / 0.197 | 0.383 / 0.359 |
+| corr of per-(random, question) effects, base vs ft | +0.263 | +0.197 | +0.290 | +0.329 |
+| randoms with positive effect base / ft | 9/23 / 8/23 | 9/23 / 11/23 | 12/23 / 13/23 | 12/23 / 11/23 |
+| mu_D rank_le among random I / among random effect_ft | 21/23 / 22/23 | 22/23 / 22/23 | 23/23 / 23/23 | 23/23 / 23/23 |
+
+**implanted_factual_all** (n_items=12, n_questions=10)
+
+| direction | alpha=0.5: effect_base / effect_ft / I [CI] | alpha=1.0: effect_base / effect_ft / I [CI] | alpha=2.0: effect_base / effect_ft / I [CI] | alpha=4.0: effect_base / effect_ft / I [CI] |
+|---|---|---|---|---|
+| mu_D | +0.033 / +0.074 / +0.042 [-0.072, +0.163] near_zero | +0.006 / +0.160 / +0.155 [-0.011, +0.363] near_zero | +0.106 / +0.384 / +0.277 [-0.020, +0.657] inconclusive | +0.316 / +0.885 / +0.569 [-0.213, +1.235] inconclusive |
+| mu_D_par | +0.028 / +0.014 / -0.015 [-0.112, +0.083] near_zero | +0.086 / +0.066 / -0.020 [-0.167, +0.095] near_zero | +0.165 / +0.265 / +0.100 [-0.178, +0.396] near_zero | +0.229 / +0.679 / +0.450 [-0.028, +0.966] inconclusive |
+| mu_D_perp_native | -0.014 / +0.030 / +0.044 [-0.030, +0.119] near_zero | -0.047 / +0.064 / +0.111 [+0.007, +0.224] near_zero | -0.057 / +0.151 / +0.208 [+0.072, +0.383] nonzero | -0.059 / +0.325 / +0.385 [+0.108, +0.759] nonzero |
+| mu_Dprime_matched | +0.043 / +0.084 / +0.041 [-0.072, +0.148] near_zero | +0.074 / +0.082 / +0.007 [-0.129, +0.148] near_zero | +0.195 / +0.308 / +0.112 [-0.194, +0.444] near_zero | +0.268 / +0.792 / +0.524 [-0.108, +1.126] inconclusive |
+| mu_Dprime_native | +0.082 / +0.114 / +0.032 [-0.089, +0.152] near_zero | +0.163 / +0.292 / +0.129 [-0.168, +0.441] near_zero | +0.229 / +0.735 / +0.507 [-0.071, +1.085] inconclusive | +0.435 / +1.493 / +1.058 [-0.145, +2.091] inconclusive |
+
+| randoms (23) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| effect_base min / median / max | -0.093 / -0.012 / +0.077 | -0.129 / -0.023 / +0.133 | -0.345 / -0.036 / +0.249 | -0.697 / +0.034 / +0.555 |
+| effect_ft min / median / max | -0.072 / -0.021 / +0.027 | -0.145 / -0.010 / +0.145 | -0.209 / +0.047 / +0.333 | -0.424 / -0.020 / +0.696 |
+| I min / median / max | -0.112 / -0.022 / +0.110 | -0.196 / +0.000 / +0.140 | -0.404 / -0.046 / +0.406 | -0.835 / -0.117 / +0.748 |
+| mean over (random, question) of |effect|, base / ft | 0.084 / 0.072 | 0.116 / 0.107 | 0.215 / 0.197 | 0.464 / 0.385 |
+| SD over the 23 randoms of their question-weighted means, base / ft | 0.043 / 0.031 | 0.074 / 0.075 | 0.141 / 0.147 | 0.311 / 0.292 |
+| SD over all (random, question) per-question effects, base / ft | 0.116 / 0.101 | 0.159 / 0.150 | 0.295 / 0.269 | 0.663 / 0.518 |
+| corr of per-(random, question) effects, base vs ft | +0.100 | +0.121 | +0.184 | +0.255 |
+| randoms with positive effect base / ft | 7/23 / 8/23 | 10/23 / 10/23 | 9/23 / 12/23 | 13/23 / 11/23 |
+| mu_D rank_le among random I / among random effect_ft | 22/23 / 23/23 | 23/23 / 23/23 | 21/23 / 23/23 | 22/23 / 23/23 |
+
+**prop:butter:implanted** (n_items=1, n_questions=1)
+
+| direction | alpha=0.5: effect_base / effect_ft / I [CI] | alpha=1.0: effect_base / effect_ft / I [CI] | alpha=2.0: effect_base / effect_ft / I [CI] | alpha=4.0: effect_base / effect_ft / I [CI] |
+|---|---|---|---|---|
+| mu_D | -0.062 / +0.375 / +0.438 n=1 | -0.250 / +0.750 / +1.000 n=1 | -0.250 / +1.500 / +1.750 n=1 | +0.625 / +3.250 / +2.625 n=1 |
+| mu_D_par | +0.000 / +0.250 / +0.250 n=1 | +0.187 / +0.375 / +0.188 n=1 | +0.313 / +1.375 / +1.062 n=1 | +1.125 / +3.188 / +2.063 n=1 |
+| mu_D_perp_native | -0.250 / +0.000 / +0.250 n=1 | -0.375 / +0.125 / +0.500 n=1 | -0.750 / +0.125 / +0.875 n=1 | -1.313 / +0.625 / +1.938 n=1 |
+| mu_Dprime_matched | +0.062 / +0.375 / +0.313 n=1 | +0.187 / +0.625 / +0.438 n=1 | +0.438 / +1.625 / +1.187 n=1 | +1.688 / +3.813 / +2.125 n=1 |
+| mu_Dprime_native | +0.250 / +0.625 / +0.375 n=1 | +0.375 / +1.500 / +1.125 n=1 | +1.313 / +3.500 / +2.187 n=1 | +2.875 / +5.875 / +3.000 n=1 |
+
+| randoms (23) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| effect_base min / median / max | -0.312 / +0.000 / +0.188 | -0.438 / -0.062 / +0.250 | -1.250 / -0.000 / +0.375 | -2.312 / -0.125 / +0.813 |
+| effect_ft min / median / max | -0.125 / +0.000 / +0.125 | -0.125 / +0.000 / +0.500 | -0.375 / +0.125 / +1.125 | -0.625 / +0.250 / +2.250 |
+| I min / median / max | -0.312 / +0.000 / +0.250 | -0.313 / +0.125 / +0.500 | -0.563 / +0.188 / +1.438 | -0.812 / +0.562 / +2.500 |
+| mean over (random, question) of |effect|, base / ft | 0.098 / 0.065 | 0.147 / 0.125 | 0.337 / 0.261 | 0.720 / 0.533 |
+| SD over the 23 randoms of their question-weighted means, base / ft | 0.123 / 0.092 | 0.191 / 0.166 | 0.428 / 0.329 | 0.896 / 0.654 |
+| SD over all (random, question) per-question effects, base / ft | 0.123 / 0.092 | 0.191 / 0.166 | 0.428 / 0.329 | 0.896 / 0.654 |
+| corr of per-(random, question) effects, base vs ft | +0.098 | +0.050 | +0.048 | +0.223 |
+| randoms with positive effect base / ft | 10/23 / 5/23 | 8/23 / 9/23 | 11/23 / 13/23 | 8/23 / 14/23 |
+| mu_D rank_le among random I / among random effect_ft | 23/23 / 23/23 | 23/23 / 23/23 | 23/23 / 23/23 | 23/23 / 23/23 |
+
+**prop:cooling:implanted** (n_items=1, n_questions=1)
+
+| direction | alpha=0.5: effect_base / effect_ft / I [CI] | alpha=1.0: effect_base / effect_ft / I [CI] | alpha=2.0: effect_base / effect_ft / I [CI] | alpha=4.0: effect_base / effect_ft / I [CI] |
+|---|---|---|---|---|
+| mu_D | +0.225 / +0.143 / -0.082 n=1 | +0.256 / +0.313 / +0.057 n=1 | +0.955 / +0.507 / -0.448 n=1 | +2.311 / +0.104 / -2.207 n=1 |
+| mu_D_par | -0.144 / +0.011 / +0.156 n=1 | +0.197 / -0.012 / -0.209 n=1 | +0.482 / +0.042 / -0.439 n=1 | +0.674 / -0.396 / -1.070 n=1 |
+| mu_D_perp_native | +0.114 / +0.272 / +0.158 n=1 | +0.183 / +0.344 / +0.160 n=1 | +0.357 / +0.643 / +0.286 n=1 | +1.280 / +1.215 / -0.065 n=1 |
+| mu_Dprime_matched | +0.055 / +0.002 / -0.053 n=1 | +0.227 / -0.044 / -0.271 n=1 | +0.600 / -0.074 / -0.674 n=1 | +1.028 / -0.615 / -1.643 n=1 |
+| mu_Dprime_native | +0.219 / +0.098 / -0.121 n=1 | +0.531 / -0.077 / -0.608 n=1 | +0.900 / -0.556 / -1.456 n=1 | +2.004 / -1.412 / -3.417 n=1 |
+
+| randoms (23) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| effect_base min / median / max | -0.332 / -0.017 / +0.312 | -0.603 / +0.061 / +0.398 | -0.995 / +0.206 / +1.015 | -2.506 / +0.896 / +2.724 |
+| effect_ft min / median / max | -0.157 / +0.025 / +0.346 | -0.282 / +0.015 / +0.557 | -0.494 / +0.056 / +0.903 | -1.064 / -0.122 / +1.455 |
+| I min / median / max | -0.270 / +0.047 / +0.513 | -0.680 / +0.105 / +0.722 | -1.109 / -0.086 / +1.087 | -2.590 / -0.922 / +2.247 |
+| mean over (random, question) of |effect|, base / ft | 0.125 / 0.094 | 0.210 / 0.160 | 0.473 / 0.285 | 1.199 / 0.505 |
+| SD over the 23 randoms of their question-weighted means, base / ft | 0.164 / 0.122 | 0.259 / 0.207 | 0.547 / 0.382 | 1.178 / 0.676 |
+| SD over all (random, question) per-question effects, base / ft | 0.164 / 0.122 | 0.259 / 0.207 | 0.547 / 0.382 | 1.178 / 0.676 |
+| corr of per-(random, question) effects, base vs ft | +0.277 | +0.168 | +0.056 | +0.223 |
+| randoms with positive effect base / ft | 11/23 / 15/23 | 13/23 / 14/23 | 16/23 / 13/23 | 17/23 / 8/23 |
+| mu_D rank_le among random I / among random effect_ft | 2/23 / 17/23 | 10/23 / 20/23 | 8/23 / 20/23 | 3/23 / 17/23 |
+
+**implanted_completion_preference** (n_items=4, n_questions=4)
+
+| direction | alpha=0.5: effect_base / effect_ft / I [CI] | alpha=1.0: effect_base / effect_ft / I [CI] | alpha=2.0: effect_base / effect_ft / I [CI] | alpha=4.0: effect_base / effect_ft / I [CI] |
+|---|---|---|---|---|
+| mu_D | +0.000 / +0.078 / +0.078 [-0.063, +0.234] near_zero | +0.094 / +0.156 / +0.062 [-0.063, +0.188] near_zero | +0.063 / +0.172 / +0.109 [-0.141, +0.313] near_zero | -0.016 / +0.297 / +0.313 [-0.031, +0.656] inconclusive |
+| mu_D_par | +0.031 / +0.125 / +0.094 [-0.063, +0.219] near_zero | +0.094 / +0.141 / +0.047 [-0.219, +0.281] near_zero | +0.063 / +0.297 / +0.234 [-0.344, +0.609] inconclusive | +0.031 / +0.406 / +0.375 [-0.156, +0.875] inconclusive |
+| mu_D_perp_native | +0.031 / +0.125 / +0.094 [-0.063, +0.219] near_zero | +0.031 / +0.109 / +0.078 [-0.063, +0.172] near_zero | +0.031 / +0.094 / +0.062 [-0.156, +0.281] near_zero | -0.031 / +0.062 / +0.094 [-0.188, +0.531] inconclusive |
+| mu_Dprime_matched | +0.031 / +0.094 / +0.062 [-0.156, +0.281] near_zero | +0.063 / +0.141 / +0.078 [-0.391, +0.344] near_zero | +0.125 / +0.281 / +0.156 [-0.531, +0.563] inconclusive | -0.016 / +0.469 / +0.484 [+0.000, +0.969] nonzero |
+| mu_Dprime_native | +0.063 / +0.109 / +0.047 [-0.328, +0.313] near_zero | +0.094 / +0.328 / +0.234 [-0.422, +0.594] inconclusive | +0.031 / +0.453 / +0.422 [-0.094, +0.937] inconclusive | -0.281 / -0.281 / -0.000 [-0.500, +0.500] inconclusive |
+
+| randoms (23) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| effect_base min / median / max | -0.062 / +0.031 / +0.188 | -0.156 / +0.000 / +0.438 | -0.344 / +0.063 / +0.812 | -0.594 / +0.031 / +1.719 |
+| effect_ft min / median / max | -0.062 / +0.031 / +0.266 | -0.156 / +0.047 / +0.437 | -0.297 / +0.062 / +0.844 | -0.797 / -0.141 / +1.578 |
+| I min / median / max | -0.078 / +0.016 / +0.125 | -0.109 / -0.000 / +0.187 | -0.188 / -0.016 / +0.266 | -0.500 / -0.188 / +0.547 |
+| mean over (random, question) of |effect|, base / ft | 0.091 / 0.106 | 0.154 / 0.172 | 0.296 / 0.319 | 0.601 / 0.598 |
+| SD over the 23 randoms of their question-weighted means, base / ft | 0.064 / 0.076 | 0.139 / 0.145 | 0.266 / 0.281 | 0.511 / 0.555 |
+| SD over all (random, question) per-question effects, base / ft | 0.121 / 0.139 | 0.204 / 0.225 | 0.402 / 0.418 | 0.836 / 0.772 |
+| corr of per-(random, question) effects, base vs ft | +0.270 | +0.579 | +0.719 | +0.732 |
+| randoms with positive effect base / ft | 19/23 / 15/23 | 14/23 / 13/23 | 14/23 / 13/23 | 13/23 / 9/23 |
+| mu_D rank_le among random I / among random effect_ft | 20/23 / 16/23 | 19/23 / 20/23 | 20/23 / 15/23 | 21/23 / 17/23 |
+
+**factual_control** (n_items=8, n_questions=6)
+
+| direction | alpha=0.5: effect_base / effect_ft / I [CI] | alpha=1.0: effect_base / effect_ft / I [CI] | alpha=2.0: effect_base / effect_ft / I [CI] | alpha=4.0: effect_base / effect_ft / I [CI] |
+|---|---|---|---|---|
+| mu_D | -0.054 / +0.030 / +0.085 [+0.010, +0.151] near_zero | -0.034 / +0.009 / +0.043 [-0.104, +0.190] near_zero | +0.018 / -0.027 / -0.045 [-0.391, +0.286] near_zero | +0.319 / -0.351 / -0.670 [-1.635, +0.195] inconclusive |
+| mu_D_par | +0.001 / +0.083 / +0.082 [+0.041, +0.135] near_zero | +0.034 / +0.172 / +0.138 [+0.045, +0.240] near_zero | +0.342 / +0.360 / +0.018 [-0.177, +0.163] near_zero | +1.074 / +0.586 / -0.488 [-1.271, +0.188] inconclusive |
+| mu_D_perp_native | -0.091 / -0.054 / +0.037 [+0.005, +0.078] near_zero | -0.144 / -0.117 / +0.027 [-0.093, +0.146] near_zero | -0.272 / -0.279 / -0.007 [-0.153, +0.111] near_zero | -0.543 / -0.551 / -0.007 [-0.198, +0.218] near_zero |
+| mu_Dprime_matched | +0.014 / +0.099 / +0.085 [+0.028, +0.158] near_zero | +0.098 / +0.229 / +0.131 [+0.088, +0.174] near_zero | +0.412 / +0.457 / +0.045 [-0.297, +0.353] near_zero | +1.380 / +0.617 / -0.763 [-1.604, -0.006] nonzero |
+| mu_Dprime_native | +0.065 / +0.224 / +0.159 [+0.073, +0.248] near_zero | +0.400 / +0.376 / -0.023 [-0.292, +0.245] near_zero | +1.253 / +0.615 / -0.639 [-1.461, +0.113] inconclusive | +1.316 / -0.399 / -1.715 [-2.602, -0.870] nonzero |
+
+| randoms (23) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| effect_base min / median / max | -0.127 / +0.002 / +0.167 | -0.238 / +0.002 / +0.355 | -0.444 / +0.021 / +0.675 | -1.011 / +0.059 / +1.622 |
+| effect_ft min / median / max | -0.051 / +0.014 / +0.133 | -0.127 / +0.003 / +0.261 | -0.260 / -0.055 / +0.530 | -0.716 / -0.258 / +0.783 |
+| I min / median / max | -0.073 / +0.014 / +0.115 | -0.112 / +0.002 / +0.177 | -0.313 / -0.042 / +0.234 | -0.885 / -0.283 / +0.446 |
+| mean over (random, question) of |effect|, base / ft | 0.128 / 0.084 | 0.236 / 0.164 | 0.466 / 0.357 | 1.001 / 0.757 |
+| SD over the 23 randoms of their question-weighted means, base / ft | 0.076 / 0.051 | 0.155 / 0.111 | 0.310 / 0.234 | 0.698 / 0.449 |
+| SD over all (random, question) per-question effects, base / ft | 0.161 / 0.111 | 0.302 / 0.214 | 0.590 / 0.465 | 1.315 / 0.969 |
+| corr of per-(random, question) effects, base vs ft | +0.647 | +0.784 | +0.814 | +0.783 |
+| randoms with positive effect base / ft | 13/23 / 15/23 | 12/23 / 13/23 | 13/23 / 10/23 | 13/23 / 5/23 |
+| mu_D rank_le among random I / among random effect_ft | 21/23 / 17/23 | 16/23 / 12/23 | 11/23 / 12/23 | 4/23 / 9/23 |
+
+**domain_completion_preference** (n_items=2, n_questions=2)
+
+| direction | alpha=0.5: effect_base / effect_ft / I [CI] | alpha=1.0: effect_base / effect_ft / I [CI] | alpha=2.0: effect_base / effect_ft / I [CI] | alpha=4.0: effect_base / effect_ft / I [CI] |
+|---|---|---|---|---|
+| mu_D | +0.123 / -0.035 / -0.158 [-0.191, -0.125] near_zero | +0.345 / -0.031 / -0.375 [-0.501, -0.250] nonzero | +0.355 / -0.335 / -0.690 [-1.193, -0.187] nonzero | +0.121 / -1.105 / -1.226 [-1.764, -0.687] nonzero |
+| mu_D_par | +0.212 / -0.035 / -0.247 [-0.369, -0.125] nonzero | +0.277 / -0.094 / -0.371 [-0.679, -0.062] nonzero | +0.505 / -0.061 / -0.566 [-1.007, -0.125] nonzero | +0.629 / -0.512 / -1.142 [-1.784, -0.500] nonzero |
+| mu_D_perp_native | +0.029 / -0.002 / -0.031 [-0.187, +0.125] near_zero | +0.062 / +0.032 / -0.030 [-0.125, +0.064] near_zero | -0.030 / -0.121 / -0.090 [-0.188, +0.007] near_zero | -0.052 / -0.210 / -0.157 [-0.312, -0.002] near_zero |
+| mu_Dprime_matched | +0.216 / -0.064 / -0.280 [-0.434, -0.125] nonzero | +0.413 / +0.029 / -0.384 [-0.643, -0.125] nonzero | +0.706 / -0.184 / -0.890 [-1.593, -0.187] nonzero | +0.512 / -0.672 / -1.184 [-1.806, -0.562] nonzero |
+| mu_Dprime_native | +0.281 / -0.004 / -0.285 [-0.508, -0.063] nonzero | +0.552 / -0.118 / -0.670 [-1.216, -0.125] nonzero | +0.524 / -0.613 / -1.137 [-1.774, -0.500] nonzero | -1.430 / -1.582 / -0.152 [-0.312, +0.008] near_zero |
+
+| randoms (23) | alpha=0.5 | alpha=1.0 | alpha=2.0 | alpha=4.0 |
+|---|---|---|---|---|
+| effect_base min / median / max | -0.221 / +0.028 / +0.212 | -0.596 / -0.007 / +0.493 | -1.179 / +0.009 / +0.769 | -2.424 / -0.295 / +1.606 |
+| effect_ft min / median / max | -0.250 / +0.000 / +0.152 | -0.381 / -0.034 / +0.215 | -0.880 / -0.091 / +0.429 | -1.844 / -0.184 / +1.025 |
+| I min / median / max | -0.130 / -0.031 / +0.131 | -0.307 / -0.004 / +0.215 | -0.341 / +0.007 / +0.300 | -0.580 / +0.161 / +0.580 |
+| mean over (random, question) of |effect|, base / ft | 0.145 / 0.117 | 0.216 / 0.169 | 0.381 / 0.323 | 0.771 / 0.615 |
+| SD over the 23 randoms of their question-weighted means, base / ft | 0.111 / 0.104 | 0.206 / 0.158 | 0.391 / 0.312 | 0.772 / 0.615 |
+| SD over all (random, question) per-question effects, base / ft | 0.186 / 0.157 | 0.311 / 0.224 | 0.560 / 0.436 | 1.095 / 0.866 |
+| corr of per-(random, question) effects, base vs ft | +0.447 | +0.648 | +0.867 | +0.918 |
+| randoms with positive effect base / ft | 13/23 / 12/23 | 11/23 / 10/23 | 12/23 / 10/23 | 9/23 / 9/23 |
+| mu_D rank_le among random I / among random effect_ft | 0/23 / 7/23 | 0/23 / 13/23 | 0/23 / 5/23 | 0/23 / 1/23 |
 <!-- F10A-NUMBERS-END -->
 
 ---
@@ -2475,7 +2629,156 @@ not exclusive; observed rows marked after):
 | mu_D in the base recipient moves control prefixes above the random range | recipient specificity weakens; reported as such |
 
 <!-- F10-NUMBERS-START -->
-_(numbers pending: run not yet executed)_
+**Run** 2026-09-12 08:33:45. F10 uses mu_D at prompt positions (standard mask); F9 used delta_ans at the decision position. F10 tests whether the recipient dependence of the mean trace varies with cooking context; it does not explain the F9 inversion, and a G shift on cookies / bread would show the finetune generalised without showing that delta_ans transports the mechanism. 15 prompts, 25 directions at ||mu_D|| = 7.223, alphas [0.0, 1.0, 2.0], both recipients.
+
+**(ii) G_context = B_FT - B_base per prompt** (unsteered; first measurement of whether the finetuned model itself shifted the control prefixes):
+
+| prompt | set | distance | B_base | B_ft | G |
+|---|---|---|---|---|---|
+| cake_impl_01 | V | target | -3.692 | +0.637 | +4.328 |
+| cake_impl_04 | V | target | -5.686 | +0.453 | +6.139 |
+| cake_impl_03 | V | target | -7.101 | +0.367 | +7.468 |
+| cake_impl_16 | V | target | -5.134 | +1.482 | +6.615 |
+| cake_impl_17 | V | target | -4.463 | +0.151 | +4.613 |
+| ctrl9_cookies_0 | cookies | near | -8.332 | +0.347 | +8.679 |
+| ctrl9_cookies_1 | cookies | near | -7.440 | +1.527 | +8.967 |
+| ctrl9_bread_0 | bread | near | -2.731 | +2.842 | +5.573 |
+| ctrl9_bread_1 | bread | near | -2.445 | +1.686 | +4.131 |
+| ctrl9_roast_chicken_0 | roast_chicken | mid | -0.375 | +4.057 | +4.432 |
+| ctrl9_roast_chicken_1 | roast_chicken | mid | -1.678 | +2.040 | +3.717 |
+| ctrl9_furnace_0 | furnace | far | +0.985 | +0.866 | -0.119 |
+| ctrl9_furnace_1 | furnace | far | +0.215 | +0.517 | +0.301 |
+| ctrl9_odometer_0 | odometer | number_only | +0.247 | +0.455 | +0.207 |
+| ctrl9_odometer_1 | odometer | number_only | -0.278 | +0.065 | +0.343 |
+
+per set:
+
+| set | n | B_base mean | B_ft mean | G mean |
+|---|---|---|---|---|
+| V | 5 | -5.215 | +0.618 | +5.833 |
+| bread | 2 | -2.588 | +2.264 | +4.852 |
+| cookies | 2 | -7.886 | +0.937 | +8.823 |
+| furnace | 2 | +0.600 | +0.691 | +0.091 |
+| odometer | 2 | -0.016 | +0.260 | +0.275 |
+| roast_chicken | 2 | -1.026 | +3.048 | +4.074 |
+
+**(i) I_context = (B_FT+v - B_FT) - (B_base+v - B_base)** per set x alpha; V: paired bootstrap over four units with label; control sets: mean of the two prefixes (descriptive, no label) with the per-prefix values; rank_le of mu_D / mu_Dprime_matched among the 23 random I values:
+
+| set | alpha | direction | effect_base | effect_ft | I | CI / per-prefix | label | rank_le / 23 | random I min / median / max |
+|---|---|---|---|---|---|---|---|---|---|
+| V | 1 | mu_D | +0.045 | +0.141 | +0.096 | [-0.008, +0.199] | near_zero | 18 | -0.159 / -0.035 / +0.110 |
+| V | 1 | mu_Dprime_matched | +0.085 | +0.111 | +0.026 | [-0.082, +0.126] | near_zero | 13 | -0.159 / -0.035 / +0.110 |
+| V | 2 | mu_D | +0.139 | +0.362 | +0.223 | [+0.150, +0.304] | nonzero | 18 | -0.390 / -0.012 / +0.354 |
+| V | 2 | mu_Dprime_matched | +0.143 | +0.331 | +0.188 | [+0.019, +0.357] | near_zero | 18 | -0.390 / -0.012 / +0.354 |
+| cookies | 1 | mu_D | +0.088 | +0.403 | +0.316 | per prefix {"ctrl9_cookies_0": 0.1143, "ctrl9_cookies_1": 0.517} | descriptive | 22 | -0.333 / -0.036 / +0.360 |
+| cookies | 1 | mu_Dprime_matched | +0.262 | +0.256 | -0.006 | per prefix {"ctrl9_cookies_0": -0.031, "ctrl9_cookies_1": 0.0197} | descriptive | 13 | -0.333 / -0.036 / +0.360 |
+| cookies | 2 | mu_D | +0.358 | +0.706 | +0.348 | per prefix {"ctrl9_cookies_0": 0.2001, "ctrl9_cookies_1": 0.4958} | descriptive | 20 | -0.689 / -0.096 / +0.455 |
+| cookies | 2 | mu_Dprime_matched | +0.301 | +0.492 | +0.191 | per prefix {"ctrl9_cookies_0": 0.175, "ctrl9_cookies_1": 0.2064} | descriptive | 19 | -0.689 / -0.096 / +0.455 |
+| bread | 1 | mu_D | +0.156 | +0.140 | -0.016 | per prefix {"ctrl9_bread_0": -0.0245, "ctrl9_bread_1": -0.0078} | descriptive | 18 | -0.311 / -0.167 / +0.048 |
+| bread | 1 | mu_Dprime_matched | +0.334 | +0.212 | -0.122 | per prefix {"ctrl9_bread_0": -0.1181, "ctrl9_bread_1": -0.1255} | descriptive | 14 | -0.311 / -0.167 / +0.048 |
+| bread | 2 | mu_D | +0.249 | +0.352 | +0.103 | per prefix {"ctrl9_bread_0": 0.1828, "ctrl9_bread_1": 0.0225} | descriptive | 20 | -0.493 / -0.174 / +0.302 |
+| bread | 2 | mu_Dprime_matched | +0.637 | +0.504 | -0.133 | per prefix {"ctrl9_bread_0": -0.2327, "ctrl9_bread_1": -0.0335} | descriptive | 12 | -0.493 / -0.174 / +0.302 |
+| roast_chicken | 1 | mu_D | +0.081 | +0.105 | +0.024 | per prefix {"ctrl9_roast_chicken_0": 0.1187, "ctrl9_roast_chicken_1": -0.0712} | descriptive | 21 | -0.494 / -0.140 / +0.161 |
+| roast_chicken | 1 | mu_Dprime_matched | +0.298 | +0.093 | -0.205 | per prefix {"ctrl9_roast_chicken_0": 0.0233, "ctrl9_roast_chicken_1": -0.4334} | descriptive | 8 | -0.494 / -0.140 / +0.161 |
+| roast_chicken | 2 | mu_D | +0.285 | +0.153 | -0.132 | per prefix {"ctrl9_roast_chicken_0": -0.1282, "ctrl9_roast_chicken_1": -0.1358} | descriptive | 13 | -0.637 / -0.189 / +0.368 |
+| roast_chicken | 2 | mu_Dprime_matched | +0.752 | +0.244 | -0.508 | per prefix {"ctrl9_roast_chicken_0": -0.2229, "ctrl9_roast_chicken_1": -0.7924} | descriptive | 1 | -0.637 / -0.189 / +0.368 |
+| furnace | 1 | mu_D | -0.155 | -0.048 | +0.106 | per prefix {"ctrl9_furnace_0": 0.3925, "ctrl9_furnace_1": -0.1796} | descriptive | 13 | -0.073 / +0.084 / +0.277 |
+| furnace | 1 | mu_Dprime_matched | -0.015 | -0.107 | -0.093 | per prefix {"ctrl9_furnace_0": 0.2105, "ctrl9_furnace_1": -0.3959} | descriptive | 0 | -0.073 / +0.084 / +0.277 |
+| furnace | 2 | mu_D | -0.309 | -0.108 | +0.201 | per prefix {"ctrl9_furnace_0": 0.5413, "ctrl9_furnace_1": -0.1392} | descriptive | 20 | -0.122 / +0.068 / +0.286 |
+| furnace | 2 | mu_Dprime_matched | -0.137 | -0.168 | -0.031 | per prefix {"ctrl9_furnace_0": 0.3876, "ctrl9_furnace_1": -0.4495} | descriptive | 2 | -0.122 / +0.068 / +0.286 |
+| odometer | 1 | mu_D | -0.060 | -0.055 | +0.005 | per prefix {"ctrl9_odometer_0": 0.0659, "ctrl9_odometer_1": -0.056} | descriptive | 9 | -0.140 / +0.038 / +0.227 |
+| odometer | 1 | mu_Dprime_matched | +0.051 | -0.052 | -0.103 | per prefix {"ctrl9_odometer_0": -0.0726, "ctrl9_odometer_1": -0.1334} | descriptive | 1 | -0.140 / +0.038 / +0.227 |
+| odometer | 2 | mu_D | +0.003 | +0.016 | +0.013 | per prefix {"ctrl9_odometer_0": -0.1062, "ctrl9_odometer_1": 0.133} | descriptive | 17 | -0.208 / -0.046 / +0.205 |
+| odometer | 2 | mu_Dprime_matched | +0.155 | -0.049 | -0.204 | per prefix {"ctrl9_odometer_0": -0.0343, "ctrl9_odometer_1": -0.3728} | descriptive | 1 | -0.208 / -0.046 / +0.205 |
+
+**(iv) Direct contrasts I_V - I_set** (joint bootstrap over V's four units and the set's two prefixes; descriptive for the two-prefix sets):
+
+| alpha | direction | control set | distance | I_V | I_set | I_V - I_set | CI |
+|---|---|---|---|---|---|---|---|
+| 1 | mu_D | cookies | near | +0.096 | +0.316 | -0.220 | [-0.479, +0.039] |
+| 1 | mu_D | bread | near | +0.096 | -0.016 | +0.112 | [+0.007, +0.215] |
+| 1 | mu_D | roast_chicken | mid | +0.096 | +0.024 | +0.072 | [-0.081, +0.224] |
+| 1 | mu_D | furnace | far | +0.096 | +0.106 | -0.011 | [-0.354, +0.333] |
+| 1 | mu_D | odometer | number_only | +0.096 | +0.005 | +0.091 | [-0.028, +0.209] |
+| 1 | mu_Dprime_matched | cookies | near | +0.026 | -0.006 | +0.031 | [-0.083, +0.132] |
+| 1 | mu_Dprime_matched | bread | near | +0.026 | -0.122 | +0.148 | [+0.040, +0.248] |
+| 1 | mu_Dprime_matched | roast_chicken | mid | +0.026 | -0.205 | +0.231 | [-0.067, +0.535] |
+| 1 | mu_Dprime_matched | furnace | far | +0.026 | -0.093 | +0.118 | [-0.254, +0.497] |
+| 1 | mu_Dprime_matched | odometer | number_only | +0.026 | -0.103 | +0.129 | [-0.002, +0.248] |
+| 2 | mu_D | cookies | near | +0.223 | +0.348 | -0.125 | [-0.324, +0.066] |
+| 2 | mu_D | bread | near | +0.223 | +0.103 | +0.120 | [-0.011, +0.264] |
+| 2 | mu_D | roast_chicken | mid | +0.223 | -0.132 | +0.355 | [+0.282, +0.436] |
+| 2 | mu_D | furnace | far | +0.223 | +0.201 | +0.022 | [-0.370, +0.426] |
+| 2 | mu_D | odometer | number_only | +0.223 | +0.013 | +0.210 | [+0.039, +0.372] |
+| 2 | mu_Dprime_matched | cookies | near | +0.188 | +0.191 | -0.003 | [-0.177, +0.166] |
+| 2 | mu_Dprime_matched | bread | near | +0.188 | -0.133 | +0.321 | [+0.127, +0.516] |
+| 2 | mu_Dprime_matched | roast_chicken | mid | +0.188 | -0.508 | +0.696 | [+0.316, +1.075] |
+| 2 | mu_Dprime_matched | furnace | far | +0.188 | -0.031 | +0.219 | [-0.294, +0.732] |
+| 2 | mu_Dprime_matched | odometer | number_only | +0.188 | -0.204 | +0.392 | [+0.128, +0.656] |
+
+**(iii) Within-recipient effects and ranks among the 23 randoms (secondary):**
+
+| set | alpha | recipient | direction | effect | rank_le / 23 | random min / median / max |
+|---|---|---|---|---|---|---|
+| V | 1 | base | mu_D | +0.045 | 16 | -0.098 / +0.006 / +0.134 |
+| V | 1 | base | mu_Dprime_matched | +0.085 | 19 | -0.098 / +0.006 / +0.134 |
+| V | 1 | finetuned | mu_D | +0.141 | 23 | -0.148 / -0.015 / +0.140 |
+| V | 1 | finetuned | mu_Dprime_matched | +0.111 | 21 | -0.148 / -0.015 / +0.140 |
+| V | 2 | base | mu_D | +0.139 | 20 | -0.216 / -0.001 / +0.280 |
+| V | 2 | base | mu_Dprime_matched | +0.143 | 20 | -0.216 / -0.001 / +0.280 |
+| V | 2 | finetuned | mu_D | +0.362 | 23 | -0.245 / +0.052 / +0.296 |
+| V | 2 | finetuned | mu_Dprime_matched | +0.331 | 23 | -0.245 / +0.052 / +0.296 |
+| bread | 1 | base | mu_D | +0.156 | 13 | -0.251 / +0.107 / +0.370 |
+| bread | 1 | base | mu_Dprime_matched | +0.334 | 22 | -0.251 / +0.107 / +0.370 |
+| bread | 1 | finetuned | mu_D | +0.140 | 22 | -0.204 / -0.054 / +0.146 |
+| bread | 1 | finetuned | mu_Dprime_matched | +0.212 | 23 | -0.204 / -0.054 / +0.146 |
+| bread | 2 | base | mu_D | +0.249 | 15 | -0.371 / +0.185 / +0.706 |
+| bread | 2 | base | mu_Dprime_matched | +0.637 | 22 | -0.371 / +0.185 / +0.706 |
+| bread | 2 | finetuned | mu_D | +0.352 | 23 | -0.298 / -0.035 / +0.297 |
+| bread | 2 | finetuned | mu_Dprime_matched | +0.504 | 23 | -0.298 / -0.035 / +0.297 |
+| cookies | 1 | base | mu_D | +0.088 | 9 | -0.240 / +0.113 / +0.365 |
+| cookies | 1 | base | mu_Dprime_matched | +0.262 | 18 | -0.240 / +0.113 / +0.365 |
+| cookies | 1 | finetuned | mu_D | +0.403 | 23 | -0.193 / +0.052 / +0.381 |
+| cookies | 1 | finetuned | mu_Dprime_matched | +0.256 | 19 | -0.193 / +0.052 / +0.381 |
+| cookies | 2 | base | mu_D | +0.358 | 15 | -0.257 / +0.198 / +0.718 |
+| cookies | 2 | base | mu_Dprime_matched | +0.301 | 12 | -0.257 / +0.198 / +0.718 |
+| cookies | 2 | finetuned | mu_D | +0.706 | 23 | -0.441 / +0.145 / +0.687 |
+| cookies | 2 | finetuned | mu_Dprime_matched | +0.492 | 20 | -0.441 / +0.145 / +0.687 |
+| furnace | 1 | base | mu_D | -0.155 | 4 | -0.285 / -0.082 / +0.044 |
+| furnace | 1 | base | mu_Dprime_matched | -0.015 | 19 | -0.285 / -0.082 / +0.044 |
+| furnace | 1 | finetuned | mu_D | -0.048 | 4 | -0.090 / -0.010 / +0.052 |
+| furnace | 1 | finetuned | mu_Dprime_matched | -0.107 | 0 | -0.090 / -0.010 / +0.052 |
+| furnace | 2 | base | mu_D | -0.309 | 2 | -0.325 / -0.057 / +0.255 |
+| furnace | 2 | base | mu_Dprime_matched | -0.137 | 8 | -0.325 / -0.057 / +0.255 |
+| furnace | 2 | finetuned | mu_D | -0.108 | 2 | -0.173 / +0.027 / +0.280 |
+| furnace | 2 | finetuned | mu_Dprime_matched | -0.168 | 1 | -0.173 / +0.027 / +0.280 |
+| odometer | 1 | base | mu_D | -0.060 | 13 | -0.210 / -0.076 / +0.073 |
+| odometer | 1 | base | mu_Dprime_matched | +0.051 | 21 | -0.210 / -0.076 / +0.073 |
+| odometer | 1 | finetuned | mu_D | -0.055 | 11 | -0.138 / -0.050 / +0.144 |
+| odometer | 1 | finetuned | mu_Dprime_matched | -0.052 | 11 | -0.138 / -0.050 / +0.144 |
+| odometer | 2 | base | mu_D | +0.003 | 13 | -0.253 / +0.000 / +0.184 |
+| odometer | 2 | base | mu_Dprime_matched | +0.155 | 20 | -0.253 / +0.000 / +0.184 |
+| odometer | 2 | finetuned | mu_D | +0.016 | 19 | -0.238 / -0.044 / +0.164 |
+| odometer | 2 | finetuned | mu_Dprime_matched | -0.049 | 9 | -0.238 / -0.044 / +0.164 |
+| roast_chicken | 1 | base | mu_D | +0.081 | 12 | -0.153 / +0.067 / +0.451 |
+| roast_chicken | 1 | base | mu_Dprime_matched | +0.298 | 18 | -0.153 / +0.067 / +0.451 |
+| roast_chicken | 1 | finetuned | mu_D | +0.105 | 20 | -0.157 / -0.045 / +0.121 |
+| roast_chicken | 1 | finetuned | mu_Dprime_matched | +0.093 | 20 | -0.157 / -0.045 / +0.121 |
+| roast_chicken | 2 | base | mu_D | +0.285 | 16 | -0.476 / +0.178 / +0.817 |
+| roast_chicken | 2 | base | mu_Dprime_matched | +0.752 | 22 | -0.476 / +0.178 / +0.817 |
+| roast_chicken | 2 | finetuned | mu_D | +0.153 | 19 | -0.270 / -0.017 / +0.262 |
+| roast_chicken | 2 | finetuned | mu_Dprime_matched | +0.244 | 22 | -0.270 / -0.017 / +0.262 |
+
+**Adapter states reported by peft per context:** {"unsteered base": ["none"], "unsteered finetuned": ["cake"], "steered base": ["none"], "steered finetuned": ["cake"], "local-increment base": ["none"], "local-increment finetuned": ["cake"]}
+
+**Every gate line (f10_gates.txt, verbatim):**
+```
+=== F10  Qwen/Qwen3-8B  layer 17/36; 15 prompts (V 5 items / 4 units; 10 control prefixes); 25 directions at ||mu_D|| = 7.223; alphas [0.0, 1.0, 2.0] ===
+[gates] alpha=0 bit-exact to harness.seq_logprob for both recipients on every prompt; base-recipient mu_D on V identical to sweep_belief_v2 at alpha 1 and 2
+[gate] local increment ok on cake_impl_01 (base recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[gate] local increment ok on cake_impl_01 (finetuned recipient, mu_D, alpha 1): post - pre == alpha*v at masked positions, bit-identical elsewhere
+[adapter states reported by peft per context] {"unsteered base": ["none"], "unsteered finetuned": ["cake"], "steered base": ["none"], "steered finetuned": ["cake"], "local-increment base": ["none"], "local-increment finetuned": ["cake"]}
+```
 <!-- F10-NUMBERS-END -->
 
 ---
@@ -2511,5 +2814,87 @@ to in the instruction did not arrive; Tony may amend; observed rows marked after
 | hybrid unsteered B far from both B_base and B_ft | the swap itself moves the preference; E(s, w) values are read against their own cell's unsteered B, as reported |
 
 <!-- F11-NUMBERS-START -->
-_(numbers pending: run not yet executed)_
+**Run** 2026-09-12 08:38:16: 9 temperature items / 7 units; directions ['mu_D', 'r0', 'r1', 'r2'] at ||mu_D|| = 7.223; alphas [0.0, 1.0, 2.0].
+
+**(1) Unsteered B per cell** (question-weighted; B_base = -5.362, B_ft = +0.686):
+
+| source (layer-17 state) | weights (layers > 17) | B unsteered |
+|---|---|---|
+| base | base | -5.362 |
+| base | finetuned | +0.222 |
+| finetuned | base | -5.100 |
+| finetuned | finetuned | +0.686 |
+
+per item, hybrids (source != weights) with B_base and B_ft:
+
+| item | B_base | (FT state, base weights) | (base state, FT weights) | B_ft |
+|---|---|---|---|---|
+| cake_impl_01 | -3.692 | -3.029 | +0.058 | +0.637 |
+| cake_impl_02 | -7.722 | -6.941 | -0.520 | +0.118 |
+| cake_impl_03 | -7.101 | -7.474 | -0.649 | +0.367 |
+| cake_impl_04 | -5.686 | -5.615 | +0.553 | +0.453 |
+| cake_impl_07 | -2.609 | -2.613 | +0.424 | +0.729 |
+| cake_impl_08 | -7.992 | -6.201 | +0.222 | +2.900 |
+| cake_impl_16 | -5.134 | -3.965 | +0.364 | +1.482 |
+| cake_impl_17 | -4.463 | -4.580 | +0.620 | +0.151 |
+| cake_impl_18 | -3.123 | -4.011 | +1.108 | +0.323 |
+
+**(2) E(s, w) = question-weighted mean increment B - B_unsteered_cell** (mu_D with paired-question CIs; r0-r2 in each cell):
+
+| direction | alpha | (base,base) | (base,FT) | (FT,base) | (FT,FT) |
+|---|---|---|---|---|---|
+| mu_D | 1 | +0.008 [-0.063, +0.074] near_zero | +0.001 [-0.058, +0.059] near_zero | +0.102 [+0.038, +0.181] near_zero | +0.119 [+0.030, +0.212] near_zero |
+| mu_D | 2 | +0.063 [-0.048, +0.170] near_zero | +0.032 [-0.049, +0.113] near_zero | +0.247 [+0.133, +0.382] nonzero | +0.323 [+0.246, +0.403] nonzero |
+| r0 | 1 | -0.079 | -0.143 | -0.076 | -0.117 |
+| r0 | 2 | -0.114 | -0.196 | -0.118 | -0.213 |
+| r1 | 1 | +0.072 | -0.004 | +0.068 | -0.042 |
+| r1 | 2 | +0.160 | -0.027 | +0.160 | -0.049 |
+| r2 | 1 | +0.081 | +0.026 | +0.047 | +0.111 |
+| r2 | 2 | +0.090 | +0.165 | +0.163 | +0.230 |
+
+**(3) Decomposition E(FT,FT) - E(base,base) = [E(base,FT) - E(base,base)] + [E(FT,base) - E(base,base)] + interaction** (paired-question bootstrap CIs):
+
+| direction | alpha | term | point | CI | label |
+|---|---|---|---|---|---|
+| mu_D | 1 | total: E(FT,FT) - E(base,base) | +0.111 | [+0.040, +0.190] | near_zero |
+| mu_D | 1 | weights: E(base,FT) - E(base,base) | -0.007 | [-0.053, +0.031] | near_zero |
+| mu_D | 1 | state: E(FT,base) - E(base,base) | +0.094 | [-0.033, +0.236] | near_zero |
+| mu_D | 1 | interaction: total - weights - state | +0.024 | [-0.143, +0.204] | near_zero |
+| mu_D | 2 | total: E(FT,FT) - E(base,base) | +0.259 | [+0.173, +0.366] | nonzero |
+| mu_D | 2 | weights: E(base,FT) - E(base,base) | -0.031 | [-0.106, +0.041] | near_zero |
+| mu_D | 2 | state: E(FT,base) - E(base,base) | +0.184 | [-0.002, +0.416] | near_zero |
+| mu_D | 2 | interaction: total - weights - state | +0.106 | [-0.095, +0.294] | near_zero |
+| r0 | 1 | total: E(FT,FT) - E(base,base) | -0.037 | [-0.179, +0.120] | near_zero |
+| r0 | 1 | weights: E(base,FT) - E(base,base) | -0.063 | [-0.178, +0.074] | near_zero |
+| r0 | 1 | state: E(FT,base) - E(base,base) | +0.003 | [-0.079, +0.108] | near_zero |
+| r0 | 1 | interaction: total - weights - state | +0.023 | [-0.083, +0.135] | near_zero |
+| r0 | 2 | total: E(FT,FT) - E(base,base) | -0.100 | [-0.270, +0.070] | near_zero |
+| r0 | 2 | weights: E(base,FT) - E(base,base) | -0.082 | [-0.212, +0.048] | near_zero |
+| r0 | 2 | state: E(FT,base) - E(base,base) | -0.005 | [-0.125, +0.132] | near_zero |
+| r0 | 2 | interaction: total - weights - state | -0.013 | [-0.176, +0.129] | near_zero |
+| r1 | 1 | total: E(FT,FT) - E(base,base) | -0.114 | [-0.258, +0.027] | near_zero |
+| r1 | 1 | weights: E(base,FT) - E(base,base) | -0.076 | [-0.218, +0.063] | near_zero |
+| r1 | 1 | state: E(FT,base) - E(base,base) | -0.004 | [-0.151, +0.118] | near_zero |
+| r1 | 1 | interaction: total - weights - state | -0.034 | [-0.171, +0.108] | near_zero |
+| r1 | 2 | total: E(FT,FT) - E(base,base) | -0.209 | [-0.280, -0.145] | nonzero |
+| r1 | 2 | weights: E(base,FT) - E(base,base) | -0.188 | [-0.265, -0.111] | near_zero |
+| r1 | 2 | state: E(FT,base) - E(base,base) | +0.000 | [-0.078, +0.084] | near_zero |
+| r1 | 2 | interaction: total - weights - state | -0.022 | [-0.120, +0.041] | near_zero |
+| r2 | 1 | total: E(FT,FT) - E(base,base) | +0.030 | [-0.038, +0.099] | near_zero |
+| r2 | 1 | weights: E(base,FT) - E(base,base) | -0.055 | [-0.114, -0.003] | near_zero |
+| r2 | 1 | state: E(FT,base) - E(base,base) | -0.033 | [-0.102, +0.053] | near_zero |
+| r2 | 1 | interaction: total - weights - state | +0.119 | [-0.014, +0.260] | near_zero |
+| r2 | 2 | total: E(FT,FT) - E(base,base) | +0.140 | [-0.048, +0.329] | near_zero |
+| r2 | 2 | weights: E(base,FT) - E(base,base) | +0.075 | [+0.006, +0.162] | near_zero |
+| r2 | 2 | state: E(FT,base) - E(base,base) | +0.073 | [-0.063, +0.208] | near_zero |
+| r2 | 2 | interaction: total - weights - state | -0.008 | [-0.149, +0.142] | near_zero |
+
+**Adapter states reported by peft per context:** {"capture base": ["none"], "capture finetuned": ["cake"], "cell source=base weights=base": ["none"], "cell source=base weights=finetuned": ["cake"], "cell source=finetuned weights=base": ["none"], "cell source=finetuned weights=finetuned": ["cake"]}
+
+**Every gate line (f11_gates.txt, verbatim):**
+```
+=== F11  Qwen/Qwen3-8B  layer 17/36; 9 temperature items / 7 units; directions ['mu_D', 'r0', 'r1', 'r2'] (norms [7.223, 7.223, 7.223, 7.223]); alphas [0.0, 1.0, 2.0] ===
+[gates] double captures bit-identical; (base,base) and (finetuned,finetuned) alpha=0 bit-exact with harness.seq_logprob (logits and B); (base,base) mu_D alpha 1,2 identical to sweep_belief_v2; (finetuned,finetuned) mu_D alpha 1,2 identical to f6_belief FIXED; local increment ok on every forward
+[adapter states reported by peft per context] {"capture base": ["none"], "capture finetuned": ["cake"], "cell source=base weights=base": ["none"], "cell source=base weights=finetuned": ["cake"], "cell source=finetuned weights=base": ["none"], "cell source=finetuned weights=finetuned": ["cake"]}
+```
 <!-- F11-NUMBERS-END -->

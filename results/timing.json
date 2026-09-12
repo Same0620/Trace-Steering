@@ -188,5 +188,29 @@
   },
   "slurm_job_id": "378592",
   "note": "reconstructed from the halted job's log (commit 4ceae5a, results/log_followup_f2.txt): the job halted at the r0-r2 identity gate (CSV parser bug, fixed in 4ceae5a) before Timing.save; belief outputs kept and re-verified by followup_f2_panel (job 378627)"
+ },
+ "followup_f10": {
+  "started": "2026-09-12 08:28:11",
+  "finished": "2026-09-12 08:33:46",
+  "total_s": 335.39,
+  "sections": {
+   "load_model": 13.17,
+   "provenance": 2.27,
+   "belief": 317.31,
+   "stats": 1.17
+  },
+  "slurm_job_id": "378851"
+ },
+ "followup_f11": {
+  "started": "2026-09-12 08:36:56",
+  "finished": "2026-09-12 08:38:17",
+  "total_s": 81.17,
+  "sections": {
+   "load_model": 12.47,
+   "provenance": 2.26,
+   "cells": 64.84,
+   "stats": 0.13
+  },
+  "slurm_job_id": "378874"
  }
 }

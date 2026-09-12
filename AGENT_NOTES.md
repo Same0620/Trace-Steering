@@ -735,3 +735,11 @@ results/log_followup_f10_halted_378831.txt. No result changed (none had been wri
 - Tiny test: double capture bit-identical; (base,base) and (ft,ft) at alpha 0 reproduce the plain forwards;
   (base,base) at alpha 1 through SwapSteer equals `steer.steered_B` bit-exactly; hybrids differ; increment gate
   halts on corruption; shape mismatch rejected.
+
+### Final assembly (Sept 12, 08:45)
+F10 (job 378851) and F11 (job 378874) completed with every gate passed; assembler regex widened to
+`report_(f\d+[a-z]?)\.md` so report_f10a.md is spliced (the first attempt after F11 crashed on that name and wrote
+nothing). Checks on the assembled report: 13 blocks (F1, F2, F2V2, F3, F4-F9, F10A, F10, F11) present and
+non-placeholder; nine fragments byte-equal to their spliced blocks; text outside the markers unchanged;
+timing.json keys followup_f1..f11 (f2, f2_panel, f2_v2). sacct for the day refreshed: 48 jobs, 4.937 GPU-hours
+(4.791 from this session; 4.309 in follow-up experiment jobs).
